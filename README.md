@@ -1,1 +1,1 @@
-# intel_buffer
+# IntelBuffer
