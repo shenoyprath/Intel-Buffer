@@ -102,3 +102,9 @@ venv.bak/
 
 # mypy
 .mypy_cache/
+
+# Editor directories and files
+.idea
+
+# DS Store
+.DS_Store
