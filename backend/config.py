@@ -2,7 +2,7 @@ import os
 
 
 class Config:
-    FLASK_ENV = os.getenv("FLASK_ENV", "development")
+    ENV = os.getenv("FLASK_ENV", "development")
     SECRET_KEY = os.getenv("FLASK_SECRET_KEY", "DevelopmentKey")
 
     APP_DIR = os.path.dirname(__file__)
