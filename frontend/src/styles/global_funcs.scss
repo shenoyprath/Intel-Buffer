@@ -1,0 +1,29 @@
+@function get-z-index($layers...) {
+  $z-indices: (
+    background: (
+      base: -100,
+      top: -50
+    ),
+    main: 0,
+    tooltip: 50,
+    footer: 100,
+    dropdown: 150,
+    header: 200,
+    modal: (
+      main: 250,
+      tooltip: 300,
+      footer: 350,
+      header: 400,
+      dropdown: 450
+    ),
+    priority: 500
+  );
+  
+  @each $layer in $layers {
+    $z-indices: map_get($z-indices, $layer);
+    @if $z-indices == null {
+      @warn 'No z-index or z-index map was found for the layer "#{$layer}".';
+    }
+  }
+  @return $z-indices;
+}
