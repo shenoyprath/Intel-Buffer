@@ -5,7 +5,6 @@
 </template>
 
 <script>
-// noinspection JSUnusedGlobalSymbols
 export default {
   computed: {
     isTouchDevice () {
