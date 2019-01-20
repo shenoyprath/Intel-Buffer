@@ -196,17 +196,19 @@ $menu-open-class: open;
 
 .nav-menu {
   $below-nav-header: 50px; // margin needed to place object directly below the nav-header
+
   overflow-y: scroll;
+  z-index: get-z-index(modal, main);
 
   margin: {
     top: $below-nav-header;
     bottom: 15px;
   }
+
   padding: {
     left: 15px;
     right: 15px;
   }
-  z-index: get-z-index(modal, main);
 
   @include media-query(phone-tablet) {
     max-width: 200px;
