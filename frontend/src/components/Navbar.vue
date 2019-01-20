@@ -1,9 +1,27 @@
 <template>
   <nav class="navbar">
-    <router-link to="/"><logo></logo></router-link>
-    <button class="hamburger">
-      <span></span>
-    </button>
+    <div class="nav-header">
+      <router-link to="/" id="logo"><logo></logo></router-link>
+      <button v-bind:class="`hamburger ${menuOpenClass}`" v-on:click="isMenuOpen = !isMenuOpen">
+        <span></span>
+      </button>
+    </div>
+
+    <transition enter-active-class="animated bounceInRight" leave-active-class="animated bounceOutRight">
+      <div v-bind:class="`nav-menu ${menuOpenClass}`" v-show="isMenuOpen">
+        <template v-for="navSection in navSections">
+          <div v-bind:key="navSection.name">
+            <h1>{{ navSection.name }}</h1>
+
+            <ul>
+              <li class="nav-link" v-for="navLink in navSection.links" v-bind:key="navLink">
+                <router-link to="#">{{ navLink }}</router-link>
+              </li>
+            </ul>
+          </div>
+        </template>
+      </div>
+    </transition>
   </nav>
 </template>
 
@@ -14,52 +32,136 @@ export default {
   name: 'navbar',
   components: {
     'logo': Logo
+  },
+  data () {
+    return {
+      isMenuOpen: false,
+      navSections: {
+        personalize: {
+          name: 'personalize',
+          links: [
+            'register',
+            'sign in'
+          ]
+        },
+        chronicles: {
+          name: 'chronicles',
+          links: [
+            'most read',
+            'latest',
+            'featured',
+            'heaps',
+            'eye appealers',
+            'for you',
+            'write'
+          ]
+        },
+        news: {
+          name: 'news',
+          links: [
+            'top stories',
+            'breaking',
+            'opinion'
+          ]
+        },
+        topics: {
+          name: 'topics',
+          links: [
+            'arts',
+            'computing',
+            'engineering',
+            'entertainment',
+            'gaming',
+            'history',
+            'medicine',
+            'science',
+            'sports',
+            'more...'
+          ]
+        }
+      }
+    }
+  },
+  computed: {
+    menuOpenClass () {
+      return this.isMenuOpen ? 'open' : ''
+    }
   }
 }
 </script>
 
 <style lang="scss" scoped>
 .navbar {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  padding: 10px;
-
-  overflow: hidden;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-
-  * {
-    position: relative;
-    display: inline;
-    vertical-align: middle;
-
-    color: $foreground-color;
-  }
-
   a {
-    border: none; // override global a element's bottom border
+    border: none;
+    color: inherit;
   }
 }
 
-.navbar-btn {
-  @include grow-on-hover();
+.nav-header {
+  display: flex;
+  justify-content: space-between;
+
+  position: fixed;
+  width: 100%;
+  top: 0;
+  left: 0;
+  z-index: get-z-index(priority);
+
+  padding: 10px;
+  background-color: $background-color;
+
+  * {
+    display: inline;
+    vertical-align: middle;
+  }
 }
 
 .logo {
   height: 40px;
 }
 
+$menu-open-class: open;
+
 .hamburger {
   background-color: transparent;
   padding: 10px;
 
-  // span is the middle line in the hamburger, ::before is the upper line, ::after is the lower line.
+  // span is the middle line in the hamburger, ::before is the upper line, ::after is the lower line
+
+  &.#{$menu-open-class} {
+    span::before {
+      bottom: 0;
+    }
+
+    span::after {
+      top: 0;
+    }
+  }
+
   span {
     position: relative;
     background-color: $foreground-color;
+
+    $gap-to-middle: 8px;
+    &::before {
+      background-color: $theme-silver;
+      bottom: $gap-to-middle;
+      transition: bottom .2s ease-out,
+      transform .2s ease-out;
+    }
+
+    &::after {
+      background-color: $theme-blue;
+      top: $gap-to-middle;
+      transition: top .2s ease-out,
+      transform .2s ease-out;
+    }
+
+    &::before, &::after {
+      content: "";
+      position: absolute;
+    }
 
     &, &::before, &::after {
       display: block;
@@ -69,39 +171,74 @@ export default {
 
       border-radius: 10px;
     }
-
-    &::before, &::after {
-      content: "";
-      position: absolute;
-    }
-
-    $gap-to-middle: 8px;
-    &::before {
-      background-color: $theme-silver;
-      bottom: $gap-to-middle;
-      transition: bottom .2s ease-out,
-      transform .2s ease-out .2s;
-    }
-
-    &::after {
-      background-color: $theme-blue;
-      top: $gap-to-middle;
-      transition: top .2s ease-out,
-      transform .2s ease-out .2s;
-    }
   }
 
-  @include if-hover-supported {
+  @include if-hover-enabled {
     &:hover {
       span::before {
         bottom: 0;
       }
+
       span::after {
         top: 0;
       }
+
       span::before, span::after {
         transform: rotateZ(-90deg);
       }
+    }
+
+    &.#{$menu-open-class}:hover {
+      transform: rotateZ(-45deg);
+    }
+  }
+}
+
+.nav-menu {
+  $below-nav-header: 50px; // margin needed to place object directly below the nav-header
+  overflow-y: scroll;
+
+  margin: {
+    top: $below-nav-header;
+    bottom: 15px;
+  }
+  padding: {
+    left: 15px;
+    right: 15px;
+  }
+  z-index: get-z-index(modal, main);
+
+  @include media-query(phone-tablet) {
+    max-width: 200px;
+    position: absolute;
+    right: 0;
+    max-height: calc(100vh - #{$below-nav-header});
+  }
+
+  h1 {
+    margin: {
+      top: 30px;
+      bottom: 10px;
+    }
+    text-transform: capitalize;
+  }
+
+  ul {
+    margin: 0;
+    padding: 0;
+  }
+}
+
+.nav-link {
+  margin: 15px;
+  display: table; // block element without taking 100% of parent width
+  font-size: 20px;
+  text-transform: capitalize;
+  transition: color .1s ease-in-out;
+
+  @include if-hover-enabled {
+    &:hover {
+      color: $theme-blue;
     }
   }
 }
