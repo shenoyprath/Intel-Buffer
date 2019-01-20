@@ -228,6 +228,8 @@ $menu-open-class: open;
   ul {
     margin: 0;
     padding: 0;
+    list-style: none;
+    font-size: 0;
   }
 }
 
