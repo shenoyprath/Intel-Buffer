@@ -6,6 +6,7 @@ module.exports = {
         data: `
           @import "@/styles/global_vars.scss";
           @import "@/styles/global_mixins.scss";
+          @import "@/styles/global_funcs.scss";
         `
       }
     }
