@@ -17,4 +17,8 @@ describe('Navbar.vue', () => {
   it('nav header is visible', () => {
     expect(wrapper.find('div.nav-header').isVisible()).to.equal(true)
   })
+
+  it('contains the logo', () => {
+    expect(wrapper.contains(Logo)).to.equal(true)
+  })
 })
