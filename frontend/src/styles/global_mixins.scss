@@ -20,3 +20,27 @@
     }
   }
 }
+
+@mixin media-query($device, $type: min) {
+  $breakpoints: (
+          phone-small: 320px,
+          phone: 400px,
+          phone-wide: 480px,
+          phone-tablet: 560px,
+          tablet-small: 640px,
+          tablet: 768px,
+          tablet-wide: 1024px,
+          desktop: 1248px,
+          desktop-wide: 1440px
+  );
+
+  @if map_has_key($breakpoints, $device) {
+    $width: map_get($breakpoints, $device);
+    @if $type == max {
+      $width: $width - 1;
+    }
+    @media only screen and (#{$type}-width: $width) {
+      @content;
+    }
+  }
+}
