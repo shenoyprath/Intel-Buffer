@@ -1,4 +1,5 @@
 import Logo from '@/components/Logo'
+
 import { shallowMount } from '@vue/test-utils'
 import { expect } from 'chai'
 

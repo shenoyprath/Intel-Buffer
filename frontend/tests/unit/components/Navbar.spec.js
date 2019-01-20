@@ -1,5 +1,6 @@
 import Logo from '@/components/Logo'
 import Navbar from '@/components/Navbar'
+
 import { shallowMount, RouterLinkStub } from '@vue/test-utils'
 import { expect } from 'chai'
 
