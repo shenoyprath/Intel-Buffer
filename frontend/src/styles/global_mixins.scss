@@ -4,6 +4,12 @@
   }
 }
 
+@mixin if-hover-disabled {
+  @media (hover: none) {
+    @content;
+  }
+}
+
 @mixin grow-on-hover($scale-val: 1.05) {
   transition: transform .2s ease-in-out;
 
