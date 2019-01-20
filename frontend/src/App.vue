@@ -62,6 +62,18 @@ button {
   display: inline-block;
   overflow: visible;
 
+  vertical-align: middle;
+  line-height: 1.5;
+  white-space: nowrap;
+
+  padding: 0.375rem 0.75rem;
+  outline: none;
+  margin: 0;
+  user-select: none;
+
+  cursor: pointer;
+  transition: all .2s ease-in-out;
+
   font: {
     family: inherit;
     size: 1rem;
@@ -73,24 +85,12 @@ button {
     align: center;
   }
 
-  vertical-align: middle;
-  line-height: 1.5;
-  white-space: nowrap;
-
-  padding: 0.375rem 0.75rem;
-  outline: none;
-  margin: 0;
-  user-select: none;
-
   border: {
     width: 1px;
     style: solid;
     color: transparent;
     radius: 0.25em;
   }
-
-  cursor: pointer;
-  transition: all .2s ease-in-out;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -101,13 +101,6 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 #{$app} {
-  font: {
-    family: 'Work Sans', sans-serif;
-    weight: 400;
-  }
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-
   background-color: $background-color;
   color: $foreground-color;
 
@@ -119,5 +112,13 @@ h1, h2, h3, h4, h5, h6 {
   position: absolute;
   z-index: get-z-index(main);
   margin: 0;
+
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  font: {
+    family: 'Work Sans', sans-serif;
+    weight: 400;
+  }
 }
 </style>
