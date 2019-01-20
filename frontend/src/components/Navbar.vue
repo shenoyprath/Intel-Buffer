@@ -234,7 +234,7 @@ $menu-open-class: open;
   display: table; // block element without taking 100% of parent width
   font-size: 20px;
   text-transform: capitalize;
-  transition: color .1s ease-in-out;
+  transition: color .2s ease-in-out;
 
   @include if-hover-enabled {
     &:hover {
