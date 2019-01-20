@@ -13,4 +13,8 @@ describe('Navbar.vue', () => {
   it('root element is a nav', () => {
     expect(wrapper.is('nav')).to.equal(true)
   })
+
+  it('nav header is visible', () => {
+    expect(wrapper.find('div.nav-header').isVisible()).to.equal(true)
+  })
 })
