@@ -116,7 +116,7 @@ h1, h2, h3, h4, h5, h6 {
 
   top: 0;
   left: 0;
-  position: fixed;
+  position: absolute;
   z-index: get-z-index(main);
   margin: 0;
 }
