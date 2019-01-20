@@ -1,4 +1,4 @@
-@mixin if-hover-supported {
+@mixin if-hover-enabled {
   @media (hover: hover) {
     @content;
   }
@@ -8,7 +8,7 @@
   transition: transform .2s ease-in-out;
 
   $grow-prop: transform; $grow-val: scale(1.05);
-  @include if-hover-supported {
+  @include if-hover-enabled {
     &:hover, &:focus {
       #{$grow-prop}: $grow-val;
     }
