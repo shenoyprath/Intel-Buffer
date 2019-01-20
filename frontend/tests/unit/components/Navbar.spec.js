@@ -21,4 +21,17 @@ describe('Navbar.vue', () => {
   it('contains the logo', () => {
     expect(wrapper.contains(Logo)).to.equal(true)
   })
+
+  const navMenu = wrapper.find('div.nav-menu')
+
+  it('nav menu is hidden initially', () => {
+    expect(navMenu.isVisible()).to.equal(false)
+  })
+
+  it('nav menu is shown when hamburger button is clicked', () => {
+    const hamburgerButton = wrapper.find('button.hamburger')
+    hamburgerButton.trigger('click')
+
+    expect(navMenu.isVisible()).to.equal(true)
+  })
 })
