@@ -39,7 +39,7 @@ a {
   color: $theme-blue;
   text-decoration: none;
 
-  @include if-hover-supported {
+  @include if-hover-enabled {
     &:hover,
     &:focus {
       border: {
