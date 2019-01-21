@@ -2,18 +2,18 @@
   <nav class="navbar">
     <div class="nav-header">
       <router-link to="/" id="logo"><logo></logo></router-link>
-      <button v-bind:class="`hamburger ${menuOpenClass}`" v-on:click="isMenuOpen = !isMenuOpen">
+      <button :class="`hamburger ${menuOpenClass}`" v-on:click="isMenuOpen = !isMenuOpen">
         <span></span>
       </button>
     </div>
 
     <transition enter-active-class="animated bounceInRight" leave-active-class="animated bounceOutRight">
-      <div v-bind:class="`nav-menu ${menuOpenClass}`" v-show="isMenuOpen">
-          <section v-bind:key="navSection.name" v-for="navSection in navSections">
+      <div :class="`nav-menu ${menuOpenClass}`" v-show="isMenuOpen">
+          <section :key="navSection.name" v-for="navSection in navSections">
             <h1>{{ navSection.name }}</h1>
 
             <ul>
-              <li class="nav-link" v-for="navLink in navSection.links" v-bind:key="navLink">
+              <li class="nav-link" v-for="navLink in navSection.links" :key="navLink">
                 <router-link to="#">{{ navLink }}</router-link>
               </li>
             </ul>
