@@ -17,5 +17,22 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.splash-screen {
+  background-color: $background-color;
 
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+
+  height: 100vh;
+  width: 100vw;
+  z-index: get-z-index(priority);
+
+  padding: {
+    left: 10px;
+    right: 10px;
+  }
+}
 </style>
