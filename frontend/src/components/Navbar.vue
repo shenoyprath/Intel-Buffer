@@ -2,7 +2,7 @@
   <nav class="navbar">
     <div class="nav-header">
       <router-link to="/" id="logo"><logo></logo></router-link>
-      <button :class="`hamburger ${menuOpenClass}`" v-on:click="isMenuOpen = !isMenuOpen">
+      <button :class="`hamburger ${menuOpenClass}`" @click="isMenuOpen = !isMenuOpen">
         <span></span>
       </button>
     </div>
