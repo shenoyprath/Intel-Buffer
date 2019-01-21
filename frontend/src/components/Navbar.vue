@@ -2,13 +2,13 @@
   <nav class="navbar">
     <div class="nav-header">
       <router-link to="/" id="logo"><logo></logo></router-link>
-      <button :class="`hamburger ${menuOpenClass}`" @click="isMenuOpen = !isMenuOpen">
+      <button :class="['hamburger', menuOpenClass]" @click="isMenuOpen = !isMenuOpen">
         <span></span>
       </button>
     </div>
 
     <transition enter-active-class="animated bounceInRight" leave-active-class="animated bounceOutRight">
-      <div :class="`nav-menu ${menuOpenClass}`" v-show="isMenuOpen">
+      <div :class="['nav-menu', menuOpenClass]" v-show="isMenuOpen">
           <section :key="navSection.name" v-for="navSection in navSections">
             <h1>{{ navSection.name }}</h1>
 
