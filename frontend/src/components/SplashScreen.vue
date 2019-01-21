@@ -28,7 +28,7 @@ export default {
 
   height: 100vh;
   width: 100vw;
-  z-index: get-z-index(priority);
+  z-index: get-z-index(main);
 
   padding: {
     left: 10px;
