@@ -9,8 +9,7 @@
 
     <transition enter-active-class="animated bounceInRight" leave-active-class="animated bounceOutRight">
       <div v-bind:class="`nav-menu ${menuOpenClass}`" v-show="isMenuOpen">
-        <template v-for="navSection in navSections">
-          <div v-bind:key="navSection.name">
+          <div v-bind:key="navSection.name" v-for="navSection in navSections">
             <h1>{{ navSection.name }}</h1>
 
             <ul>
@@ -19,7 +18,6 @@
               </li>
             </ul>
           </div>
-        </template>
       </div>
     </transition>
   </nav>
