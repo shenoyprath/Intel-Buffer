@@ -1,11 +1,19 @@
 <template>
-  <div id="app" class="animated fadeIn delay-2s">
-    <router-view/>
+  <div id="app">
+    <splash-screen v-if="isSplashVisible"></splash-screen>
+    <router-view class="animated fadeIn delay-1s" v-else/>
   </div>
 </template>
 
 <script>
+import SplashScreen from '@/components/SplashScreen'
+
 export default {
+  data () {
+    return {
+      isSplashVisible: true
+    }
+  },
   computed: {
     isTouchDevice () {
       const vendorPrefixes = ' -webkit- -moz- -o- -ms- '.split(' ')
@@ -20,6 +28,14 @@ export default {
       const mq = query => window.matchMedia(query).matches
       return mq(query)
     }
+  },
+  components: {
+    'splash-screen': SplashScreen
+  },
+  mounted () {
+    setTimeout(() => {
+      this.isSplashVisible = false
+    }, 4000)
   }
 }
 </script>
