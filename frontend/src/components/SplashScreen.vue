@@ -1,5 +1,5 @@
 <template>
-  <div class="splash-screen">
+  <div class="splash-screen animated fadeOut slower delay-2s">
     <logo></logo>
     <h2>A buffer to store your knowledge while it gets downloaded by others</h2>
   </div>
