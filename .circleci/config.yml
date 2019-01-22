@@ -14,8 +14,6 @@ jobs:
       # documented at https://circleci.com/docs/2.0/circleci-images/
       # - image: circleci/mongo:3.4.4
 
-    working_directory: ~/frontend
-
     steps:
       - checkout
 
@@ -27,7 +25,7 @@ jobs:
           - v1-dependencies-
 
       - run: cd frontend && npm install
-      - run: cd frontend && npm test
+      - run: cd frontend && npm run test:unit
 
       - save_cache:
           paths:
