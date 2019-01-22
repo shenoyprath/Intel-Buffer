@@ -11,7 +11,7 @@ import SplashScreen from '@/components/SplashScreen'
 export default {
   data () {
     return {
-      isSplashVisible: true
+      isSplashVisible: this.$route.fullPath === '/'
     }
   },
   computed: {
