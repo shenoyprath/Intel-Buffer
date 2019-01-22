@@ -17,6 +17,7 @@ jobs:
 
     steps:
       - checkout
+          path: ~/frontend
 
       - run:
           command: rm -rf frontend/package-lock.json && rm -rf frontend/node_modules && ls frontend
