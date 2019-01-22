@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <splash-screen v-if="isSplashVisible" class="animated fadeOut slower delay-2s"></splash-screen>
+    <splash-screen v-if="isSplashVisible" class="animated fadeOut slow delay-2s"></splash-screen>
     <router-view v-else class="animated fadeIn"/>
   </div>
 </template>
