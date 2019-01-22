@@ -9,6 +9,9 @@
 import SplashScreen from '@/components/SplashScreen'
 
 export default {
+  components: {
+    'splash-screen': SplashScreen
+  },
   data () {
     return {
       isSplashVisible: this.$route.fullPath === '/'
@@ -28,9 +31,6 @@ export default {
       const mq = query => window.matchMedia(query).matches
       return mq(query)
     }
-  },
-  components: {
-    'splash-screen': SplashScreen
   },
   mounted () {
     setTimeout(() => {
