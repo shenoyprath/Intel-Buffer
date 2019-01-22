@@ -19,7 +19,7 @@ jobs:
       - checkout
 
       - run:
-          command: rm -rf frontend/package-lock.json && ls frontend
+          command: rm -rf frontend/package-lock.json && rm -rf frontend/node_modules && ls frontend
 
       # Download and cache dependencies
       - restore_cache:
