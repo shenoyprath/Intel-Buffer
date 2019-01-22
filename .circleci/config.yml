@@ -18,8 +18,8 @@ jobs:
 
     steps:
       - checkout
-      - npm install
-      - npm test:unit
+      - run: npm install
+      - run: npm test:unit
 
       # Download and cache dependencies
       - restore_cache:
