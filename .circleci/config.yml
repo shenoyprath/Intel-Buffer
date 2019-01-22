@@ -14,10 +14,11 @@ jobs:
       # documented at https://circleci.com/docs/2.0/circleci-images/
       # - image: circleci/mongo:3.4.4
 
-    working_directory: ~/frontend
+    working_directory: ~/repo
 
     steps:
       - checkout
+      - cd frontend
       - run: npm install
       - run: npm test
 
