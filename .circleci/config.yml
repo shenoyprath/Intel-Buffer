@@ -20,7 +20,7 @@ jobs:
       - checkout
 
       - run:
-          command: ls
+          command: ls frontend
 
       # Download and cache dependencies
       - restore_cache:
