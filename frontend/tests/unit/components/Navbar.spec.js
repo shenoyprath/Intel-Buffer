@@ -1,8 +1,8 @@
-import Logo from '@/components/Logo'
-import Navbar from '@/components/Navbar'
-
 import { shallowMount, RouterLinkStub } from '@vue/test-utils'
 import { expect } from 'chai'
+
+import Logo from '@/components/Logo'
+import Navbar from '@/components/Navbar'
 
 describe('Navbar.vue', () => {
   const wrapper = shallowMount(Navbar, {
