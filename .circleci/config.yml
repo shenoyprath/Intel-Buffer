@@ -24,6 +24,7 @@ jobs:
           # fallback to using the latest cache if no exact match is found
           - v1-dependencies-
 
+      # TODO: find a better way so 'cd' doesn't have to be done a million times
       - run: cd frontend && npm install
 
       - save_cache:
