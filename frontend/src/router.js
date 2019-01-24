@@ -12,6 +12,11 @@ export default new Router({
       path: '/',
       name: 'home',
       component: Home
+    },
+    {
+      path: '/sign_in',
+      name: 'sign-in',
+      component: () => import('@/views/SignIn')
     }
   ]
 })
