@@ -1,22 +1,11 @@
 <template>
   <div id="app">
-    <splash-screen v-if="isSplashVisible" class="animated fadeOut slow delay-2s"></splash-screen>
-    <router-view v-else class="animated fadeIn"/>
+    <router-view/>
   </div>
 </template>
 
 <script>
-import SplashScreen from '@/components/SplashScreen'
-
 export default {
-  components: {
-    'splash-screen': SplashScreen
-  },
-  data () {
-    return {
-      isSplashVisible: this.$route.fullPath === '/'
-    }
-  },
   computed: {
     isTouchDevice () {
       const vendorPrefixes = ' -webkit- -moz- -o- -ms- '.split(' ')
@@ -31,11 +20,6 @@ export default {
       const mq = query => window.matchMedia(query).matches
       return mq(query)
     }
-  },
-  mounted () {
-    setTimeout(() => {
-      this.isSplashVisible = false
-    }, 4000)
   }
 }
 </script>
