@@ -18,16 +18,10 @@ export default {
 
 <style lang="scss" scoped>
 .splash-screen {
+  @include full-size;
+  @include center;
+
   background-color: $background-color;
-
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-
-  height: 100vh;
-  width: 100vw;
   z-index: get-z-index(main);
 
   padding: {
