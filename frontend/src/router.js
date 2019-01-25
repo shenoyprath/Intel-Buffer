@@ -17,6 +17,11 @@ export default new Router({
       path: '/sign_in',
       name: 'sign-in',
       component: () => import('@/views/SignIn')
+    },
+    {
+      path: '/register',
+      name: 'register',
+      component: () => import('@/views/Register')
     }
   ]
 })
