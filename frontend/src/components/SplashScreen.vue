@@ -1,6 +1,6 @@
 <template>
   <div class="splash-screen">
-    <logo></logo>
+    <logo/>
     <h2>A buffer to store your knowledge while it gets downloaded by others</h2>
   </div>
 </template>
