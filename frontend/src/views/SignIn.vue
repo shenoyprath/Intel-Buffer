@@ -4,9 +4,9 @@
       <logo height="25pt"/>
       <h2>Sign in to Continue</h2>
 
-      <form>
-        <input id="email" class="animated zoomIn delay-1s" type="email" placeholder="Email Address" autofocus/>
-        <input id="password" class="animated zoomIn delay-1s" type="password" placeholder="Password"/>
+      <form class="animated zoomIn delay-1s">
+        <input id="email" type="email" placeholder="Email Address" autofocus/>
+        <input id="password" type="password" placeholder="Password"/>
       </form>
 
       <router-link to="/">Forgot Password?</router-link>
