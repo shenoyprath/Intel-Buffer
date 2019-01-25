@@ -1,6 +1,6 @@
 <template>
-  <svg version="1.0" xmlns="http://www.w3.org/2000/svg" :width="`${width}pt`"
-       :height="`${height}pt`" viewBox="0 0 700.000000 506.000000" preserveAspectRatio="xMidYMid meet">
+  <svg version="1.0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700.000000 506.000000"
+       preserveAspectRatio="xMidYMid meet" height="35pt" width="50pt">
     <g transform="translate(0.000000,506.000000) scale(0.100000,-0.100000)" stroke="none">
       <path d="M4255 4619 c-269 -4 -537 -12 -595 -18 -58 -6 -229 -13 -380 -17
       -151 -4 -293 -10 -315 -13 -37 -6 -40 -9 -41 -41 -7 -251 -6 -263 7 -270 25
@@ -47,17 +47,7 @@
 
 <script>
 export default {
-  name: 'Logo',
-  props: {
-    height: {
-      type: Number,
-      default: 35
-    },
-    width: {
-      type: Number,
-      default: 50
-    }
-  }
+  name: 'Logo'
 }
 </script>
 
