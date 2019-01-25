@@ -27,5 +27,31 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.sign-in {
+  @include full-size;
+  @include center;
+}
 
+.sign-in-modal {
+  @include center;
+  height: 100%;
+  min-width: 100%;
+
+  color: $foreground-color;
+  border-radius: 10px;
+  @if ($background-color == #000) {
+    border: 1px solid #6e6e6e;
+  } @else if ($background-color == #fff) {
+    border: 1px solid #d5d5dc;
+  }
+
+  @include media-query(tablet-small) {
+    min-width: 575px;
+    height: 90%;
+  }
+
+  * {
+    margin: 10px;
+  }
+}
 </style>
