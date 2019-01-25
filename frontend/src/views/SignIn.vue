@@ -1,7 +1,7 @@
 <template>
   <div class="sign-in animated fadeIn slow">
     <div class="sign-in-modal animated slideInUp">
-      <logo height="25pt"></logo>
+      <logo height="25pt"/>
       <h2>Sign in to Continue</h2>
 
       <form>
