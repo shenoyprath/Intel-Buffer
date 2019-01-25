@@ -57,5 +57,41 @@ export default {
       bottom: 10px;
     }
   }
+
+  input {
+    width: 75%;
+    max-width: 350px;
+    height: 50px;
+    padding: 10px 2px;
+
+    border: none;
+    border-radius: 0;
+    border-bottom: 2px solid $foreground-color;
+    transition: border-bottom .3s ease-in-out;
+
+    color: $foreground-color;
+    background-color: $background-color;
+    box-shadow: none;
+    outline: none;
+    appearance: none;
+
+    font-size: 20px;
+
+    &::placeholder {
+      color: $foreground-color;
+      opacity: .4;
+    }
+
+    &:focus {
+      border-bottom: 4px solid $theme-blue;
+    }
+  }
+
+  button {
+    @include grow-on-hover;
+
+    color: $background-color;
+    background-color: $foreground-color;
+  }
 }
 </style>
