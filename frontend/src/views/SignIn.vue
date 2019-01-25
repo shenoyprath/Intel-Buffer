@@ -5,8 +5,8 @@
       <h2>Sign in to Continue</h2>
 
       <form>
-        <input id="email" class="animated zoomIn delay-1s" type="email" placeholder="Email Address" autofocus>
-        <input id="password" class="animated zoomIn delay-1s" type="password" placeholder="Password">
+        <input id="email" class="animated zoomIn delay-1s" type="email" placeholder="Email Address" autofocus/>
+        <input id="password" class="animated zoomIn delay-1s" type="password" placeholder="Password"/>
       </form>
 
       <router-link to="/">Forgot Password?</router-link>
