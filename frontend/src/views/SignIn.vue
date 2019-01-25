@@ -1,12 +1,12 @@
 <template>
-  <div class="sign-in">
-    <div class="sign-in-modal">
+  <div class="sign-in animated fadeIn slow">
+    <div class="sign-in-modal animated slideInUp">
       <logo height="25pt"></logo>
       <h2>Sign in to Continue</h2>
 
       <form>
-        <input id="email" type="email" placeholder="Email Address" autofocus>
-        <input id="password" type="password" placeholder="Password">
+        <input id="email" class="animated zoomIn delay-1s" type="email" placeholder="Email Address" autofocus>
+        <input id="password" class="animated zoomIn delay-1s" type="password" placeholder="Password">
       </form>
 
       <router-link to="/">Forgot Password?</router-link>
