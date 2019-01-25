@@ -46,6 +46,7 @@ export default {
   @include media-query(tablet-small) {
     min-width: 575px;
     height: 90%;
+
     @if ($background-color == #000) {
       border: 1px solid #6e6e6e;
     } @else if ($background-color == #fff) {
