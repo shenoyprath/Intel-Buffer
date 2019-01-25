@@ -34,6 +34,7 @@ export default {
 
 .sign-in-modal {
   @include center;
+
   height: 100%;
   min-width: 100%;
 
@@ -51,7 +52,10 @@ export default {
   }
 
   * {
-    margin: 10px;
+    margin: {
+      top: 10px;
+      bottom: 10px;
+    }
   }
 }
 </style>
