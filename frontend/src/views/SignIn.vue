@@ -37,6 +37,7 @@ export default {
   @include center;
 
   height: 100%;
+  max-height: 700px;
   min-width: 100%;
 
   color: $foreground-color;
