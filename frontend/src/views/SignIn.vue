@@ -37,7 +37,7 @@ export default {
   @include center;
 
   height: 100%;
-  max-height: 700px;
+  min-height: 575px;
   min-width: 100%;
 
   color: $foreground-color;
@@ -45,8 +45,7 @@ export default {
   border: none;
 
   @include media-query(tablet-small) {
-    min-width: 575px;
-    height: 90%;
+    min-width: 0;
 
     @if ($background-color == #000) {
       border: 1px solid #6e6e6e;
