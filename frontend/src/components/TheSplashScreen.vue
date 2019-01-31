@@ -1,5 +1,5 @@
 <template>
-  <div class="splash-screen">
+  <div class="the-splash-screen">
     <logo/>
     <h2>A buffer to store your knowledge while it gets downloaded by others</h2>
   </div>
@@ -9,7 +9,7 @@
 import Logo from '@/components/Logo'
 
 export default {
-  name: 'SplashScreen',
+  name: 'TheSplashScreen',
   components: {
     'logo': Logo
   }
@@ -17,7 +17,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.splash-screen {
+.the-splash-screen {
   @include full-size;
   @include center;
 

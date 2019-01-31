@@ -1,6 +1,6 @@
 <template>
   <div class="home">
-    <splash-screen
+    <the-splash-screen
       class="animated fadeOut slow delay-2s"
       v-if="isSplashVisible"
     />
@@ -15,13 +15,13 @@
 </template>
 
 <script>
-import SplashScreen from '@/components/SplashScreen'
+import TheSplashScreen from '@/components/TheSplashScreen'
 import Navbar from '../components/Navbar'
 
 export default {
   name: 'home',
   components: {
-    'splash-screen': SplashScreen,
+    'the-splash-screen': TheSplashScreen,
     'navbar': Navbar
   },
   data () {
