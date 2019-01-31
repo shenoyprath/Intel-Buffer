@@ -1,8 +1,14 @@
 <template>
   <div class="home">
-    <splash-screen class="animated fadeOut slow delay-2s" v-if="isSplashVisible"/>
+    <splash-screen
+      class="animated fadeOut slow delay-2s"
+      v-if="isSplashVisible"
+    />
 
-    <div class="animated fadeIn" v-else>
+    <div
+      class="animated fadeIn"
+      v-else
+    >
       <navbar/>
     </div>
   </div>

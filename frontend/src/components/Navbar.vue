@@ -1,19 +1,40 @@
 <template>
   <nav class="navbar">
     <div class="nav-header">
-      <router-link to="/" id="logo"><logo/></router-link>
-      <button :class="['hamburger', menuOpenClass]" @click="isMenuOpen = !isMenuOpen">
+      <router-link
+        to="/"
+        id="logo"
+      >
+        <logo/>
+      </router-link>
+
+      <button
+        :class="['hamburger', menuOpenClass]"
+        @click="isMenuOpen = !isMenuOpen"
+      >
         <span></span>
       </button>
     </div>
 
-    <transition enter-active-class="animated bounceInRight" leave-active-class="animated bounceOutRight">
-      <div :class="['nav-menu', menuOpenClass]" v-show="isMenuOpen">
-          <section :key="navSection.name" v-for="navSection in navSections">
+    <transition
+      enter-active-class="animated bounceInRight"
+      leave-active-class="animated bounceOutRight"
+    >
+      <div
+        :class="['nav-menu', menuOpenClass]"
+        v-show="isMenuOpen"
+      >
+          <section
+            :key="navSection.name"
+            v-for="navSection in navSections"
+          >
             <h1>{{ navSection.name }}</h1>
 
             <ul>
-              <li class="nav-link" v-for="navLink in navSection.links" :key="navLink">
+              <li
+                class="nav-link"
+                v-for="navLink in navSection.links"
+                :key="navLink">
                 <router-link to="#">{{ navLink }}</router-link>
               </li>
             </ul>
