@@ -56,8 +56,14 @@ export default {
   border-radius: 10px;
   border: none;
 
+  padding: {
+    top: 10px;
+    bottom: 10px;
+  }
+
   @include media-query(tablet-small) {
     min-width: 0;
+    max-width: 850px;
 
     @if ($background-color == #000) {
       border: 1px solid #6e6e6e;
@@ -91,6 +97,10 @@ export default {
     appearance: none;
 
     font-size: 20px;
+    margin: {
+      left: 10px;
+      right: 10px;
+    }
 
     &::placeholder {
       color: $foreground-color;
