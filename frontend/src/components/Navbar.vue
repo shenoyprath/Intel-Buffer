@@ -1,11 +1,8 @@
 <template>
   <nav class="navbar">
     <div class="nav-header">
-      <router-link
-        to="/"
-        id="logo"
-      >
-        <logo/>
+      <router-link to="/">
+        <base-logo/>
       </router-link>
 
       <button
@@ -45,12 +42,12 @@
 </template>
 
 <script>
-import Logo from '@/components/Logo'
+import BaseLogo from '@/components/BaseLogo'
 
 export default {
   name: 'navbar',
   components: {
-    'logo': Logo
+    'base-logo': BaseLogo
   },
   data () {
     return {
@@ -134,10 +131,6 @@ export default {
     display: inline;
     vertical-align: middle;
   }
-}
-
-.logo {
-  height: 40px;
 }
 
 $menu-open-class: open;

@@ -1,13 +1,13 @@
 import { shallowMount } from '@vue/test-utils'
 import { expect } from 'chai'
 
-import Logo from '@/components/Logo'
+import BaseLogo from '@/components/BaseLogo'
 import TheSplashScreen from '@/components/TheSplashScreen'
 
 describe('TheSplashScreen.vue', () => {
   const wrapper = shallowMount(TheSplashScreen)
 
   it('contains logo', () => {
-    expect(wrapper.contains(Logo)).to.equal(true)
+    expect(wrapper.contains(BaseLogo)).to.equal(true)
   })
 })

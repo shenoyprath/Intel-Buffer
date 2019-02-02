@@ -1,17 +1,17 @@
 <template>
   <div class="the-splash-screen">
-    <logo/>
+    <base-logo/>
     <h2>A buffer to store your knowledge while it gets downloaded by others</h2>
   </div>
 </template>
 
 <script>
-import Logo from '@/components/Logo'
+import BaseLogo from '@/components/BaseLogo'
 
 export default {
   name: 'TheSplashScreen',
   components: {
-    'logo': Logo
+    'base-logo': BaseLogo
   }
 }
 </script>

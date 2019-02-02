@@ -1,7 +1,7 @@
 import { shallowMount, RouterLinkStub } from '@vue/test-utils'
 import { expect } from 'chai'
 
-import Logo from '@/components/Logo'
+import BaseLogo from '@/components/BaseLogo'
 import Navbar from '@/components/Navbar'
 
 describe('Navbar.vue', () => {
@@ -20,7 +20,7 @@ describe('Navbar.vue', () => {
   })
 
   it('contains the logo', () => {
-    expect(wrapper.contains(Logo)).to.equal(true)
+    expect(wrapper.contains(BaseLogo)).to.equal(true)
   })
 
   const navMenu = wrapper.find('div.nav-menu')

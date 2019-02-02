@@ -62,7 +62,7 @@
 
 <script>
 export default {
-  name: 'Logo'
+  name: 'BaseLogo'
 }
 </script>
 

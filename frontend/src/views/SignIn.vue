@@ -1,7 +1,7 @@
 <template>
   <div class="sign-in animated fadeIn slow">
     <div class="sign-in-modal animated slideInUp">
-      <logo height="25pt"/>
+      <base-logo height="25pt"/>
       <h2>Sign in to Continue</h2>
 
       <form class="animated zoomIn delay-1s">
@@ -29,12 +29,12 @@
 </template>
 
 <script>
-import Logo from '@/components/Logo'
+import BaseLogo from '@/components/BaseLogo'
 
 export default {
   name: 'SignIn',
   components: {
-    'logo': Logo
+    'base-logo': BaseLogo
   }
 }
 </script>
