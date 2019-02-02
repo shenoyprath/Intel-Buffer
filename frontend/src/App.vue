@@ -28,7 +28,6 @@ export default {
 @import url('https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css');
 @import url('https://fonts.googleapis.com/css?family=Eczar:600|Work+Sans:400,700');
 @import url('https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.0/animate.min.css');
-@import url('https://use.fontawesome.com/releases/v5.6.3/css/all.css');
 
 *,
 *::before,
