@@ -1,5 +1,7 @@
 <template>
   <div class="authentication-modal-container animated fadeIn slow">
+    <button class="close">&#x2715;</button>
+
     <div class="authentication-modal animated slideInUp">
       <base-logo height="25pt"/>
       <h2>Sign in to Continue</h2>
