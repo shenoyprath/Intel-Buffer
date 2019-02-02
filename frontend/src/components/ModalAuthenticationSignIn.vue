@@ -32,7 +32,7 @@
 import BaseLogo from '@/components/BaseLogo'
 
 export default {
-  name: 'SignIn',
+  name: 'ModalAuthenticationSignIn',
   components: {
     'base-logo': BaseLogo
   }
@@ -40,7 +40,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '../styles/mixins/authentication_modal.scss';
+@import '../styles/mixins/authentication_modal';
 
 @include authentication-modal;
 </style>
