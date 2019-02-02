@@ -43,6 +43,13 @@ export default {
 .sign-in {
   @include full-size;
   @include center;
+
+  z-index: get-z-index(modal, main);
+  @if ($background-color == #000) {
+    background: rgba(0, 0, 0, 0.4);
+  } @else if ($background-color == #fff) {
+    background: rgba(255, 255, 255, 0.4);
+  }
 }
 
 .sign-in-modal {
