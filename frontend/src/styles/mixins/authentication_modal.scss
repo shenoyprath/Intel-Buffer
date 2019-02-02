@@ -18,7 +18,12 @@
       background-color: transparent;
       color: $foreground-color;
       font-size: 30px;
+
       padding: 0;
+      margin: {
+        left: 5px;
+        right: 5px;
+      }
     }
   }
 
