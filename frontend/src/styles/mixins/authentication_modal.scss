@@ -100,5 +100,12 @@
       color: $background-color;
       background-color: $foreground-color;
     }
+
+    .description {
+      margin: {
+        left: 20px;
+        right: 20px;
+      }
+    }
   }
 }
