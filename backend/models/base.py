@@ -19,4 +19,4 @@ class Base(Model):
         https://github.com/coleifer/peewee/issues/856
         """
 
-        cls.create(**query)
+        return cls.create(**query)
