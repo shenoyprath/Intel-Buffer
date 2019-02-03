@@ -10,7 +10,7 @@ class Base(Model):
     @classmethod
     def instantiate(cls, **query):
         """
-        Factory method for creating instances of models.
+        Abstract method for creating instances of models.
         If complex logic is needed before creating an instance, simply override this method and add the additional
         functionality before creating the instance.
 
