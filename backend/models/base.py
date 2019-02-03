@@ -34,7 +34,7 @@ class Base(Model):
         :return: Instance that matches the identifier or None if nothing matches.
         """
 
-        return cls.get_or_none(id=identity)
+        return cls.get_or_none(cls.id == identity)
 
     def __repr__(self):
         return "\n".join(
