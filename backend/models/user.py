@@ -19,10 +19,6 @@ class User(Base):
 
     bio = CharField(max_length=160, null=True)  # user's 160 character bio
 
-    creation_timestamp = DateTimeField(default=datetime.utcnow)
-
-    last_login_timestamp = DateTimeField(null=True, default=datetime.utcnow)
-
     is_verified = BooleanField(default=False)
 
     @classmethod
