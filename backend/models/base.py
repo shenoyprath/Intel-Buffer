@@ -23,3 +23,14 @@ class Base(Model):
         """
 
         return cls.create(**query)
+
+    @classmethod
+    def retrieve(cls, identity):
+        """
+        Abstract method to retrieve an instance from a model using a unique identifier.
+
+        :param identity: Default unique identifier is the id. Named 'identity' to avoid shadowing built-in name 'id'.
+        :return: Instance that matches the identifier or None if nothing matches.
+        """
+
+        return cls.get_or_none(id=identity)
