@@ -17,6 +17,9 @@ class Base(Model):
         Note: This method is used because Peewee advices against overriding `Model.__init__` or `Model.create`.
         Named 'instantiate' to avoid conflict with `Model.create`.
         https://github.com/coleifer/peewee/issues/856
+
+        :param query: Same parameters that are passed to the Peewee's 'Model.create'.
+        :return: New instance of the the model.
         """
 
         return cls.create(**query)
