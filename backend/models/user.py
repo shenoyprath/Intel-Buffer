@@ -37,3 +37,10 @@ class User(UserMixin, Base):
             email_address=email_address,
             password=hashed_password
         )
+
+    @classmethod
+    def retrieve(cls, **kwargs):
+        email_address_key = "email_address"
+        if email_address_key in kwargs:
+            return cls.get_or_none(cls.email_address == kwargs.get(email_address_key))
+        return super().retrieve(identity=kwargs.get("identity"))
