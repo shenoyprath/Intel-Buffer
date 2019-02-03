@@ -1,4 +1,5 @@
 from peewee import Model
+from playhouse.shortcuts import model_to_dict
 
 from models import db
 
@@ -34,3 +35,8 @@ class Base(Model):
         """
 
         return cls.get_or_none(id=identity)
+
+    def __repr__(self):
+        return "\n".join(
+            f"{key}: {value}" for key, value in model_to_dict(self).items()
+        )
