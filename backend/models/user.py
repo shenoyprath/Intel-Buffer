@@ -40,7 +40,7 @@ class User(UserMixin, Base):
 
     @classmethod
     def retrieve(cls, **kwargs):
-        email_address_key = "email_address"
-        if email_address_key in kwargs:
-            return cls.get_or_none(cls.email_address == kwargs.get(email_address_key))
+        email_address = kwargs.get("email_address")
+        if email_address is not None:
+            return cls.get_or_none(cls.email_address == email_address)
         return super().retrieve(identity=kwargs.get("identity"))
