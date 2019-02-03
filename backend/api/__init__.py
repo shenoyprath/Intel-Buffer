@@ -13,8 +13,8 @@ app.static_folder = os.path.join(app.config["DIST_DIR"], "static")
 
 
 # noinspection PyUnusedLocal
-@app.route('/', defaults={'path': ''})
-@app.route('/<path>/')
+@app.route("/", defaults={"path": ""})
+@app.route("/<path>/")
 def index(path):
     dist_dir = current_app.config["DIST_DIR"]
     entry = os.path.join(dist_dir, "index.html")
