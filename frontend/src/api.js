@@ -8,4 +8,14 @@ const api = axios.create({
   }
 })
 
+api.interceptors.response.use(
+  response => {
+    return response
+  },
+  error => {
+    console.log(error)
+    return Promise.reject(error)
+  }
+)
+
 export default api
