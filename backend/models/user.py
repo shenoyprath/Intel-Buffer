@@ -1,6 +1,5 @@
 from datetime import datetime
 
-from flask_login import UserMixin
 from werkzeug.security import generate_password_hash
 
 from peewee import BooleanField, CharField, DateTimeField, FixedCharField
@@ -9,7 +8,7 @@ from models.base import Base
 from utils.remove_extra_spaces import remove_extra_spaces
 
 
-class User(UserMixin, Base):
+class User(Base):
     first_name = CharField()
 
     last_name = CharField()
