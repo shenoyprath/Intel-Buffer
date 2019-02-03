@@ -9,6 +9,7 @@ verify_ssl = true
 flask = "*"
 flask-restplus = "*"
 peewee = "*"
+flask-login = "*"
 
 [requires]
 python_version = "3.7"
