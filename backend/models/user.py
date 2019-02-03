@@ -44,3 +44,10 @@ class User(UserMixin, Base):
         if email_address is not None:
             return cls.get_or_none(cls.email_address == email_address)
         return super().retrieve(identity=kwargs.get("identity"))
+
+    def __repr__(self):
+        return (
+            f"First Name: {self.first_name} \n"
+            f"Last Name: {self.last_name} \n"
+            f"Email Address: {self.email_address}"
+        )
