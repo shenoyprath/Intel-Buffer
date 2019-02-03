@@ -7,6 +7,7 @@ import ModalAuthenticationSignIn from '@/components/ModalAuthenticationSignIn'
 
 export default {
   name: 'SignIn',
+
   components: {
     ModalAuthenticationSignIn
   }

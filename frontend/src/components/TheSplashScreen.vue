@@ -10,6 +10,7 @@ import BaseLogo from '@/components/BaseLogo'
 
 export default {
   name: 'TheSplashScreen',
+
   components: {
     'base-logo': BaseLogo
   }

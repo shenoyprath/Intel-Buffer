@@ -20,15 +20,18 @@ import Navbar from '../components/Navbar'
 
 export default {
   name: 'home',
+
   components: {
     'the-splash-screen': TheSplashScreen,
     'navbar': Navbar
   },
+
   data () {
     return {
       isSplashVisible: true
     }
   },
+
   mounted () {
     setTimeout(() => {
       this.isSplashVisible = false

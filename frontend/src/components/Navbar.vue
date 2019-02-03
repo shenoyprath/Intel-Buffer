@@ -46,12 +46,15 @@ import BaseLogo from '@/components/BaseLogo'
 
 export default {
   name: 'navbar',
+
   components: {
     'base-logo': BaseLogo
   },
+
   data () {
     return {
       isMenuOpen: false,
+
       navSections: {
         personalize: {
           name: 'personalize',
@@ -60,6 +63,7 @@ export default {
             'sign in'
           ]
         },
+
         chronicles: {
           name: 'chronicles',
           links: [
@@ -72,6 +76,7 @@ export default {
             'write'
           ]
         },
+
         news: {
           name: 'news',
           links: [
@@ -80,6 +85,7 @@ export default {
             'opinion'
           ]
         },
+
         topics: {
           name: 'topics',
           links: [
@@ -98,6 +104,7 @@ export default {
       }
     }
   },
+
   computed: {
     menuOpenClass () {
       return this.isMenuOpen ? 'open' : ''

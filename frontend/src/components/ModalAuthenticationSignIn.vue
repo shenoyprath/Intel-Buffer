@@ -35,6 +35,7 @@ import BaseLogo from '@/components/BaseLogo'
 
 export default {
   name: 'ModalAuthenticationSignIn',
+
   components: {
     'base-logo': BaseLogo
   }

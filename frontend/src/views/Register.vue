@@ -7,6 +7,7 @@ import ModalAuthenticationRegister from '@/components/ModalAuthenticationRegiste
 
 export default {
   name: 'Register',
+
   components: {
     ModalAuthenticationRegister
   }
