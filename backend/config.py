@@ -9,5 +9,7 @@ class Config:
     ROOT_DIR = os.path.dirname(APP_DIR)
     DIST_DIR = os.path.join(ROOT_DIR, "frontend/dist")
 
+    JWT_SECRET_KEY = SECRET_KEY
+
     if not os.path.exists(DIST_DIR):
         raise NotADirectoryError(f"DIST_DIR not found: {DIST_DIR}")
