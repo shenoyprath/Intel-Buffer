@@ -9,7 +9,7 @@ from config import Config
 
 from index import index
 
-from api import blueprint as api_blueprint
+from api import api_blueprint
 
 from models import db
 from models.base import Base
