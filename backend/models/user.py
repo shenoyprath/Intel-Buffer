@@ -3,6 +3,7 @@ from werkzeug.security import generate_password_hash
 from peewee import BooleanField, CharField, FixedCharField
 
 from models.base import Base
+
 from utils.remove_extra_spaces import remove_extra_spaces
 
 
