@@ -9,7 +9,7 @@ from config import Config
 
 from index import index
 
-import api
+from api import blueprint as api_blueprint
 
 from models import db
 from models.base import Base
@@ -26,7 +26,7 @@ app.static_folder = os.path.join(app.config["DIST_DIR"], "static")
 app.add_url_rule(rule="/", view_func=index, defaults={"path": ""})
 app.add_url_rule(rule="/<path>/", view_func=index)
 
-app.register_blueprint(api.blueprint)
+app.register_blueprint(api_blueprint)
 
 JWTManager(app)
 
