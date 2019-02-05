@@ -2,6 +2,7 @@ import os
 
 from peewee import MySQLDatabase
 
+
 db_user_environ_var = "INTEL_BUFFER_DB_USER"
 db_pass_environ_var = "INTEL_BUFFER_DB_PASS"
 
