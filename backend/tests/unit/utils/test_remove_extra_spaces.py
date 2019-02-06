@@ -29,3 +29,11 @@ class TestRemoveExtraSpaces:
     def test_removes_extra_whitespace(string):
         result_val = remove_extra_spaces(string)
         assert not TestRemoveExtraSpaces.has_consecutive_spaces(result_val)
+
+    @staticmethod
+    @given(strings=iterables(text()))
+    @example([initial_val_example, "\t\n\r"])
+    def test_removes_extra_whitespace_for_multiple(strings):
+        result_val = remove_extra_spaces(*strings)
+        for val in result_val:
+            assert not TestRemoveExtraSpaces.has_consecutive_spaces(val)
