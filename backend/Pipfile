@@ -12,6 +12,7 @@ flask = "*"
 flask-restplus = "*"
 flask-jwt-extended = "*"
 peewee = "*"
+marshmallow = "*"
 
 [requires]
 python_version = "3.7"
