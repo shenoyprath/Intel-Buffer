@@ -15,3 +15,17 @@ class TestRemoveExtraSpaces:
         if result_val:
             assert not result_val[0].isspace()
             assert not result_val[-1].isspace()
+
+    @staticmethod
+    def has_consecutive_spaces(string):
+        for index in range(len(string) - 1):
+            if string[index].isspace() and string[index + 1].isspace():
+                return True
+        return False
+
+    @staticmethod
+    @given(string=text())
+    @example(initial_val_example)
+    def test_removes_extra_whitespace(string):
+        result_val = remove_extra_spaces(string)
+        assert not TestRemoveExtraSpaces.has_consecutive_spaces(result_val)
