@@ -15,11 +15,11 @@ def validate_payload(schema, fail_status_code):
     :param fail_status_code: Status code to send to client if payload does not validate.
     """
 
-    def decorator(function):
+    def decorator(route):
         def wrapper(*args, **kwargs):
             try:
                 payload = schema().load(rest_api.payload)
-                return function(payload=payload.data, *args, **kwargs)
+                return route(payload=payload.data, *args, **kwargs)
 
             except ValidationError as e:
                 response = jsonify(error_messages=e.messages)
