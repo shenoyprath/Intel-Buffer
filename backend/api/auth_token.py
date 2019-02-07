@@ -10,16 +10,10 @@ from models import db
 from models.user import User
 
 
-@rest_api.route("/login/", methods=("POST",))
-class Login(Resource):
+@rest_api.route("/auth_token/", methods=("POST",))
+class AuthToken(Resource):
     @staticmethod
     def post():
-        """
-        Creates a new authentication token for the client if client exists in the database.
-
-        :return JSON: Access token if client is validated or error message if client is not.
-        """
-
         email_address = rest_api.payload.get("email_address")
         password = rest_api.payload.get("password")
 
