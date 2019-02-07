@@ -12,7 +12,7 @@ def validate_payload(schema, fail_status_code):
     Otherwise, it returns the errors without calling the api route.
 
     :param schema: Schema to validate the payload sent by the client.
-    :param fail_status_code: Status code to send to client if payload does not validate.
+    :param fail_status_code: Status code sent to client if payload does not validate.
     """
 
     def decorator(route):
