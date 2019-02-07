@@ -3,4 +3,4 @@ from marshmallow import Schema
 
 class Base(Schema):
     class Meta:
-        strict = True  # raises ValidationError when fails to validate the schema
+        strict = True  # failure to validate the schema raises a ValidationError
