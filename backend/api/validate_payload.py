@@ -9,8 +9,8 @@ def validate_payload(schema):
     def decorator(function):
         def wrapper(*args, **kwargs):
             try:
-                schema().load(rest_api.payload)
-                return function(*args, **kwargs)
+                payload = schema().load(rest_api.payload)
+                return function(payload=payload.data, *args, **kwargs)
 
             except ValidationError as e:
                 return jsonify(error_messages=e.messages)
