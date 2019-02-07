@@ -25,12 +25,10 @@ class User(Base):
         first_name, last_name = remove_extra_spaces(first_name, last_name)
         hashed_password = generate_password_hash(password=password, method="sha256")
 
-        return cls.create(
-            first_name=first_name,
-            last_name=last_name,
-            email_address=email_address,
-            password=hashed_password
-        )
+        return cls.create(first_name=first_name,
+                          last_name=last_name,
+                          email_address=email_address,
+                          password=hashed_password)
 
     @classmethod
     def retrieve(cls, **kwargs):
@@ -40,8 +38,6 @@ class User(Base):
         return super().retrieve(identity=kwargs.get("identity"))
 
     def __repr__(self):
-        return (
-            f"First Name: {self.first_name} \n"
-            f"Last Name: {self.last_name} \n"
-            f"Email Address: {self.email_address}"
-        )
+        return (f"First Name: {self.first_name} \n"
+                f"Last Name: {self.last_name} \n"
+                f"Email Address: {self.email_address}")
