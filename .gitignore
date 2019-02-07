@@ -109,6 +109,6 @@ venv.bak/
 # DS Store
 .DS_Store
 
-# backend eest caches
+# backend test caches
 .hypothesis
 .pytest_cache
