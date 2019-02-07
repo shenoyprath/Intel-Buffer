@@ -38,6 +38,6 @@ class User(Base):
         return super().retrieve(identity=kwargs.get("identity"))
 
     def __repr__(self):
-        return (f"First Name: {self.first_name} \n"
-                f"Last Name: {self.last_name} \n"
-                f"Email Address: {self.email_address}")
+        return "\n".join([f"First Name: {self.first_name}",
+                          f"Last Name: {self.last_name}",
+                          f"Email Address: {self.email_address}"])
