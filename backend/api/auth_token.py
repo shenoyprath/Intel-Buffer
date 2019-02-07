@@ -31,6 +31,6 @@ class AuthToken(Resource):
                 response.status_code = 200
                 return response
 
-        response = jsonify(message="Invalid credentials. Please try again.")
+        response = jsonify(error_message="Invalid credentials. Please try again.")
         response.status_code = 401
         return response
