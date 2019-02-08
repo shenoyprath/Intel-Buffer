@@ -37,5 +37,6 @@ class Base(Model):
         return cls.get_or_none(cls.id == identity)
 
     def __repr__(self):
+        # TODO: change format to "className(key: value, key: value,...)"
         return "\n".join(f"{key}: {value}"
                          for key, value in model_to_dict(self).items())
