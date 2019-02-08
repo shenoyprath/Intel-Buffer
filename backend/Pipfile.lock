@@ -168,12 +168,10 @@
         },
         "hypothesis": {
             "hashes": [
-                "sha256:406a5f4a1681345d6fa4ac3e8496ab317c13396c51fa942fd2e611977f6a9434",
-                "sha256:db73f50ca3c935360b92953bc5e5fd16e1f45ca4084e5c2224ba568b78f62af4",
-                "sha256:e58b277b634b50d5e2d25ba9be9ff7f43052822cf4f390747910880d2dcda6a6"
+                "sha256:54d63ceaa6fd7dca6797936811a08c5ef4f32840308f278b8011a0edc8078d5f"
             ],
             "index": "pypi",
-            "version": "==4.5.1"
+            "version": "==4.5.4"
         },
         "more-itertools": {
             "hashes": [
