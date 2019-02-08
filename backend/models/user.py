@@ -1,6 +1,6 @@
 from werkzeug.security import generate_password_hash
 
-from peewee import BooleanField, CharField, FixedCharField
+from peewee import BooleanField, CharField
 
 from models.base import Base
 
@@ -14,7 +14,7 @@ class User(Base):
 
     email_address = CharField(unique=True)
 
-    password = FixedCharField(max_length=80)
+    password = CharField(max_length=50)
 
     bio = CharField(max_length=160, null=True)  # user's 160 character bio
 
