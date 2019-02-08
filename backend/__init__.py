@@ -28,7 +28,7 @@ app.add_url_rule(rule="/<path>/", view_func=index)
 
 app.register_blueprint(api_blueprint)
 
-JWTManager(app)
+jwt = JWTManager(app)
 
 with db:
     db.create_tables(Base.__subclasses__(), safe=True)
