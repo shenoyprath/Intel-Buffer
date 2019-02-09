@@ -1,3 +1,5 @@
+from functools import wraps
+
 from flask import jsonify
 
 from marshmallow import ValidationError
@@ -16,6 +18,7 @@ def validate_payload(schema, fail_status_code):
     """
 
     def decorator(route):
+        @wraps(route)
         def wrapper(*args, **kwargs):
             try:
                 payload = schema().load(rest_api.payload)
