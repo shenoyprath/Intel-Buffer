@@ -20,6 +20,7 @@ class RegistrationSchema(Base):
     email_address = Email(required=True, error_messages=custom_errors)
 
     password_len_msg = "Password must be between {min} and {max} characters long."
+    password_req_chars_msg = "Password must contain letters and numbers."
     password = String(required=True,
                       error_messages=custom_errors,
                       validate=Length(min=User.min_password_len,
@@ -32,7 +33,7 @@ class RegistrationSchema(Base):
         has_numbers = any(char.isdigit() for char in password)
 
         if not has_letters or not has_numbers:
-            raise ValidationError("Password must contain letters and numbers.")
+            raise ValidationError(RegistrationSchema.password_req_chars_msg)
 
     @validates_schema(skip_on_field_errors=True)
     def names_are_not_spaces(self, data):

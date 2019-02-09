@@ -1,7 +1,7 @@
 from string import printable
 
 from hypothesis import given, example
-from hypothesis.strategies import text, dictionaries, recursive, booleans, floats, lists, one_of
+from hypothesis.strategies import text, dictionaries, recursive, booleans, floats, lists, one_of, characters
 
 from pytest import raises
 
@@ -56,12 +56,28 @@ class TestRegistrationSchema:
         assert e.value.messages["password"] == [TestRegistrationSchema.password_len_msg]
 
     @staticmethod
-    def test_invalidates_password_without_letters():
-        pass
+    @given(password=text(characters(blacklist_categories=["L"]),
+                         min_size=User.min_password_len,
+                         max_size=User.max_password_len))
+    def test_invalidates_password_without_letters(password):
+        password_dict = {"password": password}
+        with raises(ValidationError) as e:
+            RegistrationSchema().load(password_dict)
+
+        assert "password" in e.value.messages
+        assert e.value.messages["password"] == [RegistrationSchema.password_req_chars_msg]
 
     @staticmethod
-    def test_invalidates_password_without_nums():
-        pass
+    @given(password=text(characters(blacklist_categories=["N"]),
+                         min_size=User.min_password_len,
+                         max_size=User.max_password_len))
+    def test_invalidates_password_without_nums(password):
+        password_dict = {"password": password}
+        with raises(ValidationError) as e:
+            RegistrationSchema().load(password_dict)
+
+        assert "password" in e.value.messages
+        assert e.value.messages["password"] == [RegistrationSchema.password_req_chars_msg]
 
     @staticmethod
     def test_invalidates_password_matching_email():
