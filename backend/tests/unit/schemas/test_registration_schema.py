@@ -1,4 +1,18 @@
+import json
+from string import printable
+
+from hypothesis.strategies import text, dictionaries, recursive, booleans, floats, lists
+
+
 class TestRegistrationSchema:
+    json_strategy = recursive(booleans() |
+                              floats() |
+                              text(printable),
+                              lambda children: lists(children, 1) |
+                              dictionaries(text(printable), children, min_size=1))
+
+    empty_json = json.loads(json.dumps({}))
+
     @staticmethod
     def test_invalidates_blank_fields():
         pass
