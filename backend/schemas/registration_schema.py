@@ -41,11 +41,11 @@ class RegistrationSchema(Base):
         field_required_msg = RegistrationSchema.custom_errors["required"]
 
         first_name = data.get("first_name")
-        if is_empty_or_space(first_name):
+        if first_name is not None and is_empty_or_space(first_name):
             raise ValidationError(field_required_msg, field_names=["first_name"])
 
         last_name = data.get("last_name")
-        if is_empty_or_space(last_name):
+        if last_name is not None and is_empty_or_space(last_name):
             raise ValidationError(field_required_msg, field_names=["last_name"])
 
     @validates_schema
