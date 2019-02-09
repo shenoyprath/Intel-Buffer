@@ -1,3 +1,4 @@
+from marshmallow import ValidationError, validates, validates_schema
 from marshmallow.fields import String, Email
 from marshmallow.validate import Length
 
@@ -5,15 +6,47 @@ from models.user import User
 
 from schemas.base import Base
 
+from utils.is_empty_or_space import is_empty_or_space
+
 
 class RegistrationSchema(Base):
-    first_name = String(required=True)
+    # TODO: find a way to change the default error messages for all fields without having to pass arguments repeatedly
+    custom_errors = {"required": "This field is required."}
 
-    last_name = String(required=True)
+    first_name = String(required=True, error_messages=custom_errors)
 
-    email_address = Email(required=True)
+    last_name = String(required=True, error_messages=custom_errors)
+
+    email_address = Email(required=True, error_messages=custom_errors)
 
     password = String(required=True,
+                      error_messages=custom_errors,
                       validate=Length(min=User.min_password_len,
                                       max=User.max_password_len,
                                       error="Password must be between {min} and {max} characters long."))
+
+    @validates("password")
+    def has_letters_and_nums(self, password):
+        has_letters = any(char.isalpha() for char in password)
+        has_numbers = any(char.isdigit() for char in password)
+
+        if not has_letters or not has_numbers:
+            raise ValidationError("Password must contain letters and numbers.")
+
+    @validates_schema(skip_on_field_errors=True)
+    def names_are_not_spaces(self, data):
+        field_required_msg = RegistrationSchema.custom_errors \
+                                               .get("required")
+        first_name = data.get("first_name")
+        if is_empty_or_space(first_name):
+            raise ValidationError(field_required_msg, field_names=["first_name"])
+
+        last_name = data.get("last_name")
+        if is_empty_or_space(last_name):
+            raise ValidationError(field_required_msg, field_names=["last_name"])
+
+    @validates_schema(skip_on_field_errors=True)
+    def password_is_not_email(self, data):
+        if data.get("password") == data.get("email_address"):
+            raise ValidationError(message="Password cannot be the same as your email address.",
+                                  field_names=["password"])
