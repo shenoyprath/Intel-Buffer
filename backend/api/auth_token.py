@@ -1,8 +1,12 @@
+from datetime import datetime
+
 from flask import jsonify
 from werkzeug.security import check_password_hash
 
 from flask_restplus import Resource
 from flask_jwt_extended import create_access_token, create_refresh_token
+
+from app import jwt
 
 from api import rest_api
 
@@ -12,6 +16,16 @@ from models.user import User
 
 @rest_api.route("/auth_token/", methods=("POST",))
 class AuthToken(Resource):
+    @staticmethod
+    @jwt.user_claims_loader
+    def add_token_claims(identity):
+        """
+        Custom claims for the authentication tokens (mostly to find the time the token was issued at).
+        """
+
+        return {"identity": identity,
+                "creation_timestamp": str(datetime.utcnow())}
+
     @staticmethod
     def post():
         """
@@ -26,7 +40,9 @@ class AuthToken(Resource):
         with db:
             user = User.retrieve(email_address=email_address)
             if user and check_password_hash(user.password, password):
-                access_token, refresh_token = create_access_token(email_address), create_refresh_token(email_address)
+                access_token = create_access_token(email_address)
+                refresh_token = create_refresh_token(email_address)
+
                 response = jsonify(access_token=access_token,
                                    refresh_token=refresh_token)
                 response.status_code = 200
