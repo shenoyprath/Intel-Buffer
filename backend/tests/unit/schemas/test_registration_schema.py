@@ -1,7 +1,14 @@
 import json
 from string import printable
 
+from hypothesis import given, example
 from hypothesis.strategies import text, dictionaries, recursive, booleans, floats, lists
+
+from pytest import raises
+
+from marshmallow import ValidationError
+
+from schemas.registration_schema import RegistrationSchema
 
 
 class TestRegistrationSchema:
@@ -11,11 +18,20 @@ class TestRegistrationSchema:
                               lambda children: lists(children, 1) |
                               dictionaries(text(printable), children, min_size=1))
 
-    empty_json = json.loads(json.dumps({}))
-
     @staticmethod
-    def test_invalidates_blank_fields():
-        pass
+    @given(payload=json_strategy)
+    @example({})
+    def test_invalidates_blank_fields(payload):
+        with raises(ValidationError) as e:
+            RegistrationSchema().load(payload)
+
+        if isinstance(payload, dict):
+            assert e.value.messages == {"email_address": ["This field is required."],
+                                        "password": ["This field is required."],
+                                        "first_name": ["This field is required."],
+                                        "last_name": ["This field is required."]}
+        else:
+            assert e.value.messages == {"_schema": ["Invalid input type."]}
 
     @staticmethod
     def test_invalidates_just_whitespace_names():
