@@ -15,12 +15,12 @@ class TestRegistrationSchema:
                               floats() |
                               text(printable),
                               lambda children: lists(children, 1) |
-                              dictionaries(text(printable), children, min_size=1))
+                              dictionaries(text(printable), children, min_size=1))  # straight out of the docs
 
     @staticmethod
     @given(payload=json_strategy)
     @example({})
-    def test_invalidates_if_required_fields_not_provided(payload):
+    def test_invalidates_nonexistence_of_required_fields(payload):
         with raises(ValidationError) as e:
             RegistrationSchema().load(payload)
 
@@ -33,11 +33,7 @@ class TestRegistrationSchema:
             assert e.value.messages == {"_schema": ["Invalid input type."]}
 
     @staticmethod
-    def test_invalidates_blank_fields():
-        pass
-
-    @staticmethod
-    def test_invalidates_just_whitespace_names():
+    def test_invalidates_empty_or_whitespace_names():
         pass
 
     @staticmethod
