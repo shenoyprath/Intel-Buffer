@@ -1,4 +1,3 @@
-import json
 from string import printable
 
 from hypothesis import given, example
@@ -21,7 +20,7 @@ class TestRegistrationSchema:
     @staticmethod
     @given(payload=json_strategy)
     @example({})
-    def test_invalidates_blank_fields(payload):
+    def test_invalidates_if_required_fields_not_provided(payload):
         with raises(ValidationError) as e:
             RegistrationSchema().load(payload)
 
@@ -32,6 +31,10 @@ class TestRegistrationSchema:
                                         "last_name": ["This field is required."]}
         else:
             assert e.value.messages == {"_schema": ["Invalid input type."]}
+
+    @staticmethod
+    def test_invalidates_blank_fields():
+        pass
 
     @staticmethod
     def test_invalidates_just_whitespace_names():
