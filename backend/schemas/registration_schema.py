@@ -35,8 +35,8 @@ class RegistrationSchema(Base):
 
     @validates_schema(skip_on_field_errors=True)
     def names_are_not_spaces(self, data):
-        field_required_msg = RegistrationSchema.custom_errors \
-                                               .get("required")
+        field_required_msg = RegistrationSchema.custom_errors["required"]
+
         first_name = data.get("first_name")
         if is_empty_or_space(first_name):
             raise ValidationError(field_required_msg, field_names=["first_name"])
