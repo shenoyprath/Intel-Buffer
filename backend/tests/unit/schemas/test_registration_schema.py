@@ -33,12 +33,10 @@ class TestRegistrationSchema:
 
         required_msg = TestRegistrationSchema.required_msg
         if isinstance(payload, dict):
-            assert e.value.messages == {"email_address": [required_msg],
-                                        "password": [required_msg],
-                                        "first_name": [required_msg],
-                                        "last_name": [required_msg]}
+            for field in ("first_name", "last_name", "email_address", "password"):
+                assert required_msg in e.value.messages[field]
         else:
-            assert e.value.messages == {"_schema": ["Invalid input type."]}
+            assert "Invalid input type." in e.value.messages["_schema"]
 
     @staticmethod
     def test_invalidates_empty_or_whitespace_names():
@@ -53,7 +51,7 @@ class TestRegistrationSchema:
             RegistrationSchema().load(password_dict)
 
         assert "password" in e.value.messages
-        assert e.value.messages["password"] == [TestRegistrationSchema.password_len_msg]
+        assert TestRegistrationSchema.password_len_msg in e.value.messages["password"]
 
     @staticmethod
     @given(password=one_of(text(characters(blacklist_categories=["L"]),
@@ -68,11 +66,7 @@ class TestRegistrationSchema:
             RegistrationSchema().load(password_dict)
 
         assert "password" in e.value.messages
-        assert e.value.messages["password"] == [RegistrationSchema.password_req_chars_msg]
-
-    @staticmethod
-    def test_invalidates_password_matching_email():
-        pass
+        assert RegistrationSchema.password_req_chars_msg in e.value.messages["password"]
 
     @staticmethod
     def test_validates_when_all_criteria_meet():

@@ -21,6 +21,7 @@ class RegistrationSchema(Base):
 
     password_len_msg = "Password must be between {min} and {max} characters long."
     password_req_chars_msg = "Password must contain letters and numbers."
+    password_is_email_msg = "Password cannot be the same as your email address."
     password = String(required=True,
                       error_messages=custom_errors,
                       validate=Length(min=User.min_password_len,
@@ -35,7 +36,7 @@ class RegistrationSchema(Base):
         if not has_letters or not has_numbers:
             raise ValidationError(RegistrationSchema.password_req_chars_msg)
 
-    @validates_schema(skip_on_field_errors=True)
+    @validates_schema
     def names_are_not_spaces(self, data):
         field_required_msg = RegistrationSchema.custom_errors["required"]
 
@@ -47,8 +48,8 @@ class RegistrationSchema(Base):
         if is_empty_or_space(last_name):
             raise ValidationError(field_required_msg, field_names=["last_name"])
 
-    @validates_schema(skip_on_field_errors=True)
+    @validates_schema
     def password_is_not_email(self, data):
         if data.get("password") == data.get("email_address"):
-            raise ValidationError(message="Password cannot be the same as your email address.",
+            raise ValidationError(message=RegistrationSchema.password_is_email_msg,
                                   field_names=["password"])
