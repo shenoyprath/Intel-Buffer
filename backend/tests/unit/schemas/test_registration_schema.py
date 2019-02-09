@@ -56,22 +56,13 @@ class TestRegistrationSchema:
         assert e.value.messages["password"] == [TestRegistrationSchema.password_len_msg]
 
     @staticmethod
-    @given(password=text(characters(blacklist_categories=["L"]),
-                         min_size=User.min_password_len,
-                         max_size=User.max_password_len))
-    def test_invalidates_password_without_letters(password):
-        password_dict = {"password": password}
-        with raises(ValidationError) as e:
-            RegistrationSchema().load(password_dict)
-
-        assert "password" in e.value.messages
-        assert e.value.messages["password"] == [RegistrationSchema.password_req_chars_msg]
-
-    @staticmethod
-    @given(password=text(characters(blacklist_categories=["N"]),
-                         min_size=User.min_password_len,
-                         max_size=User.max_password_len))
-    def test_invalidates_password_without_nums(password):
+    @given(password=one_of(text(characters(blacklist_categories=["L"]),
+                                min_size=User.min_password_len,
+                                max_size=User.max_password_len),
+                           text(characters(blacklist_categories=["N"]),
+                                min_size=User.min_password_len,
+                                max_size=User.max_password_len)))
+    def test_invalidates_password_without_letters_or_nums(password):
         password_dict = {"password": password}
         with raises(ValidationError) as e:
             RegistrationSchema().load(password_dict)
