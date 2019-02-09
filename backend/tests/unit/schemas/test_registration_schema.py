@@ -1,7 +1,7 @@
 from string import printable
 
 from hypothesis import given, example
-from hypothesis.strategies import text, dictionaries, recursive, booleans, floats, lists
+from hypothesis.strategies import text, dictionaries, recursive, booleans, floats, lists, one_of
 
 from pytest import raises
 
@@ -45,18 +45,9 @@ class TestRegistrationSchema:
         pass
 
     @staticmethod
-    @given(password=text(min_size=User.max_password_len + 1))
-    def test_invalidates_long_passwords(password):
-        password_dict = {"password": password}
-        with raises(ValidationError) as e:
-            RegistrationSchema().load(password_dict)
-
-        assert "password" in e.value.messages
-        assert e.value.messages["password"] == [TestRegistrationSchema.password_len_msg]
-
-    @staticmethod
-    @given(password=text(max_size=User.min_password_len - 1))
-    def test_invalidates_short_passwords(password):
+    @given(password=one_of(text(min_size=User.max_password_len + 1),
+                           text(max_size=User.min_password_len - 1)))
+    def test_invalidates_password_len_out_of_range(password):
         password_dict = {"password": password}
         with raises(ValidationError) as e:
             RegistrationSchema().load(password_dict)
