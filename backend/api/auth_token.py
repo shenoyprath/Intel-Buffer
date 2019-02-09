@@ -54,10 +54,18 @@ class AuthToken(Resource):
         return response
 
     @staticmethod
+    @jwt.token_in_blacklist_loader
+    def is_token_blacklisted(jwt_dict):
+        user_email_address = jwt_dict.get("jti")  # jti stores the identity
+        if redis_db.get(f"token_blacklist:{user_email_address}") is not None:
+            return True
+        return False
+
+    @staticmethod
     @jwt_required
     def delete():
         """
-        Blacklists the client's authentication token till they expire. Used to "log the user out".
+        Blacklists the client's authentication tokens till it expires. Used to "log the client out".
         No way to avoid state management here because token needs to be invalidated immediately.
         """
 
