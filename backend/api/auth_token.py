@@ -2,7 +2,7 @@ from flask import jsonify
 from werkzeug.security import check_password_hash
 
 from flask_restplus import Resource
-from flask_jwt_extended import create_access_token
+from flask_jwt_extended import create_access_token, create_refresh_token
 
 from api import rest_api
 
@@ -15,7 +15,7 @@ class AuthToken(Resource):
     @staticmethod
     def post():
         """
-        Creates a new authentication token for the client if client exists in the database.
+        Creates a new authentication (access and refresh) token for the client if client exists in the database.
 
         :return JSON: Access token if client is validated or error message if client is not.
         """
@@ -26,8 +26,9 @@ class AuthToken(Resource):
         with db:
             user = User.retrieve(email_address=email_address)
             if user and check_password_hash(user.password, password):
-                access_token = create_access_token(email_address)
-                response = jsonify(access_token=access_token)
+                access_token, refresh_token = create_access_token(email_address), create_refresh_token(email_address)
+                response = jsonify(access_token=access_token,
+                                   refresh_token=refresh_token)
                 response.status_code = 200
                 return response
 
