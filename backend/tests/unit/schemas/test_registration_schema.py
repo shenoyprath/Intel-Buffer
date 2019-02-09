@@ -55,8 +55,14 @@ class TestRegistrationSchema:
         assert e.value.messages["password"] == [TestRegistrationSchema.password_len_msg]
 
     @staticmethod
-    def test_invalidates_short_passwords():
-        pass
+    @given(password=text(max_size=User.min_password_len - 1))
+    def test_invalidates_short_passwords(password):
+        password_dict = {"password": password}
+        with raises(ValidationError) as e:
+            RegistrationSchema().load(password_dict)
+
+        assert "password" in e.value.messages
+        assert e.value.messages["password"] == [TestRegistrationSchema.password_len_msg]
 
     @staticmethod
     def test_invalidates_password_without_letters():
