@@ -19,11 +19,12 @@ class RegistrationSchema(Base):
 
     email_address = Email(required=True, error_messages=custom_errors)
 
+    password_len_msg = "Password must be between {min} and {max} characters long."
     password = String(required=True,
                       error_messages=custom_errors,
                       validate=Length(min=User.min_password_len,
                                       max=User.max_password_len,
-                                      error="Password must be between {min} and {max} characters long."))
+                                      error=password_len_msg))
 
     @validates("password")
     def has_letters_and_nums(self, password):
