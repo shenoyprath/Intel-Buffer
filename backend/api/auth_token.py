@@ -57,9 +57,7 @@ class AuthToken(Resource):
     @jwt.token_in_blacklist_loader
     def is_token_blacklisted(jwt_dict):
         user_email_address = jwt_dict.get("jti")  # jti stores the identity
-        if redis_db.get(f"token_blacklist:{user_email_address}") is not None:
-            return True
-        return False
+        return redis_db.get(f"token_blacklist:{user_email_address}") is not None
 
     @staticmethod
     @jwt_required
