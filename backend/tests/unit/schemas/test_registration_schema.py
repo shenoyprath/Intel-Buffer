@@ -1,7 +1,8 @@
 from string import printable
 
 from hypothesis import given, example
-from hypothesis.strategies import text, dictionaries, recursive, booleans, floats, lists, one_of, characters
+from hypothesis.strategies import text, dictionaries, recursive, booleans, floats, lists, one_of, characters, emails, \
+    integers, data
 
 from pytest import raises
 
@@ -69,5 +70,22 @@ class TestRegistrationSchema:
         assert RegistrationSchema.password_req_chars_msg in e.value.messages["password"]
 
     @staticmethod
-    def test_validates_when_all_criteria_meet():
-        pass
+    @given(strategy=data())
+    def test_invalidates_password_matching_email(strategy):
+        random_int = strategy.draw(integers())
+
+        def filter_by_len(email):  # filter to pass password length validation
+            return User.min_password_len < len(email) + len(str(random_int)) < User.max_password_len
+
+        email_address = strategy.draw(emails()
+                                      .filter(lambda email: filter_by_len(email)))
+        # integer added to circumvent validation that checks for numbers & letters in passwords
+        email_address = str(random_int) + email_address
+
+        payload_dict = {"email_address": email_address,
+                        "password": email_address}
+        with raises(ValidationError) as e:
+            RegistrationSchema().load(payload_dict)
+
+        assert "password" in e.value.messages
+        assert RegistrationSchema.password_is_email_msg in e.value.messages["password"]
