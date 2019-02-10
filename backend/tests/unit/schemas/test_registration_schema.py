@@ -44,6 +44,16 @@ class TestRegistrationSchema:
         pass
 
     @staticmethod
+    @given(text())
+    def test_invalidates_invalid_email(invalid_email):
+        payload_dict = {"email_address": invalid_email}
+        with raises(ValidationError) as e:
+            RegistrationSchema().load(payload_dict)
+
+        assert "email_address" in e.value.messages
+        assert "Not a valid email address." in e.value.messages["email_address"]
+
+    @staticmethod
     @given(password=one_of(text(min_size=User.max_password_len + 1),
                            text(max_size=User.min_password_len - 1)))
     def test_invalidates_password_len_out_of_range(password):
