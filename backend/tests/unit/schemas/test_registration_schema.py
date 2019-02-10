@@ -2,7 +2,7 @@ from string import printable
 
 from hypothesis import given, example
 from hypothesis.strategies import text, dictionaries, recursive, booleans, floats, lists, one_of, characters, emails, \
-    integers, data
+                                  integers, data
 
 from pytest import raises
 
