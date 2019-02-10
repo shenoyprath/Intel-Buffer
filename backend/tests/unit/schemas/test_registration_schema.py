@@ -1,10 +1,10 @@
-from string import printable
+from string import printable, ascii_letters
 
-from hypothesis import given, example
+from hypothesis import given, example, assume
 from hypothesis.strategies import text, dictionaries, recursive, booleans, floats, lists, one_of, characters, emails, \
                                   integers, data
 
-from pytest import raises
+from pytest import raises, fail
 
 from marshmallow import ValidationError
 
@@ -99,3 +99,24 @@ class TestRegistrationSchema:
 
         assert "password" in e.value.messages
         assert RegistrationSchema.password_is_email_msg in e.value.messages["password"]
+
+    @staticmethod
+    @given(first_name=text(characters(blacklist_categories=("C", "Z")), min_size=1),
+           last_name=text(characters(blacklist_categories=("C", "Z")), min_size=1),
+           email_address=emails(),
+           password=data())
+    def test_validates_when_all_criteria_meet(first_name, last_name, email_address, password):
+        password_nums = password.draw(integers())
+        password_letters = password.draw(text(characters(whitelist_categories=(),
+                                                         whitelist_characters=list(ascii_letters)), min_size=1))
+        password = str(password_nums) + password_letters
+        assume(User.min_password_len < len(password) < User.max_password_len)
+
+        payload_dict = {"first_name": first_name,
+                        "last_name": last_name,
+                        "email_address": email_address,
+                        "password": password}
+        try:
+            RegistrationSchema().load(payload_dict)
+        except ValidationError:
+            fail(f"ValidationError was unexpectedly raised.")
