@@ -7,9 +7,7 @@ from flask_restplus import Resource
 from flask_jwt_extended import create_access_token, create_refresh_token, jwt_required, get_jwt_identity, \
                                get_jwt_claims, get_raw_jwt
 
-from app import jwt
-
-from api import rest_api, redis_db
+from api import rest_api, jwt, redis_db
 
 from models import db
 from models.user import User

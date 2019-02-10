@@ -2,14 +2,13 @@ import os
 import sys
 
 from flask import Flask
-from flask_jwt_extended import JWTManager
 
 from logger import logger
 from config import Config
 
 from index import index
 
-from api import api_blueprint
+from api import api_blueprint, jwt
 
 from models import db
 from models.base import Base
@@ -27,8 +26,7 @@ app.add_url_rule(rule="/", view_func=index, defaults={"path": ""})
 app.add_url_rule(rule="/<path>/", view_func=index)
 
 app.register_blueprint(api_blueprint)
-
-jwt = JWTManager(app)
+jwt.init_app(app)
 
 with db:
     db.create_tables(Base.__subclasses__(), safe=True)

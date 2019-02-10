@@ -3,12 +3,14 @@ import os
 from flask import Blueprint
 
 from flask_restplus import Api
+from flask_jwt_extended import JWTManager
 
 from redis import Redis
 
 
 api_blueprint = Blueprint("api", __name__, url_prefix="/api")
 rest_api = Api(api_blueprint)
+jwt = JWTManager()
 
 
 redis_pass_environ_var = "REDIS_DB_PASS"
