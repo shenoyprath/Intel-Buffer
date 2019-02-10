@@ -14,5 +14,5 @@ if os.environ.get(db_pass_environ_var) is None:
                            f"the database.")
 
 db = MySQLDatabase("intel_buffer_db",
-                   user=os.environ.get("INTEL_BUFFER_DB_USER"),
-                   password=os.environ.get("INTEL_BUFFER_DB_PASS"))
+                   user=os.environ.get(db_user_environ_var),
+                   password=os.environ.get(db_pass_environ_var))
