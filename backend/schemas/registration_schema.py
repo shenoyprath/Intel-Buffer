@@ -2,6 +2,7 @@ from marshmallow import ValidationError, validates, validates_schema
 from marshmallow.fields import String, Email
 from marshmallow.validate import Length
 
+from models import db
 from models.user import User
 
 from schemas.base import Base
@@ -27,6 +28,12 @@ class RegistrationSchema(Base):
                       validate=Length(min=User.min_password_len,
                                       max=User.max_password_len,
                                       error=password_len_msg))
+
+    @validates("email_address")
+    def is_unique(self, email_address):
+        with db:
+            if User.retrieve(email_address=email_address) is not None:
+                raise ValidationError("Email address already exists.")
 
     @validates("password")
     def has_letters_and_nums(self, password):
