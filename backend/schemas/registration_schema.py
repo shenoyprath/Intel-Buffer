@@ -33,8 +33,9 @@ class RegistrationSchema(Base):
 
     @validates("email_address")
     def is_unique(self, email_address):
-        if User.retrieve(email_address=email_address) is not None:
-            raise ValidationError(RegistrationSchema.email_exists_msg)
+        with db:
+            if User.retrieve(email_address=email_address) is not None:
+                raise ValidationError(RegistrationSchema.email_exists_msg)
 
     @validates("password")
     def has_letters_and_nums(self, password):
