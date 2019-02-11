@@ -21,20 +21,20 @@ class RegistrationSchema(Base):
     email_exists_msg = "Email address already exists."
     email_address = Email(required=True, error_messages=custom_errors)
 
+    min_password_len, max_password_len = 8, 50
     password_len_msg = "Password must be between {min} and {max} characters long."
     password_req_chars_msg = "Password must contain letters and numbers."
     password_is_email_msg = "Password cannot be the same as your email address."
     password = String(required=True,
                       error_messages=custom_errors,
-                      validate=Length(min=User.min_password_len,
-                                      max=User.max_password_len,
+                      validate=Length(min=min_password_len,
+                                      max=max_password_len,
                                       error=password_len_msg))
 
     @validates("email_address")
     def is_unique(self, email_address):
-        with db:
-            if User.retrieve(email_address=email_address) is not None:
-                raise ValidationError(RegistrationSchema.email_exists_msg)
+        if User.retrieve(email_address=email_address) is not None:
+            raise ValidationError(RegistrationSchema.email_exists_msg)
 
     @validates("password")
     def has_letters_and_nums(self, password):
