@@ -18,6 +18,7 @@ class RegistrationSchema(Base):
 
     last_name = String(required=True, error_messages=custom_errors)
 
+    email_exists_msg = "Email address already exists."
     email_address = Email(required=True, error_messages=custom_errors)
 
     password_len_msg = "Password must be between {min} and {max} characters long."
@@ -33,7 +34,7 @@ class RegistrationSchema(Base):
     def is_unique(self, email_address):
         with db:
             if User.retrieve(email_address=email_address) is not None:
-                raise ValidationError("Email address already exists.")
+                raise ValidationError(RegistrationSchema.email_exists_msg)
 
     @validates("password")
     def has_letters_and_nums(self, password):
