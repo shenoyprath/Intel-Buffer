@@ -12,8 +12,10 @@ from models.user import User
 
 from schemas.registration_schema import RegistrationSchema
 
+from tests.unit.models.test_database_accessor import DatabaseAccessor
 
-class TestRegistrationSchema:
+
+class TestRegistrationSchema(DatabaseAccessor):
     required_msg = RegistrationSchema.custom_errors["required"]
 
     recursive_json = recursive(booleans() |
@@ -63,18 +65,39 @@ class TestRegistrationSchema:
         assert "email_address" in e.value.messages
         assert "Not a valid email address." in e.value.messages["email_address"]
 
-    @staticmethod
-    @given(email=emails())
-    def test_invalidates_existing_email(email):
-        pass
+    used_emails = []
 
     @staticmethod
-    @given(password=one_of(text(min_size=User.max_password_len + 1),
-                           text(max_size=User.min_password_len - 1)))
+    @given(first_name=text(characters(whitelist_characters=list(printable), whitelist_categories=()), min_size=1),
+           last_name=text(characters(whitelist_characters=list(printable), whitelist_categories=()), min_size=1),
+           email_address=emails().filter(lambda email: email not in TestRegistrationSchema.used_emails),
+           password=data())
+    def test_invalidates_existing_email(first_name, last_name, email_address, password):
+        password_nums = password.draw(integers())
+        password_letters = password.draw(text(characters(whitelist_categories=(),
+                                                         whitelist_characters=list(ascii_letters)), min_size=1))
+        password = str(password_nums) + password_letters
+        assume(RegistrationSchema.min_password_len < len(password) < RegistrationSchema.max_password_len)
+
+        User.instantiate(first_name, last_name, email_address, password)
+        TestRegistrationSchema.used_emails.append(email_address)
+        payload_dict = {"first_name": first_name,
+                        "last_name": last_name,
+                        "email_address": email_address,
+                        "password": password}
+
+        e = TestRegistrationSchema.get_load_error(payload_dict)
+        assert "email_address" in e.value.messages
+        assert e.value.messages["email_address"]
+
+    @staticmethod
+    @given(password=one_of(text(min_size=RegistrationSchema.max_password_len + 1),
+                           text(max_size=RegistrationSchema.min_password_len - 1)))
     def test_invalidates_password_len_out_of_range(password):
         e = TestRegistrationSchema.get_load_error({"password": password})
         password_len_msg = RegistrationSchema.password_len_msg \
-                                             .format(min=User.min_password_len, max=User.max_password_len)
+                                             .format(min=RegistrationSchema.min_password_len,
+                                                     max=RegistrationSchema.max_password_len)
 
         assert "password" in e.value.messages
         assert password_len_msg in e.value.messages["password"]
@@ -83,7 +106,9 @@ class TestRegistrationSchema:
     @given(password=one_of(text(characters(blacklist_categories=["L"])),  # blacklist letters
                            text(characters(blacklist_categories=["N"])),  # blacklist numbers
                            text(characters(blacklist_categories=["L", "N"])))
-           .filter(lambda password: User.min_password_len < len(password) < User.max_password_len))
+           .filter(lambda password: RegistrationSchema.min_password_len <
+                   len(password) <
+                   RegistrationSchema.max_password_len))
     def test_invalidates_password_without_letters_or_nums(password):
         e = TestRegistrationSchema.get_load_error({"password": password})
 
@@ -96,7 +121,8 @@ class TestRegistrationSchema:
         random_int = strategy.draw(integers())
 
         def filter_by_len(email):  # filter to pass password length validation
-            return User.min_password_len < len(email) + len(str(random_int)) < User.max_password_len
+            return RegistrationSchema.min_password_len < len(email) + len(str(random_int)) < \
+                   RegistrationSchema.max_password_len
 
         email_address = strategy.draw(emails()
                                       .filter(lambda email: filter_by_len(email)))
@@ -120,7 +146,7 @@ class TestRegistrationSchema:
         password_letters = password.draw(text(characters(whitelist_categories=(),
                                                          whitelist_characters=list(ascii_letters)), min_size=1))
         password = str(password_nums) + password_letters
-        assume(User.min_password_len < len(password) < User.max_password_len)
+        assume(RegistrationSchema.min_password_len < len(password) < RegistrationSchema.max_password_len)
 
         payload_dict = {"first_name": first_name,
                         "last_name": last_name,
