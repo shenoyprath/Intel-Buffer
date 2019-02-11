@@ -1,4 +1,5 @@
 import os
+from functools import wraps
 
 from peewee import MySQLDatabase
 
@@ -31,6 +32,22 @@ def test_models_exist():
         assert model.table_exists()
 
     database_teardown()
+
+
+def database_accessor(test_case):
+    """
+    Decorator for wrapping a test case to get method level database setup and teardown.
+    """
+
+    @wraps(test_case)
+    def wrapper(*args, **kwargs):
+        database_setup()
+        result = test_case(*args, **kwargs)
+        database_teardown()
+
+        return result
+
+    return wrapper
 
 
 class DatabaseAccessor:
