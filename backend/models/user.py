@@ -14,8 +14,7 @@ class User(Base):
 
     email_address = CharField(unique=True)
 
-    min_password_len, max_password_len = 8, 50
-    password = CharField(max_length=max_password_len)
+    password = CharField()
 
     bio = CharField(max_length=160, null=True)  # user's 160 character bio
 
