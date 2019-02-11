@@ -12,20 +12,36 @@ db = MySQLDatabase("intel_buffer_test_db",
 models = Base.__subclasses__()
 
 
-class TestDatabaseAccessor:
+def database_setup():
+    db.bind(models, bind_refs=False, bind_backrefs=False)
+
+    db.connect()
+    db.create_tables(models)
+
+
+def database_teardown():
+    db.drop_tables(models)
+    db.close()
+
+
+def test_models_exist():
+    database_setup()
+
+    for model in models:
+        assert model.table_exists()
+
+    database_teardown()
+
+
+class DatabaseAccessor:
+    """
+    Inherit this class in order to receive class level database setup and teardown.
+    """
+
     @classmethod
     def setup_class(cls):
-        db.bind(models, bind_refs=False, bind_backrefs=False)
-
-        db.connect()
-        db.create_tables(models)
-
-    @staticmethod
-    def test_models_exist():
-        for model in models:
-            assert model.table_exists()
+        database_setup()
 
     @classmethod
     def teardown_class(cls):
-        db.drop_tables(models)
-        db.close()
+        database_teardown()
