@@ -45,15 +45,16 @@ class RegistrationSchema(Base):
 
     @validates_schema
     def names_are_not_spaces(self, data):
-        field_required_msg = RegistrationSchema.custom_errors["required"]
+        blank_fields = []
+        for field_name in ("first_name", "last_name"):
+            field_value = data.get(field_name)
+            # short circuit None value as it's handled by marshmallow's required parameter.
+            if field_value is not None and is_empty_or_space(field_value):
+                blank_fields.append(field_name)
 
-        first_name = data.get("first_name")
-        if first_name is not None and is_empty_or_space(first_name):
-            raise ValidationError(field_required_msg, field_names=["first_name"])
-
-        last_name = data.get("last_name")
-        if last_name is not None and is_empty_or_space(last_name):
-            raise ValidationError(field_required_msg, field_names=["last_name"])
+        if blank_fields:
+            raise ValidationError(RegistrationSchema.custom_errors["required"],
+                                  field_names=blank_fields)
 
     @validates_schema
     def password_is_not_email(self, data):
