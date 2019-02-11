@@ -13,7 +13,7 @@ class TestRemoveExtraSpaces:
     def test_strips(string):
         result = remove_extra_spaces(string)
         try:
-            assert not (result[0].isspace() and result[-1].isspace())
+            assert not (result[0].isspace() or result[-1].isspace())
         except IndexError:
             assert not result
 
