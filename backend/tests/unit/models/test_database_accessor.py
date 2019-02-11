@@ -27,10 +27,7 @@ def database_teardown():
 
 def test_models_exist():
     database_setup()
-
-    for model in models:
-        assert model.table_exists()
-
+    assert all(model.table_exists() for model in models)
     database_teardown()
 
 
