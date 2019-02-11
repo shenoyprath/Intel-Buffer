@@ -39,7 +39,7 @@ class TestRegistrationSchema(DatabaseAccessor):
         if isinstance(payload, dict):
             assert all(TestRegistrationSchema.required_msg in e.value.messages[field]
                        for field in ("first_name", "last_name", "email_address", "password"))
-        else:
+        else:  # some objects (bool, lists, etc) other than dict are also valid json and need to be dealt properly
             assert "Invalid input type." in e.value.messages["_schema"]
 
     whitespace_name = text(characters(whitelist_categories=(),
