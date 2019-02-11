@@ -41,9 +41,13 @@ def database_accessor(test_case):
     return wrapper
 
 
+def check_if_models_exist():
+    return all(model.table_exists() for model in models)
+
+
 @database_accessor
 def test_models_exist():
-    assert all(model.table_exists() for model in models)
+    assert check_if_models_exist()
 
 
 class DatabaseAccessor:
@@ -58,3 +62,9 @@ class DatabaseAccessor:
     @classmethod
     def teardown_class(cls):
         database_teardown()
+
+
+class TestDatabaseAccessor(DatabaseAccessor):
+    @staticmethod
+    def test_models_exist():
+        assert check_if_models_exist()
