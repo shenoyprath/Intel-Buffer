@@ -65,7 +65,7 @@ class TestRegistrationSchema(DatabaseAccessor):
         assert "email_address" in e.value.messages
         assert "Not a valid email address." in e.value.messages["email_address"]
 
-    used_emails = []
+    used_emails = set()
 
     @staticmethod
     @given(first_name=text(characters(whitelist_characters=list(printable), whitelist_categories=()), min_size=1),
@@ -73,6 +73,7 @@ class TestRegistrationSchema(DatabaseAccessor):
            email_address=emails().filter(lambda email: email not in TestRegistrationSchema.used_emails),
            password=data())
     def test_invalidates_existing_email(first_name, last_name, email_address, password):
+        TestRegistrationSchema.used_emails.add(email_address)
         password_nums = password.draw(integers())
         password_letters = password.draw(text(characters(whitelist_categories=(),
                                                          whitelist_characters=list(ascii_letters)), min_size=1))
@@ -80,7 +81,6 @@ class TestRegistrationSchema(DatabaseAccessor):
         assume(RegistrationSchema.min_password_len < len(password) < RegistrationSchema.max_password_len)
 
         User.instantiate(first_name, last_name, email_address, password)
-        TestRegistrationSchema.used_emails.append(email_address)
         payload_dict = {"first_name": first_name,
                         "last_name": last_name,
                         "email_address": email_address,
