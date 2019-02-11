@@ -25,12 +25,6 @@ def database_teardown():
     db.close()
 
 
-def test_models_exist():
-    database_setup()
-    assert all(model.table_exists() for model in models)
-    database_teardown()
-
-
 def database_accessor(test_case):
     """
     Decorator for wrapping a test case to get method level database setup and teardown.
@@ -45,6 +39,11 @@ def database_accessor(test_case):
         return result
 
     return wrapper
+
+
+@database_accessor
+def test_models_exist():
+    assert all(model.table_exists() for model in models)
 
 
 class DatabaseAccessor:
