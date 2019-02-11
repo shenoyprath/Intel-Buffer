@@ -1,8 +1,8 @@
-from string import printable, ascii_letters
+from string import printable, whitespace, ascii_letters
 
 from hypothesis import given, example, assume
-from hypothesis.strategies import text, dictionaries, recursive, booleans, floats, lists, one_of, characters, emails, \
-                                  integers, data
+from hypothesis.strategies import text, dictionaries, one_of, characters, emails, integers, data, booleans, \
+                                  lists, recursive, floats
 
 from pytest import raises, fail
 
@@ -14,67 +14,78 @@ from schemas.registration_schema import RegistrationSchema
 
 
 class TestRegistrationSchema:
-    json_strategy = recursive(booleans() |
-                              floats() |
-                              text(printable),
-                              lambda children: lists(children, 1) |
-                              dictionaries(text(printable), children, min_size=1))  # straight out of the docs
-
     required_msg = RegistrationSchema.custom_errors["required"]
 
-    password_len_msg = RegistrationSchema.password_len_msg \
-                                         .format(min=User.min_password_len, max=User.max_password_len)
+    recursive_json = recursive(booleans() |
+                               floats() |
+                               text(printable),
+                               lambda children: lists(children, 1) |
+                               dictionaries(text(printable), children, min_size=1))  # straight out of the docs
 
     @staticmethod
-    @given(payload=json_strategy)
-    @example({})
-    def test_invalidates_nonexistence_of_required_fields(payload):
+    def get_load_error(payload):
         with raises(ValidationError) as e:
             RegistrationSchema().load(payload)
+        return e
 
-        required_msg = TestRegistrationSchema.required_msg
+    @staticmethod
+    @given(payload=recursive_json)
+    @example({})
+    def test_invalidates_nonexistence_of_required_fields(payload):
+        e = TestRegistrationSchema.get_load_error(payload)
+
         if isinstance(payload, dict):
-            for field in ("first_name", "last_name", "email_address", "password"):
-                assert required_msg in e.value.messages[field]
+            assert all(TestRegistrationSchema.required_msg in e.value.messages[field]
+                       for field in ("first_name", "last_name", "email_address", "password"))
         else:
             assert "Invalid input type." in e.value.messages["_schema"]
 
+    whitespace_name = text(characters(whitelist_categories=(),
+                                      whitelist_characters=list(whitespace)))
+
     @staticmethod
-    def test_invalidates_empty_or_whitespace_names():
-        pass
+    @given(first_name=whitespace_name, last_name=whitespace_name)
+    def test_invalidates_empty_or_whitespace_names(first_name, last_name):
+        payload = {"first_name": first_name,
+                   "last_name": last_name}
+        e = TestRegistrationSchema.get_load_error(payload)
+
+        fields = ("first_name", "last_name")
+        assert all(field in e.value.messages for field in fields)
+        assert all(TestRegistrationSchema.required_msg in e.value.messages[field]
+                   for field in ("first_name", "last_name"))
 
     @staticmethod
     @given(text())
     def test_invalidates_invalid_email(invalid_email):
-        payload_dict = {"email_address": invalid_email}
-        with raises(ValidationError) as e:
-            RegistrationSchema().load(payload_dict)
+        e = TestRegistrationSchema.get_load_error({"email_address": invalid_email})
 
         assert "email_address" in e.value.messages
         assert "Not a valid email address." in e.value.messages["email_address"]
 
     @staticmethod
+    @given(email=emails())
+    def test_invalidates_existing_email(email):
+        pass
+
+    @staticmethod
     @given(password=one_of(text(min_size=User.max_password_len + 1),
                            text(max_size=User.min_password_len - 1)))
     def test_invalidates_password_len_out_of_range(password):
-        password_dict = {"password": password}
-        with raises(ValidationError) as e:
-            RegistrationSchema().load(password_dict)
+        e = TestRegistrationSchema.get_load_error({"password": password})
+        password_len_msg = RegistrationSchema.password_len_msg \
+                                             .format(min=User.min_password_len, max=User.max_password_len)
 
         assert "password" in e.value.messages
-        assert TestRegistrationSchema.password_len_msg in e.value.messages["password"]
+        assert password_len_msg in e.value.messages["password"]
 
     @staticmethod
-    @given(password=one_of(text(characters(blacklist_categories=["L"]),
-                                min_size=User.min_password_len,
-                                max_size=User.max_password_len),
-                           text(characters(blacklist_categories=["N"]),
-                                min_size=User.min_password_len,
-                                max_size=User.max_password_len)))
+    @given(password=one_of(text(characters(blacklist_categories=["L"])),  # blacklist letters
+                           text(characters(blacklist_categories=["N"])),  # blacklist numbers
+                           text(characters(blacklist_categories=["L", "N"])))
+           .filter(lambda password: User.min_password_len < len(password) < User.max_password_len))
     def test_invalidates_password_without_letters_or_nums(password):
-        password_dict = {"password": password}
-        with raises(ValidationError) as e:
-            RegistrationSchema().load(password_dict)
+        e = TestRegistrationSchema.get_load_error({"password": password})
 
         assert "password" in e.value.messages
         assert RegistrationSchema.password_req_chars_msg in e.value.messages["password"]
@@ -92,10 +103,9 @@ class TestRegistrationSchema:
         # integer added to circumvent validation that checks for numbers & letters in passwords
         email_address = str(random_int) + email_address
 
-        payload_dict = {"email_address": email_address,
-                        "password": email_address}
-        with raises(ValidationError) as e:
-            RegistrationSchema().load(payload_dict)
+        payload = {"email_address": email_address,
+                   "password": email_address}
+        e = TestRegistrationSchema.get_load_error(payload)
 
         assert "password" in e.value.messages
         assert RegistrationSchema.password_is_email_msg in e.value.messages["password"]
