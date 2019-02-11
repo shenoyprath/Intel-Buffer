@@ -13,7 +13,7 @@ from models import db
 from models.user import User
 
 
-@rest_api.route("/auth_token/", methods=("POST",))
+@rest_api.route("/auth_token", methods=("POST",))
 class AuthToken(Resource):
 
     redis_blacklist_namespace = "token_blacklist:"
