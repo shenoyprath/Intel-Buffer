@@ -7,7 +7,7 @@ from marshmallow import ValidationError
 from api import rest_api
 
 
-def validate_payload(schema, fail_status_code):
+def validate_payload(schema, fail_status_code=400):
     """
     Decorator to wrap api routes. Automatically validates the payload against a schema.
     If payload validates, it allows the api route to handle the request.
