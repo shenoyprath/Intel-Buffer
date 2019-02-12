@@ -1,16 +1,15 @@
 from datetime import datetime
 
 from flask import jsonify
-from werkzeug.security import check_password_hash
 
 from flask_restplus import Resource
 from flask_jwt_extended import create_access_token, create_refresh_token, jwt_required, get_jwt_identity, \
                                get_jwt_claims, get_raw_jwt
 
 from api import rest_api, jwt, redis_db
+from api.validate_payload import validate_payload
 
-from models import db
-from models.user import User
+from schemas.login_schema import LoginSchema
 
 
 @rest_api.route("/auth_token", methods=("POST",))
@@ -29,29 +28,19 @@ class AuthToken(Resource):
                 "creation_timestamp": str(datetime.utcnow())}
 
     @staticmethod
-    def post():
+    @validate_payload(schema=LoginSchema, fail_status_code=401)
+    def post(payload):
         """
-        Creates a new authentication (access and refresh) token for the client if client exists in the database.
-
-        :return JSON: Access token if client is validated or error message if client is not.
+        Creates a new authentication (access and refresh) token for the client.
         """
 
-        email_address = rest_api.payload.get("email_address")
-        password = rest_api.payload.get("password")
+        email_address = payload.get("email_address")
 
-        with db:
-            user = User.retrieve(email_address=email_address)
-            if user and check_password_hash(user.password, password):
-                access_token = create_access_token(email_address)
-                refresh_token = create_refresh_token(email_address)
+        access_token = create_access_token(email_address)
+        refresh_token = create_refresh_token(email_address)
 
-                response = jsonify(access_token=access_token,
-                                   refresh_token=refresh_token)
-                response.status_code = 200
-                return response
-
-        response = jsonify(error_message="Invalid credentials. Please try again.")
-        response.status_code = 401
+        response = jsonify(access_token=access_token, refresh_token=refresh_token)
+        response.status_code = 200
         return response
 
     @staticmethod
