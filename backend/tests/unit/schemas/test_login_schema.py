@@ -1,4 +1,4 @@
-from hypothesis import given
+from hypothesis import given, example
 from hypothesis.strategies import emails, text
 
 from pytest import raises, fail
@@ -17,6 +17,8 @@ from tests.test_utils.json_strategy import recursive_json
 class TestLoginSchema(DatabaseAccessor):
     @staticmethod
     @given(payload=recursive_json)
+    @example(None)
+    @example({})
     def test_invalidates_no_credentials(payload):
         with raises(ValidationError) as e:
             LoginSchema().load(payload)
