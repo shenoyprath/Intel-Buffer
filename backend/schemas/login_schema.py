@@ -23,7 +23,7 @@ class LoginSchema(Base):
         try:
             email_address = data["email_address"]
             password = data["password"]
-        except (AttributeError, KeyError):
+        except (TypeError, KeyError):
             raise ValidationError(LoginSchema.errors["required"])
 
         with db:
