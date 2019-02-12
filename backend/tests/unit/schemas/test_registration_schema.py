@@ -1,8 +1,7 @@
 from string import printable, whitespace, ascii_letters
 
 from hypothesis import given, example, assume
-from hypothesis.strategies import text, dictionaries, one_of, characters, emails, integers, data, booleans, \
-                                  lists, recursive, floats
+from hypothesis.strategies import text, one_of, characters, emails, integers, data
 
 from pytest import raises, fail
 
@@ -14,15 +13,11 @@ from schemas.registration_schema import RegistrationSchema
 
 from tests.unit.models.test_database_accessor import DatabaseAccessor
 
+from tests.test_utils.json_strategy import recursive_json
+
 
 class TestRegistrationSchema(DatabaseAccessor):
     required_msg = RegistrationSchema.custom_errors["required"]
-
-    recursive_json = recursive(booleans() |
-                               floats() |
-                               text(printable),
-                               lambda children: lists(children, 1) |
-                               dictionaries(text(printable), children, min_size=1))  # straight out of the docs
 
     @staticmethod
     def get_validation_error(payload):
