@@ -22,12 +22,12 @@ def validate_payload(schema, fail_status_code=400):
         def wrapper(*args, **kwargs):
             try:
                 payload = schema().load(rest_api.payload)
-                return route(payload=payload.data, *args, **kwargs)
-
             except ValidationError as e:
                 response = jsonify(error_messages=e.messages)
                 response.status_code = fail_status_code
                 return response
+
+            return route(payload=payload.data, *args, **kwargs)
 
         return wrapper
     return decorator
