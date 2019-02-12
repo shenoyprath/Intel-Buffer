@@ -1,4 +1,5 @@
 from hypothesis import given
+from hypothesis.strategies import emails, text
 
 from pytest import raises
 
@@ -19,3 +20,13 @@ class TestLoginSchema(DatabaseAccessor):
             LoginSchema().load(payload)
 
         assert LoginSchema.errors["required"] in e.value.messages["_schema"]
+
+    @staticmethod
+    @given(email_address=emails(),
+           password=text())
+    def test_invalidates_incorrect_credentials(email_address, password):
+        with raises(ValidationError) as e:
+            LoginSchema().load({"email_address": email_address,
+                                "password": password})
+
+        assert LoginSchema.errors["invalid_credentials"] in e.value.messages["_schema"]
