@@ -10,7 +10,7 @@ from schemas.base import Base
 
 
 class LoginSchema(Base):
-    # will check for email in db anyway, so marshmallow's email validation is not needed
+    # will check for email in db anyway, so marshmallow's email validation is not needed.
     email_address = String()
 
     password = String()
