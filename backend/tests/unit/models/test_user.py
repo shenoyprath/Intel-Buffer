@@ -1,5 +1,7 @@
 from string import printable
 
+from werkzeug.security import check_password_hash
+
 from hypothesis import given
 from hypothesis.strategies import text, emails, characters
 
@@ -37,4 +39,14 @@ class TestUser(DatabaseAccessor):
         assert test_user.first_name == remove_extra_spaces(first_name)
         assert test_user.last_name == remove_extra_spaces(last_name)
 
+        test_user.delete_instance()
+
+    @staticmethod
+    @given(first_name=text(characters(whitelist_categories=[], whitelist_characters=list(printable))),
+           last_name=text(characters(whitelist_categories=[], whitelist_characters=list(printable))),
+           email_address=emails(),
+           password=text())
+    def test_user_instantiation_hashes_password(first_name, last_name, email_address, password):
+        test_user = User.instantiate(first_name, last_name, email_address, password)
+        assert check_password_hash(test_user.password, password)
         test_user.delete_instance()
