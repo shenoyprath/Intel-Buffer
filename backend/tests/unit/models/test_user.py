@@ -50,3 +50,13 @@ class TestUser(DatabaseAccessor):
         test_user = User.instantiate(first_name, last_name, email_address, password)
         assert check_password_hash(test_user.password, password)
         test_user.delete_instance()
+
+    @staticmethod
+    @given(first_name=text(characters(whitelist_categories=[], whitelist_characters=list(printable))),
+           last_name=text(characters(whitelist_categories=[], whitelist_characters=list(printable))),
+           email_address=emails(),
+           password=text())
+    def test_user_retrieve(first_name, last_name, email_address, password):
+        test_user = User.instantiate(first_name, last_name, email_address, password)
+        assert User.retrieve(email_address=email_address) == test_user
+        test_user.delete_instance()
