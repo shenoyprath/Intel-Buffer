@@ -10,15 +10,16 @@ from models.user import User
 from schemas.login_schema import LoginSchema
 
 from tests.unit.models.test_database_accessor import DatabaseAccessor
+from tests.unit.schemas.get_load_error import get_load_error
 
 
 class TestLoginSchema(DatabaseAccessor):
     @given(email_address=emails(),
            password=text())
     def test_invalidates_incorrect_credentials(self, email_address, password):
-        with raises(ValidationError) as e:
-            LoginSchema().load({"email_address": email_address,
-                                "password": password})
+        e = get_load_error(LoginSchema,
+                           {"email_address": email_address,
+                            "password": password})
 
         assert LoginSchema.custom_errors["invalid_credentials"] in e.value.messages["_schema"]
 
