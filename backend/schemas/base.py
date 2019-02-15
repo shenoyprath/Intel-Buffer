@@ -1,4 +1,8 @@
 from marshmallow import Schema
+from marshmallow.fields import Field
+
+
+Field.default_error_messages["required"] = "This field is required."
 
 
 class Base(Schema):
