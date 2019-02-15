@@ -65,6 +65,5 @@ class DatabaseAccessor:
 
 
 class TestDatabaseAccessor(DatabaseAccessor):
-    @staticmethod
-    def test_models_exist():
+    def test_models_exist(self):
         assert check_if_models_exist()
