@@ -17,7 +17,7 @@ class LoginSchema(Base):
 
     custom_errors = {"invalid_credentials": "Invalid credentials. Please try again."}
 
-    @validates_schema
+    @validates_schema(skip_on_field_errors=True)
     def has_valid_credentials(self, data):
         email_address = data.get("email_address")
         password = data.get("password")
