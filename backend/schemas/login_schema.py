@@ -11,22 +11,18 @@ from schemas.base import Base
 
 class LoginSchema(Base):
     # will check for email in db anyway, so marshmallow's email validation is not needed.
-    email_address = String()
+    email_address = String(required=True)
 
-    password = String()
+    password = String(required=True)
 
-    errors = {"required": "Your email address and password are required.",
-              "invalid_credentials": "Invalid credentials. Please try again."}
+    custom_errors = {"invalid_credentials": "Invalid credentials. Please try again."}
 
     @validates_schema
     def has_valid_credentials(self, data):
-        try:
-            email_address = data["email_address"]
-            password = data["password"]
-        except (TypeError, KeyError):
-            raise ValidationError(LoginSchema.errors["required"])
+        email_address = data.get("email_address")
+        password = data.get("password")
 
         with db:
             user = User.retrieve(email_address=email_address)
             if user is None or not check_password_hash(user.password, password):
-                raise ValidationError(LoginSchema.errors["invalid_credentials"])
+                raise ValidationError(LoginSchema.custom_errors["invalid_credentials"])
