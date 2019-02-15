@@ -16,7 +16,7 @@ class TestRemoveExtraSpaces:
         except IndexError:
             assert not result
 
-    @given(string=text(characters(whitelist_categories=["C", "Z"])))  # most whitespace is categorized as either C or Z.
+    @given(string=text(characters(whitelist_categories=["C", "Z"])))  # whitespace is categorized as either C or Z.
     @example(simple_example)
     def test_removes_extra_whitespace(self, string):
         result = remove_extra_spaces(string)

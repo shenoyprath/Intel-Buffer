@@ -14,8 +14,7 @@ from tests.unit.schemas.get_load_error import get_load_error
 
 
 class TestLoginSchema(DatabaseAccessor):
-    @given(email_address=emails(),
-           password=text())
+    @given(email_address=emails(), password=text())
     def test_invalidates_incorrect_credentials(self, email_address, password):
         e = get_load_error(LoginSchema,
                            {"email_address": email_address,
@@ -23,8 +22,7 @@ class TestLoginSchema(DatabaseAccessor):
 
         assert LoginSchema.custom_errors["invalid_credentials"] in e.value.messages["_schema"]
 
-    @given(email_address=emails(),
-           password=text())
+    @given(email_address=emails(), password=text())
     def test_validates_correct_credentials(self, email_address, password):
         name = " "  # database will not store null value for first_name and last_name columns
         test_user = User.instantiate(first_name=name,
