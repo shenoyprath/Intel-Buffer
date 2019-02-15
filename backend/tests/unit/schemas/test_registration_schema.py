@@ -1,11 +1,12 @@
 from string import printable, whitespace, ascii_letters
 
-from hypothesis import given, example, assume
+from hypothesis import given, assume
 from hypothesis.strategies import text, one_of, characters, emails, integers, data
 
 from pytest import raises, fail
 
 from marshmallow import ValidationError
+from marshmallow.fields import Field
 
 from models.user import User
 
@@ -13,29 +14,13 @@ from schemas.registration_schema import RegistrationSchema
 
 from tests.unit.models.test_database_accessor import DatabaseAccessor
 
-from tests.test_utils.json_strategy import recursive_json
-
 
 class TestRegistrationSchema(DatabaseAccessor):
-    required_msg = RegistrationSchema.custom_errors["required"]
-
     @staticmethod
     def get_validation_error(payload):
         with raises(ValidationError) as e:
             RegistrationSchema().load(payload)
         return e
-
-    @staticmethod
-    @given(payload=recursive_json)
-    @example({})
-    def test_invalidates_nonexistence_of_required_fields(payload):
-        e = TestRegistrationSchema.get_validation_error(payload)
-
-        if isinstance(payload, dict):
-            assert all(TestRegistrationSchema.required_msg in e.value.messages[field]
-                       for field in ("first_name", "last_name", "email_address", "password"))
-        else:  # some objects (bool, lists, etc) other than dict are also valid json and need to be dealt properly
-            assert "Invalid input type." in e.value.messages["_schema"]
 
     whitespace_name = text(characters(whitelist_categories=(),
                                       whitelist_characters=list(whitespace)))
@@ -49,33 +34,22 @@ class TestRegistrationSchema(DatabaseAccessor):
 
         fields = ("first_name", "last_name")
         assert all(field in e.value.messages for field in fields)
-        assert all(TestRegistrationSchema.required_msg in e.value.messages[field]
+        assert all(Field.default_error_messages["required"] in e.value.messages[field]
                    for field in ("first_name", "last_name"))
-
-    @staticmethod
-    @given(text())
-    def test_invalidates_invalid_email(invalid_email):
-        e = TestRegistrationSchema.get_validation_error({"email_address": invalid_email})
-
-        assert "email_address" in e.value.messages
-        assert "Not a valid email address." in e.value.messages["email_address"]
-
-    used_emails = set()
 
     @staticmethod
     @given(first_name=text(characters(whitelist_characters=list(printable), whitelist_categories=()), min_size=1),
            last_name=text(characters(whitelist_characters=list(printable), whitelist_categories=()), min_size=1),
-           email_address=emails().filter(lambda email: email not in TestRegistrationSchema.used_emails),
+           email_address=emails(),
            password=data())
     def test_invalidates_existing_email(first_name, last_name, email_address, password):
-        TestRegistrationSchema.used_emails.add(email_address)
         password_nums = password.draw(integers())
         password_letters = password.draw(text(characters(whitelist_categories=(),
                                                          whitelist_characters=list(ascii_letters)), min_size=1))
         password = str(password_nums) + password_letters
         assume(RegistrationSchema.min_password_len < len(password) < RegistrationSchema.max_password_len)
 
-        User.instantiate(first_name, last_name, email_address, password)
+        user = User.instantiate(first_name, last_name, email_address, password)
         payload_dict = {"first_name": first_name,
                         "last_name": last_name,
                         "email_address": email_address,
@@ -85,17 +59,7 @@ class TestRegistrationSchema(DatabaseAccessor):
         assert "email_address" in e.value.messages
         assert e.value.messages["email_address"]
 
-    @staticmethod
-    @given(password=one_of(text(min_size=RegistrationSchema.max_password_len + 1),
-                           text(max_size=RegistrationSchema.min_password_len - 1)))
-    def test_invalidates_password_len_out_of_range(password):
-        e = TestRegistrationSchema.get_validation_error({"password": password})
-        password_len_msg = RegistrationSchema.password_len_msg \
-                                             .format(min=RegistrationSchema.min_password_len,
-                                                     max=RegistrationSchema.max_password_len)
-
-        assert "password" in e.value.messages
-        assert password_len_msg in e.value.messages["password"]
+        user.delete_instance()
 
     @staticmethod
     @given(password=one_of(text(characters(blacklist_categories=["L"])),  # blacklist letters
@@ -108,7 +72,7 @@ class TestRegistrationSchema(DatabaseAccessor):
         e = TestRegistrationSchema.get_validation_error({"password": password})
 
         assert "password" in e.value.messages
-        assert RegistrationSchema.password_req_chars_msg in e.value.messages["password"]
+        assert RegistrationSchema.custom_errors["password_req_chars"] in e.value.messages["password"]
 
     @staticmethod
     @given(strategy=data())
@@ -129,7 +93,7 @@ class TestRegistrationSchema(DatabaseAccessor):
         e = TestRegistrationSchema.get_validation_error(payload)
 
         assert "password" in e.value.messages
-        assert RegistrationSchema.password_is_email_msg in e.value.messages["password"]
+        assert RegistrationSchema.custom_errors["password_is_email"] in e.value.messages["password"]
 
     @staticmethod
     @given(first_name=text(characters(blacklist_categories=("C", "Z")), min_size=1),
