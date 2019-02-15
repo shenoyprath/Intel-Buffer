@@ -1,7 +1,7 @@
 from hypothesis import given
 from hypothesis.strategies import emails, text
 
-from pytest import raises, fail
+from pytest import fail
 
 from marshmallow import ValidationError
 
