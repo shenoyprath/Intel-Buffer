@@ -32,12 +32,3 @@ class TestUser:
         test_user = User.instantiate(first_name, last_name, email_address, password)
         assert check_password_hash(test_user.password, password)
         test_user.delete_instance()
-
-    @given(first_name=text(),
-           last_name=text(),
-           email_address=emails(),
-           password=text())
-    def test_user_retrieve(self, first_name, last_name, email_address, password):
-        test_user = User.instantiate(first_name, last_name, email_address, password)
-        assert User.retrieve(email_address=email_address) == test_user
-        test_user.delete_instance()
