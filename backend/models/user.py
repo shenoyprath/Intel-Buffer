@@ -31,11 +31,8 @@ class User(Base):
                           password=hashed_password)
 
     @classmethod
-    def retrieve(cls, **kwargs):
-        email_address = kwargs.get("email_address")
-        if email_address is not None:
-            return cls.get_or_none(cls.email_address == email_address)
-        return super().retrieve(identity=kwargs.get("identity"))
+    def retrieve(cls, email_address):
+        return cls.get_or_none(cls.email_address == email_address)
 
     def __repr__(self):
         return "\n".join([f"First Name: {self.first_name}",
