@@ -9,7 +9,8 @@ from models.base import Base
 
 db = MySQLDatabase("intel_buffer_test_db",
                    user=os.environ.get(db_user_environ_var),
-                   password=os.environ.get(db_pass_environ_var))
+                   password=os.environ.get(db_pass_environ_var),
+                   charset="utf8mb4")
 models = Base.__subclasses__()
 
 
