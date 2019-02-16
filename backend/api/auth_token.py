@@ -3,11 +3,13 @@ from datetime import datetime
 from flask import jsonify
 
 from flask_restplus import Resource
+
 from flask_jwt_extended import create_access_token, create_refresh_token, jwt_required, get_jwt_identity, \
                                get_jwt_claims, get_raw_jwt
 
+from webargs.flaskparser import use_args
+
 from api import rest_api, jwt, redis_db
-from api.validate_payload import validate_payload
 
 from schemas.login_schema import LoginSchema
 
@@ -28,13 +30,13 @@ class AuthToken(Resource):
                 "creation_timestamp": str(datetime.utcnow())}
 
     @staticmethod
-    @validate_payload(schema=LoginSchema, fail_status_code=401)
-    def post(payload):
+    @use_args(LoginSchema(), error_status_code=401)
+    def post(args):
         """
         Creates a new authentication (access and refresh) token for the client.
         """
 
-        email_address = payload.get("email_address")
+        email_address = args.get("email_address")
 
         access_token = create_access_token(email_address)
         refresh_token = create_refresh_token(email_address)
