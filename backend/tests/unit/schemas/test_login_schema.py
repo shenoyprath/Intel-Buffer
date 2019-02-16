@@ -1,7 +1,7 @@
 from hypothesis import given
 from hypothesis.strategies import emails, text
 
-from pytest import fail
+from pytest import fail, mark
 
 from marshmallow import ValidationError
 
@@ -10,11 +10,11 @@ from models.user import User
 from schemas.login_schema import LoginSchema
 
 from tests.unit.models.add_and_drop_row import add_and_drop_row
-from tests.unit.models.test_database_accessor import DatabaseAccessor
 from tests.unit.schemas.get_load_error import get_load_error
 
 
-class TestLoginSchema(DatabaseAccessor):
+@mark.usefixtures("database_accessor")
+class TestLoginSchema:
     @given(email_address=emails(), password=text())
     def test_invalidates_incorrect_credentials(self, email_address, password):
         e = get_load_error(LoginSchema,

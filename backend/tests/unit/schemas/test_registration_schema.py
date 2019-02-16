@@ -3,7 +3,7 @@ from string import whitespace, ascii_letters
 from hypothesis import given, assume
 from hypothesis.strategies import text, one_of, characters, emails, integers, data
 
-from pytest import fail
+from pytest import fail, mark
 
 from marshmallow import ValidationError
 from marshmallow.fields import Field
@@ -12,11 +12,11 @@ from models.user import User
 
 from schemas.registration_schema import RegistrationSchema
 
-from tests.unit.models.test_database_accessor import DatabaseAccessor
 from tests.unit.schemas.get_load_error import get_load_error
 
 
-class TestRegistrationSchema(DatabaseAccessor):
+@mark.usefixtures("database_accessor")
+class TestRegistrationSchema:
     whitespace_name = text(characters(whitelist_categories=(),
                                       whitelist_characters=list(whitespace)))
 

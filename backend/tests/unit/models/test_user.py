@@ -3,14 +3,15 @@ from werkzeug.security import check_password_hash
 from hypothesis import given
 from hypothesis.strategies import text, emails
 
+from pytest import mark
+
 from models.user import User
 
 from utils.remove_extra_spaces import remove_extra_spaces
 
-from tests.unit.models.test_database_accessor import DatabaseAccessor
 
-
-class TestUser(DatabaseAccessor):
+@mark.usefixtures("database_accessor")
+class TestUser:
     @given(first_name=text(),
            last_name=text(),
            email_address=emails(),
