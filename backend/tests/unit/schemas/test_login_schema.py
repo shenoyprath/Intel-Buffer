@@ -25,9 +25,9 @@ class TestLoginSchema(DatabaseAccessor):
 
     @given(email_address=emails(), password=text())
     @add_and_drop_row(User, first_name="John", last_name="Doe")  # first & last name are required columns
-    def test_validates_correct_credentials(self, email_address, password):
+    def test_validates_correct_credentials(self, row):
         try:
-            LoginSchema().load({"email_address": email_address,
-                                "password": password})
+            LoginSchema().load({"email_address": row.email_address,
+                                "password": row.password})
         except ValidationError:
             fail("ValidationError was unexpectedly raised.")
