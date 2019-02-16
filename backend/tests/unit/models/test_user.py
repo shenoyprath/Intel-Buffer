@@ -1,7 +1,7 @@
 from werkzeug.security import check_password_hash
 
 from hypothesis import given
-from hypothesis.strategies import text, emails
+from hypothesis.strategies import text
 
 from pytest import mark
 
@@ -9,26 +9,26 @@ from models.user import User
 
 from utils.remove_extra_spaces import remove_extra_spaces
 
+from tests.unit.models.model_instance import model_instance
+
 
 @mark.usefixtures("database_accessor")
 class TestUser:
-    @given(first_name=text(),
-           last_name=text(),
-           email_address=emails(),
-           password=text())
-    def test_user_instantiation_removes_extra_spaces_in_names(self, first_name, last_name, email_address, password):
-        test_user = User.instantiate(first_name, last_name, email_address, password)
+    @given(first_name=text(), last_name=text())
+    def test_user_instantiation_removes_extra_spaces_in_names(self, first_name, last_name):
+        with model_instance(User,
+                            first_name=first_name,
+                            last_name=last_name,
+                            email_address="example@example.com",
+                            password="Password123") as test_user:
+            assert test_user.first_name == remove_extra_spaces(first_name)
+            assert test_user.last_name == remove_extra_spaces(last_name)
 
-        assert test_user.first_name == remove_extra_spaces(first_name)
-        assert test_user.last_name == remove_extra_spaces(last_name)
-
-        test_user.delete_instance()
-
-    @given(first_name=text(),
-           last_name=text(),
-           email_address=emails(),
-           password=text())
-    def test_user_instantiation_hashes_password(self, first_name, last_name, email_address, password):
-        test_user = User.instantiate(first_name, last_name, email_address, password)
-        assert check_password_hash(test_user.password, password)
-        test_user.delete_instance()
+    @given(password=text())
+    def test_user_instantiation_hashes_password(self, password):
+        with model_instance(User,
+                            first_name="John",
+                            last_name="Doe",
+                            email_address="example@example.com",
+                            password=password) as test_user:
+            assert check_password_hash(test_user.password, password)
