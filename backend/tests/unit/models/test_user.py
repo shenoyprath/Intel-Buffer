@@ -1,9 +1,7 @@
-from string import printable
-
 from werkzeug.security import check_password_hash
 
 from hypothesis import given
-from hypothesis.strategies import text, emails, characters
+from hypothesis.strategies import text, emails
 
 from models.user import User
 
@@ -13,8 +11,8 @@ from tests.unit.models.test_database_accessor import DatabaseAccessor
 
 
 class TestUser(DatabaseAccessor):
-    @given(first_name=text(characters(whitelist_categories=[], whitelist_characters=list(printable))),
-           last_name=text(characters(whitelist_categories=[], whitelist_characters=list(printable))),
+    @given(first_name=text(),
+           last_name=text(),
            email_address=emails(),
            password=text())
     def test_user_instantiation_inserts_user_to_db(self, first_name, last_name, email_address, password):
@@ -27,8 +25,8 @@ class TestUser(DatabaseAccessor):
 
         test_user.delete_instance()
 
-    @given(first_name=text(characters(whitelist_categories=[], whitelist_characters=list(printable))),
-           last_name=text(characters(whitelist_categories=[], whitelist_characters=list(printable))),
+    @given(first_name=text(),
+           last_name=text(),
            email_address=emails(),
            password=text())
     def test_user_instantiation_removes_extra_spaces_in_names(self, first_name, last_name, email_address, password):
@@ -39,8 +37,8 @@ class TestUser(DatabaseAccessor):
 
         test_user.delete_instance()
 
-    @given(first_name=text(characters(whitelist_categories=[], whitelist_characters=list(printable))),
-           last_name=text(characters(whitelist_categories=[], whitelist_characters=list(printable))),
+    @given(first_name=text(),
+           last_name=text(),
            email_address=emails(),
            password=text())
     def test_user_instantiation_hashes_password(self, first_name, last_name, email_address, password):
@@ -48,8 +46,8 @@ class TestUser(DatabaseAccessor):
         assert check_password_hash(test_user.password, password)
         test_user.delete_instance()
 
-    @given(first_name=text(characters(whitelist_categories=[], whitelist_characters=list(printable))),
-           last_name=text(characters(whitelist_categories=[], whitelist_characters=list(printable))),
+    @given(first_name=text(),
+           last_name=text(),
            email_address=emails(),
            password=text())
     def test_user_retrieve(self, first_name, last_name, email_address, password):

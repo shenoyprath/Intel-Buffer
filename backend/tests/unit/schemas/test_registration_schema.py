@@ -1,4 +1,4 @@
-from string import printable, whitespace, ascii_letters
+from string import whitespace, ascii_letters
 
 from hypothesis import given, assume
 from hypothesis.strategies import text, one_of, characters, emails, integers, data
@@ -31,8 +31,8 @@ class TestRegistrationSchema(DatabaseAccessor):
         assert all(Field.default_error_messages["required"] in e.value.messages[field]
                    for field in ("first_name", "last_name"))
 
-    @given(first_name=text(characters(whitelist_characters=list(printable), whitelist_categories=()), min_size=1),
-           last_name=text(characters(whitelist_characters=list(printable), whitelist_categories=()), min_size=1),
+    @given(first_name=text(min_size=1),
+           last_name=text(min_size=1),
            email_address=emails(),
            password=data())
     def test_invalidates_existing_email(self, first_name, last_name, email_address, password):
