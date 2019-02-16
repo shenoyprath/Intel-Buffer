@@ -9,8 +9,8 @@ from models.user import User
 
 from schemas.login_schema import LoginSchema
 
-from tests.unit.models.test_database_accessor import DatabaseAccessor
 from tests.unit.models.add_and_drop_row import add_and_drop_row
+from tests.unit.models.test_database_accessor import DatabaseAccessor
 from tests.unit.schemas.get_load_error import get_load_error
 
 

@@ -15,20 +15,6 @@ class TestUser(DatabaseAccessor):
            last_name=text(),
            email_address=emails(),
            password=text())
-    def test_user_instantiation_inserts_user_to_db(self, first_name, last_name, email_address, password):
-        test_user = User.instantiate(first_name, last_name, email_address, password)
-
-        assert (User
-                .select()
-                .where(User.email_address == email_address)
-                .count()) == 1
-
-        test_user.delete_instance()
-
-    @given(first_name=text(),
-           last_name=text(),
-           email_address=emails(),
-           password=text())
     def test_user_instantiation_removes_extra_spaces_in_names(self, first_name, last_name, email_address, password):
         test_user = User.instantiate(first_name, last_name, email_address, password)
 
