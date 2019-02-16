@@ -23,4 +23,4 @@ redis_db = Redis(host="127.0.0.1",
                  decode_responses=True,
                  password=os.environ.get(redis_pass_environ_var))
 
-from api import auth_token
+from api import auth_token, error_handler
