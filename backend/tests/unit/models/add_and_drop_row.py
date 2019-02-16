@@ -18,13 +18,13 @@ def add_and_drop_row(model, **static_column_values):
 
     def decorator(test_case):
         @wraps(test_case)
-        def wrapper(**dynamic_column_values):
+        def wrapper(*args, **dynamic_column_values):
             """
             :param dynamic_column_values: Dynamically generated (using hypothesis) column values.
             """
 
             row = model.instantiate(**static_column_values, **dynamic_column_values)
-            test_return = test_case(row=row)
+            test_return = test_case(*args, row=row)
             row.delete_instance()
             return test_return
 
