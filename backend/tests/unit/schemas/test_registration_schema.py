@@ -1,6 +1,6 @@
 from string import whitespace, ascii_letters
 
-from hypothesis import given, assume
+from hypothesis import given, assume, example
 from hypothesis.strategies import text, one_of, characters, emails, integers, data
 
 from pytest import fail, mark
@@ -17,19 +17,14 @@ from tests.unit.schemas.get_load_error import get_load_error
 
 @mark.usefixtures("database_accessor")
 class TestRegistrationSchema:
-    whitespace_name = text(characters(whitelist_categories=(),
-                                      whitelist_characters=list(whitespace)))
-
-    @given(first_name=whitespace_name, last_name=whitespace_name)
-    def test_invalidates_empty_or_whitespace_names(self, first_name, last_name):
-        payload = {"first_name": first_name,
-                   "last_name": last_name}
-        e = get_load_error(RegistrationSchema, payload)
-
-        fields = ("first_name", "last_name")
-        assert all(field in e.value.messages for field in fields)
-        assert all(Field.default_error_messages["required"] in e.value.messages[field]
-                   for field in ("first_name", "last_name"))
+    @given(name=text(characters(whitelist_categories=(),
+                                whitelist_characters=list(whitespace))))
+    @example("")
+    def test_invalidates_empty_or_whitespace_names(self, name):
+        e = get_load_error(RegistrationSchema, {"first_name": name,
+                                                "last_name": name})
+        for field in "first_name", "last_name":
+            assert Field.default_error_messages["required"] in e.value.messages[field]
 
     @given(first_name=text(min_size=1),
            last_name=text(min_size=1),
