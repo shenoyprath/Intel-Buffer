@@ -31,7 +31,7 @@ class RegistrationSchema(Base):
     @validates("email_address")
     def is_unique(self, email_address):
         with db:
-            if User.retrieve(email_address=email_address) is not None:
+            if User.retrieve(email_address) is not None:
                 raise ValidationError(RegistrationSchema.custom_errors["email_exists"])
 
     @validates("password")

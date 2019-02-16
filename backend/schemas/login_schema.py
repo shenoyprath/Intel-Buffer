@@ -22,6 +22,6 @@ class LoginSchema(Base):
         password = data.get("password")
 
         with db:
-            user = User.retrieve(email_address=email_address)
+            user = User.retrieve(email_address)
             if user is None or not check_password_hash(user.password, password):
                 raise ValidationError(LoginSchema.custom_errors["invalid_credentials"])
