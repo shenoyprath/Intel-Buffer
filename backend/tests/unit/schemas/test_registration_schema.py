@@ -12,6 +12,7 @@ from models.user import User
 
 from schemas.registration_schema import RegistrationSchema
 
+from tests.unit.models.model_instance import model_instance
 from tests.unit.schemas.get_load_error import get_load_error
 
 
@@ -26,28 +27,15 @@ class TestRegistrationSchema:
         for field in "first_name", "last_name":
             assert Field.default_error_messages["required"] in e.value.messages[field]
 
-    @given(first_name=text(min_size=1),
-           last_name=text(min_size=1),
-           email_address=emails(),
-           password=data())
-    def test_invalidates_existing_email(self, first_name, last_name, email_address, password):
-        password_nums = password.draw(integers())
-        password_letters = password.draw(text(characters(whitelist_categories=(),
-                                                         whitelist_characters=list(ascii_letters)), min_size=1))
-        password = str(password_nums) + password_letters
-        assume(RegistrationSchema.min_password_len < len(password) < RegistrationSchema.max_password_len)
-
-        user = User.instantiate(first_name, last_name, email_address, password)
-        payload_dict = {"first_name": first_name,
-                        "last_name": last_name,
-                        "email_address": email_address,
-                        "password": password}
-
-        e = get_load_error(RegistrationSchema, payload_dict)
-        assert "email_address" in e.value.messages
-        assert e.value.messages["email_address"]
-
-        user.delete_instance()
+    @given(email_address=emails())
+    def test_invalidates_existing_email(self, email_address):
+        with model_instance(User,
+                            first_name="John",
+                            last_name="Doe",
+                            email_address=email_address,
+                            password="Password123") as test_user:
+            e = get_load_error(RegistrationSchema, {"email_address": test_user.email_address})
+        assert RegistrationSchema.custom_errors["email_exists"] in e.value.messages["email_address"]
 
     @given(password=one_of(text(characters(blacklist_categories=["L"])),  # blacklist letters
                            text(characters(blacklist_categories=["N"])),  # blacklist numbers
