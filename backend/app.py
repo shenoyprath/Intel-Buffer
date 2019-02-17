@@ -18,22 +18,34 @@ if sys.version_info < (3, 7):
     raise RuntimeError("Python version >= 3.7 is required.")
 
 
-app = Flask(__name__)
-app.config.from_object(Config)
-app.static_folder = os.path.join(app.config["DIST_DIR"], "static")
+def create_app():
+    new_app = Flask(__name__)
+    new_app.config.from_object(Config)
+    new_app.static_folder = os.path.join(new_app.config["DIST_DIR"], "static")
 
-app.add_url_rule(
-    rule="/",
-    view_func=index,
-    defaults={"path": ""}
-)
-app.add_url_rule(
-    rule="/<path>/",
-    view_func=index
-)
+    new_app.add_url_rule(
+        rule="/",
+        view_func=index,
+        defaults={"path": ""}
+    )
+    new_app.add_url_rule(
+        rule="/<path>/",
+        view_func=index
+    )
 
-app.register_blueprint(api_blueprint)
-jwt.init_app(app)
+    def register_blueprints():
+        new_app.register_blueprint(api_blueprint)
+
+    def register_extensions():
+        jwt.init_app(new_app)
+
+    register_blueprints()
+    register_extensions()
+
+    return new_app
+
+
+app = create_app()
 
 with db:
     db.create_tables(Base.__subclasses__(), safe=True)
