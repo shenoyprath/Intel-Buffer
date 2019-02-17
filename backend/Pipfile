@@ -6,6 +6,7 @@ verify_ssl = true
 [dev-packages]
 hypothesis = "*"
 pytest = "*"
+pytest-cov = "*"
 
 [packages]
 flask = "*"
