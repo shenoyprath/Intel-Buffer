@@ -22,8 +22,15 @@ app = Flask(__name__)
 app.config.from_object(Config)
 app.static_folder = os.path.join(app.config["DIST_DIR"], "static")
 
-app.add_url_rule(rule="/", view_func=index, defaults={"path": ""})
-app.add_url_rule(rule="/<path>/", view_func=index)
+app.add_url_rule(
+    rule="/",
+    view_func=index,
+    defaults={"path": ""}
+)
+app.add_url_rule(
+    rule="/<path>/",
+    view_func=index
+)
 
 app.register_blueprint(api_blueprint)
 jwt.init_app(app)

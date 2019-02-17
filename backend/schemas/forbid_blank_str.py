@@ -18,7 +18,10 @@ class ForbidBlankStr(Validator):
         if value is None:  # if value=None and allow_none=False, required err msg shouldn't duplicate in err msgs dict
             return
 
-        if not value or (self.forbid_whitespace_str and is_empty_or_space(value)):
+        if (
+            not value or
+            (self.forbid_whitespace_str and is_empty_or_space(value))
+        ):
             raise ValidationError(self.error)
 
     def _repr_args(self):

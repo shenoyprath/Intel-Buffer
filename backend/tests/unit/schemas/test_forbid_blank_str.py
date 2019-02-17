@@ -24,8 +24,14 @@ class TestForbidBlankStr:
         except ValidationError as e:
             fail(f"ValidationError was unexpectedly raised when validating None: \n{str(e)}")
 
-    @given(string=text(characters(whitelist_categories=(),
-                                  whitelist_characters=list(whitespace))))
+    @given(
+        string=text(
+            characters(
+                whitelist_categories=(),
+                whitelist_characters=list(whitespace)
+            )
+        )
+    )
     def test_invalidates_whitespace_str(self, string):
         validator = ForbidBlankStr(forbid_whitespace_str=True)
         with raises(ValidationError):

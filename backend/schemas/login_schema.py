@@ -10,9 +10,12 @@ from schemas.base import Base
 
 
 class LoginSchema(Base):
-    custom_errors = {"invalid_credentials": "Invalid credentials. Please try again."}
+    custom_errors = {
+        "invalid_credentials": "Invalid credentials. Please try again."
+    }
 
-    email_address = String(required=True)  # will check if email is in db anyway, Email() field validation isn't needed.
+    # will check if email is in db anyway, Email() field validation isn't needed.
+    email_address = String(required=True)
 
     password = String(required=True)
 
@@ -24,4 +27,6 @@ class LoginSchema(Base):
         with db:
             user = User.retrieve(email_address)
             if user is None or not check_password_hash(user.password, password):
-                raise ValidationError(LoginSchema.custom_errors["invalid_credentials"])
+                raise ValidationError(
+                    LoginSchema.custom_errors["invalid_credentials"]
+                )

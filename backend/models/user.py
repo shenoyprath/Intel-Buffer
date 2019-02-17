@@ -25,16 +25,20 @@ class User(Base):
         first_name, last_name = (remove_extra_spaces(name) for name in (first_name, last_name))
         hashed_password = generate_password_hash(password=password, method="sha256")
 
-        return cls.create(first_name=first_name,
-                          last_name=last_name,
-                          email_address=email_address,
-                          password=hashed_password)
+        return cls.create(
+            first_name=first_name,
+            last_name=last_name,
+            email_address=email_address,
+            password=hashed_password
+        )
 
     @classmethod
     def retrieve(cls, email_address):
         return cls.get_or_none(cls.email_address == email_address)
 
     def __repr__(self):
-        return "\n".join([f"First Name: {self.first_name}",
-                          f"Last Name: {self.last_name}",
-                          f"Email Address: {self.email_address}"])
+        return "\n".join([
+            f"First Name: {self.first_name}",
+            f"Last Name: {self.last_name}",
+            f"Email Address: {self.email_address}"
+        ])
