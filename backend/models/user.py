@@ -37,8 +37,8 @@ class User(Base):
         return cls.get_or_none(cls.email_address == email_address)
 
     def __repr__(self):
-        return "\n".join([
-            f"First Name: {self.first_name}",
-            f"Last Name: {self.last_name}",
-            f"Email Address: {self.email_address}"
-        ])
+        return "<User {}>".format({
+            "first_name": self.first_name,
+            "last_name": self.last_name,
+            "email_address": self.email_address
+        })
