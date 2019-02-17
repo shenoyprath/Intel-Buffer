@@ -1,3 +1,5 @@
+from string import whitespace
+
 from hypothesis import given
 from hypothesis.strategies import text, one_of, characters, emails
 
@@ -66,7 +68,10 @@ class TestRegistrationSchema:
 
     @given(
         name=text(
-            characters(blacklist_categories=("C", "Z")),  # whitespace is categorized as C/Z (to avoid whitespace str)
+            characters(
+                blacklist_characters=tuple(whitespace),
+                blacklist_categories=("C",)  # no need to test this category
+            ),
             min_size=1
         ),
         email_address=emails(),
