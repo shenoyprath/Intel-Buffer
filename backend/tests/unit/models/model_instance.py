@@ -9,7 +9,7 @@ def model_instance(model, *instance_args, **instance_kwargs):
     (Ex: IntegrityError raised when running test that inserts the same email for two users without deleting the first.)
 
     Note: This is used over a pytest fixture as using a parametrized fixture makes the test case every unreadable and
-    hard to integrate with hypothesis's given decorator.
+    hard to integrate with hypothesis's @given decorator.
     """
 
     instance = model.instantiate(*instance_args, **instance_kwargs)
