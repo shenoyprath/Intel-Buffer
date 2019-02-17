@@ -3,8 +3,15 @@ import os
 from peewee import MySQLDatabase
 from pytest import fixture
 
+from app import app
+
 from models import db_user_environ_var, db_pass_environ_var
 from models.base import Base
+
+
+@fixture
+def app():
+    return app
 
 
 @fixture
