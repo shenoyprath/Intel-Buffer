@@ -22,7 +22,8 @@ class TestRemoveExtraSpaces:
     @example(simple_example)
     def test_removes_extra_whitespace(self, string):
         result = remove_extra_spaces(string)
-        # check if result has consecutive spaces
-        assert not any(result[index].isspace() and
-                       result[index + 1].isspace()
-                       for index in range(len(result) - 1))
+        for index in range(len(result) - 1):
+            assert not (
+                result[index].isspace() and
+                result[index + 1].isspace()
+            )
