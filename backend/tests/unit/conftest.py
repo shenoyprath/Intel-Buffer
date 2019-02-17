@@ -11,8 +11,7 @@ from models.base import Base
 
 @fixture
 def app():
-    app = create_app()
-    return app
+    return create_app()
 
 
 @fixture
