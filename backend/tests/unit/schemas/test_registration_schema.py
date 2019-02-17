@@ -34,20 +34,15 @@ class TestRegistrationSchema:
                             last_name="Doe",
                             email_address=email_address,
                             password="Password123") as test_user:
-            e = get_load_error(RegistrationSchema, {"email_address": test_user.email_address})
+            e = get_load_error(RegistrationSchema,
+                               {"email_address": test_user.email_address})
+
         assert RegistrationSchema.custom_errors["email_exists"] in e.value.messages["email_address"]
 
-    @given(password=one_of(text(characters(blacklist_categories=["L"])),  # blacklist letters
-                           text(characters(blacklist_categories=["N"])),  # blacklist numbers
-                           text(characters(blacklist_categories=["L", "N"])))
-           .filter(lambda password: RegistrationSchema.min_password_len <
-                   len(password) <
-                   RegistrationSchema.max_password_len))
+    @given(password=one_of(text(characters(blacklist_categories=("L",))),  # blacklist letters
+                           text(characters(blacklist_categories=("N",)))))  # blacklist numbers
     def test_invalidates_password_without_letters_or_nums(self, password):
-        e = get_load_error(RegistrationSchema,
-                           {"password": password})
-
-        assert "password" in e.value.messages
+        e = get_load_error(RegistrationSchema, {"password": password})
         assert RegistrationSchema.custom_errors["password_req_chars"] in e.value.messages["password"]
 
     @given(strategy=data())
