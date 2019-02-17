@@ -1,12 +1,9 @@
-from string import whitespace, ascii_letters
-
-from hypothesis import given, assume, example
-from hypothesis.strategies import text, one_of, characters, emails, integers, data
+from hypothesis import given
+from hypothesis.strategies import text, one_of, characters, emails
 
 from pytest import fail, mark
 
 from marshmallow import ValidationError
-from marshmallow.fields import Field
 
 from models.user import User
 
@@ -18,15 +15,6 @@ from tests.unit.schemas.get_load_error import get_load_error
 
 @mark.usefixtures("database_accessor")
 class TestRegistrationSchema:
-    @given(name=text(characters(whitelist_categories=(),
-                                whitelist_characters=list(whitespace))))
-    @example("")
-    def test_invalidates_empty_or_whitespace_names(self, name):
-        e = get_load_error(RegistrationSchema, {"first_name": name,
-                                                "last_name": name})
-        for field in "first_name", "last_name":
-            assert Field.default_error_messages["required"] in e.value.messages[field]
-
     @given(email_address=emails())
     def test_invalidates_existing_email(self, email_address):
         with model_instance(User,
@@ -52,22 +40,16 @@ class TestRegistrationSchema:
                             "password": email_address})
         assert RegistrationSchema.custom_errors["password_is_email"] in e.value.messages["password"]
 
-    @given(first_name=text(characters(blacklist_categories=("C", "Z")), min_size=1),
-           last_name=text(characters(blacklist_categories=("C", "Z")), min_size=1),
+    @given(name=text(characters(blacklist_categories=("C", "Z")), min_size=1),  # whitespace is categorized as C or Z.
            email_address=emails(),
-           password=data())
-    def test_validates_when_all_criteria_meet(self, first_name, last_name, email_address, password):
-        password_nums = password.draw(integers())
-        password_letters = password.draw(text(characters(whitelist_categories=(),
-                                                         whitelist_characters=list(ascii_letters)), min_size=1))
-        password = str(password_nums) + password_letters
-        assume(RegistrationSchema.min_password_len < len(password) < RegistrationSchema.max_password_len)
-
-        payload_dict = {"first_name": first_name,
-                        "last_name": last_name,
-                        "email_address": email_address,
-                        "password": password}
+           password=text(characters(whitelist_categories=("L", "N")),
+                         min_size=RegistrationSchema.min_password_len,
+                         max_size=RegistrationSchema.max_password_len))
+    def test_validates_when_all_criteria_meet(self, name, email_address, password):
         try:
-            RegistrationSchema().load(payload_dict)
-        except ValidationError:
-            fail(f"ValidationError was unexpectedly raised.")
+            RegistrationSchema().load({"first_name": name,
+                                       "last_name": name,
+                                       "email_address": email_address,
+                                       "password": password})
+        except ValidationError as e:
+            fail(str(e))
