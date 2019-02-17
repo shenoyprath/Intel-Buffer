@@ -76,7 +76,6 @@ class TestRegistrationSchema:
         ),
         email_address=emails(),
         password=text(
-            characters(whitelist_categories=("L", "N")),  # speeds up data generation
             min_size=RegistrationSchema.min_password_len,
             max_size=RegistrationSchema.max_password_len
         ).filter(lambda password: has_alphanum_chars(password))
