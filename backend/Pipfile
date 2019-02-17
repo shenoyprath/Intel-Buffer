@@ -15,6 +15,7 @@ peewee = "*"
 redis = "*"
 marshmallow = "*"
 webargs = "*"
+pymysql = "*"
 
 [requires]
 python_version = "3.7"
