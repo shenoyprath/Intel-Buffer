@@ -12,7 +12,7 @@ from utils.remove_extra_spaces import remove_extra_spaces
 from tests.unit.models.model_instance import model_instance
 
 
-@mark.usefixtures("database_accessor")
+@mark.usefixtures("database")
 class TestUser:
     @given(first_name=text(), last_name=text())
     def test_user_instantiation_removes_extra_spaces_in_names(self, first_name, last_name):

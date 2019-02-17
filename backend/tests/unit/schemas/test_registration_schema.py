@@ -14,7 +14,7 @@ from utils.has_alphanum_chars import has_alphanum_chars
 from tests.unit.models.model_instance import model_instance
 
 
-@mark.usefixtures("database_accessor")
+@mark.usefixtures("database")
 class TestRegistrationSchema:
     @given(email_address=emails())
     def test_invalidates_existing_email(self, email_address):

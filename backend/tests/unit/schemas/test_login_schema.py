@@ -10,7 +10,7 @@ from schemas.login_schema import LoginSchema
 from tests.unit.models.model_instance import model_instance
 
 
-@mark.usefixtures("database_accessor")
+@mark.usefixtures("database")
 class TestLoginSchema:
     @given(email_address=emails(), password=text())
     def test_invalidates_incorrect_credentials(self, email_address, password):

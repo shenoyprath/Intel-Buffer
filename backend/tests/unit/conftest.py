@@ -8,7 +8,7 @@ from models.base import Base
 
 
 @fixture
-def database_accessor():
+def database():
     db = MySQLDatabase(
         "intel_buffer_test_db",
         user=os.environ.get(db_user_environ_var),
