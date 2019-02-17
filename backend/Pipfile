@@ -13,7 +13,7 @@ flask-restplus = "*"
 flask-jwt-extended = "*"
 peewee = "*"
 redis = "*"
-marshmallow = "==3.0.0rc4"
+marshmallow = "*"
 webargs = "*"
 
 [requires]
