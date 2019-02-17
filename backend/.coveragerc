@@ -3,6 +3,8 @@ branch = True
 
 omit =
     tests/*
+    config.py
+    logger.py
 
 source = ./
 
