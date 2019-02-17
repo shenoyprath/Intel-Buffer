@@ -8,6 +8,8 @@ from models.user import User
 from schemas.base import Base
 from schemas.forbid_blank_str import ForbidBlankStr
 
+from utils.has_alphanum_chars import has_alphanum_chars
+
 
 class RegistrationSchema(Base):
     custom_errors = {
@@ -52,10 +54,7 @@ class RegistrationSchema(Base):
 
     @validates("password")
     def has_letters_and_nums(self, password):
-        has_letters = any(char.isalpha() for char in password)
-        has_numbers = any(char.isdigit() for char in password)
-
-        if not has_letters or not has_numbers:
+        if not has_alphanum_chars(password):
             raise ValidationError(
                 RegistrationSchema.custom_errors["password_req_chars"]
             )
