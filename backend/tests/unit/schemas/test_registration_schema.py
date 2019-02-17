@@ -23,8 +23,12 @@ class TestRegistrationSchema:
 
         assert RegistrationSchema.custom_errors["email_exists"] in errors["email_address"]
 
-    @given(password=one_of(text(characters(blacklist_categories=("L",))),  # blacklist letters
-                           text(characters(blacklist_categories=("N",)))))  # blacklist numbers
+    @given(password=one_of(text(characters(blacklist_categories=("L",)),  # blacklist letters
+                                min_size=RegistrationSchema.min_password_len,
+                                max_size=RegistrationSchema.max_password_len),
+                           text(characters(blacklist_categories=("N",)),  # blacklist numbers
+                                min_size=RegistrationSchema.min_password_len,
+                                max_size=RegistrationSchema.max_password_len)))
     def test_invalidates_password_without_letters_or_nums(self, password):
         errors = RegistrationSchema().validate({"password": password})
         assert RegistrationSchema.custom_errors["password_req_chars"] in errors["password"]
