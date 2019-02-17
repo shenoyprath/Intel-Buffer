@@ -7,6 +7,8 @@ from models.user import User
 
 from schemas.registration_schema import RegistrationSchema
 
+from utils.has_alphanum_chars import has_alphanum_chars
+
 from tests.unit.models.model_instance import model_instance
 
 
@@ -62,10 +64,9 @@ class TestRegistrationSchema:
         ),
         email_address=emails(),
         password=text(
-            characters(whitelist_categories=("L", "N")),
             min_size=RegistrationSchema.min_password_len,
             max_size=RegistrationSchema.max_password_len
-        )
+        ).filter(lambda password: has_alphanum_chars(password))
     )
     def test_validates_when_all_criteria_meet(self, name, email_address, password):
         errors = RegistrationSchema().validate({
