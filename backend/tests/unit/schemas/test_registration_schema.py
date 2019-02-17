@@ -45,24 +45,11 @@ class TestRegistrationSchema:
         e = get_load_error(RegistrationSchema, {"password": password})
         assert RegistrationSchema.custom_errors["password_req_chars"] in e.value.messages["password"]
 
-    @given(strategy=data())
-    def test_invalidates_password_matching_email(self, strategy):
-        random_int = strategy.draw(integers())
-
-        def filter_by_len(email):  # filter to pass password length validation
-            return RegistrationSchema.min_password_len < len(email) + len(str(random_int)) < \
-                   RegistrationSchema.max_password_len
-
-        email_address = strategy.draw(emails()
-                                      .filter(lambda email: filter_by_len(email)))
-        # integer added to circumvent validation that checks for numbers & letters in passwords
-        email_address = str(random_int) + email_address
-
-        payload = {"email_address": email_address,
-                   "password": email_address}
-        e = get_load_error(RegistrationSchema, payload)
-
-        assert "password" in e.value.messages
+    @given(email_address=emails())
+    def test_invalidates_password_matching_email(self, email_address):
+        e = get_load_error(RegistrationSchema,
+                           {"email_address": email_address,
+                            "password": email_address})
         assert RegistrationSchema.custom_errors["password_is_email"] in e.value.messages["password"]
 
     @given(first_name=text(characters(blacklist_categories=("C", "Z")), min_size=1),
