@@ -1,13 +1,12 @@
 from marshmallow import ValidationError, validates, validates_schema
-from marshmallow.fields import Field, String, Email
+from marshmallow.fields import String, Email
 from marshmallow.validate import Length
 
 from models import db
 from models.user import User
 
 from schemas.base import Base
-
-from utils.is_empty_or_space import is_empty_or_space
+from schemas.forbid_blank_str import ForbidBlankStr
 
 
 class RegistrationSchema(Base):
@@ -16,14 +15,19 @@ class RegistrationSchema(Base):
                      "password_req_chars": "Password must contain letters and numbers.",
                      "password_is_email": "Password cannot be the same as your email address."}
 
-    first_name = String(required=True)
+    first_name = String(required=True,
+                        allow_none=False,
+                        validate=ForbidBlankStr(forbid_whitespace_str=True))
 
-    last_name = String(required=True)
+    last_name = String(required=True,
+                       allow_none=False,
+                       validate=ForbidBlankStr(forbid_whitespace_str=True))
 
-    email_address = Email(required=True)
+    email_address = Email(required=True, allow_none=False)
 
     min_password_len, max_password_len = 8, 50
     password = String(required=True,
+                      allow_none=False,
                       validate=Length(min=min_password_len,
                                       max=max_password_len,
                                       error=custom_errors["password_len"]))
@@ -41,19 +45,6 @@ class RegistrationSchema(Base):
 
         if not has_letters or not has_numbers:
             raise ValidationError(RegistrationSchema.custom_errors["password_req_chars"])
-
-    @validates_schema
-    def names_are_not_spaces(self, data):
-        blank_fields = []
-        for field_name in ("first_name", "last_name"):
-            field_value = data.get(field_name)
-            # short circuit None value as it's handled by marshmallow's required parameter.
-            if field_value is not None and is_empty_or_space(field_value):
-                blank_fields.append(field_name)
-
-        if blank_fields:
-            raise ValidationError(Field.default_error_messages["required"],
-                                  field_names=blank_fields)
 
     @validates_schema
     def password_is_not_email(self, data):
