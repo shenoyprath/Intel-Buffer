@@ -15,7 +15,7 @@ jwt = JWTManager()
 
 redis_pass_environ_var = "REDIS_DB_PASS"
 if os.environ.get(redis_pass_environ_var) is None:
-    raise RuntimeError(
+    raise EnvironmentError(
         f"Environment variable {redis_pass_environ_var} isn't set to the password used to access the Redis database"
     )
 
