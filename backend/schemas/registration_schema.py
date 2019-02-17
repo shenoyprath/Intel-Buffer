@@ -59,10 +59,10 @@ class RegistrationSchema(Base):
                 RegistrationSchema.custom_errors["password_req_chars"]
             )
 
-    @validates_schema(skip_on_field_errors=False)
+    @validates_schema
     def password_is_not_email(self, data):
         if data.get("password") == data.get("email_address"):
             raise ValidationError(
                 message=RegistrationSchema.custom_errors["password_is_email"],
-                field_names=["password"]
+                field_name="password"
             )

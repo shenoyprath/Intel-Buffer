@@ -49,9 +49,16 @@ class TestRegistrationSchema:
         })
         assert RegistrationSchema.custom_errors["password_req_chars"] in errors["password"]
 
-    @given(email_address=emails())
+    @given(email_address=emails().filter(
+        lambda addr:
+            RegistrationSchema.min_password_len <= len(addr) <= RegistrationSchema.max_password_len and
+            has_alphanum_chars(addr)
+    ))
     def test_invalidates_password_matching_email(self, email_address):
         errors = RegistrationSchema().validate({
+            # names given as skip_on_field_errors is True, so @validates_schema won't run if required fields are missing
+            "first_name": "John",
+            "last_name": "Doe",
             "email_address": email_address,
             "password": email_address
         })
@@ -59,7 +66,7 @@ class TestRegistrationSchema:
 
     @given(
         name=text(
-            characters(blacklist_categories=("C", "Z")),  # whitespace is categorized as C or Z.
+            characters(blacklist_categories=("C", "Z")),  # whitespace is categorized as C/Z (to avoid whitespace str)
             min_size=1
         ),
         email_address=emails(),
