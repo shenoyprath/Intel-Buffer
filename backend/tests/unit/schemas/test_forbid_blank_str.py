@@ -1,4 +1,4 @@
-from pytest import raises
+from pytest import raises, fail
 
 from marshmallow import ValidationError
 
@@ -10,3 +10,10 @@ class TestForbidBlankStr:
         validator = ForbidBlankStr()
         with raises(ValidationError):
             validator("")
+
+    def test_validates_none(self):
+        validator = ForbidBlankStr()
+        try:
+            validator(None)
+        except ValidationError as e:
+            fail(f"ValidationError was unexpectedly raised when validating None: \n{str(e)}")
