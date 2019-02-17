@@ -19,7 +19,7 @@ class LoginSchema(Base):
 
     password = String(required=True)
 
-    @validates_schema(skip_on_field_errors=True)
+    @validates_schema
     def has_valid_credentials(self, data):
         email_address = data.get("email_address")
         password = data.get("password")
