@@ -30,6 +30,8 @@ class Base(Model):
     def retrieve(cls, *uid_args, **uid_kwargs):
         """
         Interface method to retrieve an instance from a model using unique identifiers other than id.
+
+        :return: Instance of model that has the specified unique identifier values.
         """
 
         raise NotImplementedError
