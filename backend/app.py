@@ -14,14 +14,17 @@ from models import db
 from models.base import Base
 
 
-if sys.version_info < (3, 7):
+if sys.version_info < (3, 7):  # pragma: no cover
     raise RuntimeError("Python version >= 3.7 is required.")
 
 
 def create_app():
     new_app = Flask(__name__)
     new_app.config.from_object(Config)
-    new_app.static_folder = os.path.join(new_app.config["DIST_DIR"], "static")
+    new_app.static_folder = os.path.join(
+        new_app.config["DIST_DIR"],
+        "static"
+    )
 
     new_app.add_url_rule(
         rule="/",
