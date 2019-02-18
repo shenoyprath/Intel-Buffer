@@ -2,22 +2,18 @@ import os
 
 from peewee import MySQLDatabase
 
+from utils.undef_env_var import error_if_undef
+
 
 db_user_environ_var = "INTEL_BUFFER_DB_USER"
 db_pass_environ_var = "INTEL_BUFFER_DB_PASS"
 
-if os.environ.get(db_user_environ_var) is None:
-    raise EnvironmentError(
-        f"Environment variable {db_user_environ_var} isn't set to the username used to access the database."
-    )
-if os.environ.get(db_pass_environ_var) is None:
-    raise EnvironmentError(
-        f"Environment variable {db_pass_environ_var} isn't set to the password used to access the database."
-    )
+error_if_undef(db_user_environ_var)
+error_if_undef(db_pass_environ_var)
 
 db = MySQLDatabase(
     "intel_buffer_db",
-    user=os.environ.get(db_user_environ_var),
-    password=os.environ.get(db_pass_environ_var),
+    user=os.getenv(db_user_environ_var),
+    password=os.getenv(db_pass_environ_var),
     charset="utf8mb4"
 )
