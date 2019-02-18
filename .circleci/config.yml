@@ -24,8 +24,8 @@ jobs:
 
       - restore_cache:
           keys:
-          - my-app1-{{ .Branch }}-{{ checksum "backend/Pipfile.lock" }}
-          - my-app1-
+          - my-app2-{{ .Branch }}-{{ checksum "backend/Pipfile.lock" }}
+          - my-app2-
 
       - run:
           name: grant circleci access to dependency locations
@@ -42,12 +42,13 @@ jobs:
           command: cd backend && pipenv install --dev
 
       - save_cache:
-          key: my-app1-{{ .Branch }}-{{ checksum "backend/Pipfile.lock" }}
+          key: my-app2-{{ .Branch }}-{{ checksum "backend/Pipfile.lock" }}
           paths:
             - ".venv"
             - "/usr/local/bin"
             - "/usr/local/lib/python3.7/site-packages"
 
+      - run: sudo apt-get install npm
       - run: cd frontend && npm install
       - run: cd frontend && npm run build
 
