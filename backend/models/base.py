@@ -1,4 +1,4 @@
-from peewee import Model
+from peewee import Model, DoesNotExist
 from playhouse.shortcuts import model_to_dict
 
 from models import db
@@ -42,7 +42,10 @@ class Base(Model):
         Essentially implements a get_or_none_by_id method.
         """
 
-        pass
+        try:
+            return cls.get_by_id(id_)
+        except DoesNotExist:
+            return
 
     def __repr__(self):
         return f"<{self.__class__.__name__} {model_to_dict(self)}>"
