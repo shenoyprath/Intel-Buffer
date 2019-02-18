@@ -29,7 +29,7 @@ def create_app():
         defaults={"path": ""}
     )
     new_app.add_url_rule(
-        rule="/<path>/",
+        rule="/<path>",
         view_func=index
     )
 
