@@ -36,5 +36,13 @@ class Base(Model):
 
         return cls.get_or_none(cls.id == identity)
 
+    @classmethod
+    def safe_get_by_id(cls, id_):
+        """
+        Essentially implements a get_or_none_by_id method.
+        """
+
+        pass
+
     def __repr__(self):
         return f"<{self.__class__.__name__} {model_to_dict(self)}>"
