@@ -48,7 +48,7 @@ jobs:
             - "/usr/local/bin"
             - "/usr/local/lib/python3.7/site-packages"
 
-      - run: sudo service mysql status
+      # - run: sudo service mysql status
 
       - run: sudo apt install curl
       - run: curl -sL https://deb.nodesource.com/setup_11.x | sudo bash -
@@ -62,31 +62,31 @@ jobs:
           name: run tests with coverage and statistics from hypothesis
           command: cd backend && pipenv run python -m pytest --cov --hypothesis-show-statistics
 
-  frontend_build_and_test:
-    docker:
-      - image: circleci/node:11.6.0
+  # frontend_build_and_test:
+  #   docker:
+  #     - image: circleci/node:11.6.0
 
-    steps:
-      - checkout
+  #   steps:
+  #     - checkout
 
-      - restore_cache:
-          keys:
-          - intel-buffer-frontend-{{ .Branch }}-{{ checksum "frontend/package.json" }}
-          - intel-buffer-frontend-
+  #     - restore_cache:
+  #         keys:
+  #         - intel-buffer-frontend-{{ .Branch }}-{{ checksum "frontend/package.json" }}
+  #         - intel-buffer-frontend-
 
-      # TODO: find a better way so 'cd' doesn't have to be done a million times
-      - run: cd frontend && npm install
+  #     # TODO: find a better way so 'cd' doesn't have to be done a million times
+  #     - run: cd frontend && npm install
 
-      - save_cache:
-          paths:
-            - node_modules
-          key: intel-buffer-frontend-{{ .Branch }}-{{ checksum "frontend/package.json" }}
+  #     - save_cache:
+  #         paths:
+  #           - node_modules
+  #         key: intel-buffer-frontend-{{ .Branch }}-{{ checksum "frontend/package.json" }}
 
-      - run: cd frontend && npm run test:unit
+  #     - run: cd frontend && npm run test:unit
 
 workflows:
   version: 2.1
   build_and_test:
     jobs:
-      - frontend_build_and_test
+      # - frontend_build_and_test
       - backend_build_and_test
