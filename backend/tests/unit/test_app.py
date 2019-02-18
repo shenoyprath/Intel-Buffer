@@ -14,3 +14,9 @@ class TestApp:
             rule.rule == "/"
             for rule in app.url_map.iter_rules("index")
         )
+
+    def test_redirects_all_to_index(self, app):
+        assert any(
+            rule.rule == "/<path>"
+            for rule in app.url_map.iter_rules("index")
+        )
