@@ -37,7 +37,7 @@ jobs:
 
       - run:
           name: install dependencies
-          command: cd backend && pipenv install
+          command: cd backend && pipenv install --dev
 
       - save_cache:
           key: intel-buffer-backend-{{ .Branch }}-{{ checksum "backend/Pipfile.lock" }}
