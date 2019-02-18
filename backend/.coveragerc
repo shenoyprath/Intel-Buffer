@@ -5,7 +5,7 @@ omit =
     tests/*
     logger.py
 
-source = ./
+source = .
 
 [report]
 exclude_lines =
