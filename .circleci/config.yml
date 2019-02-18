@@ -14,8 +14,9 @@ jobs:
           MYSQL_HOST: localhost
           MYSQL_PORT: 3306
           MYSQL_DB: intel_buffer_test_db
-          MYSQL_USER: root
-          MYSQL_PASSWORD: pass
+          MYSQL_ROOT_PASS: pass
+        ports:
+          - 3306:3306
 
       - image: circleci/node:11.6.0
 
