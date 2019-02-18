@@ -24,8 +24,8 @@ jobs:
 
       - restore_cache:
           keys:
-          - my-app-{{ .Branch }}-{{ checksum "backend/Pipfile.lock" }}
-          - my-app-
+          - my-app1-{{ .Branch }}-{{ checksum "backend/Pipfile.lock" }}
+          - my-app1-
 
       - run:
           name: grant circleci access to dependency locations
@@ -42,7 +42,7 @@ jobs:
           command: cd backend && pipenv install --dev
 
       - save_cache:
-          key: my-app-{{ .Branch }}-{{ checksum "backend/Pipfile.lock" }}
+          key: my-app1-{{ .Branch }}-{{ checksum "backend/Pipfile.lock" }}
           paths:
             - ".venv"
             - "/usr/local/bin"
