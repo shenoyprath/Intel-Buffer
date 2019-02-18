@@ -24,8 +24,8 @@ jobs:
 
       - restore_cache:
           keys:
-          - h03-{{ .Branch }}-{{ checksum "backend/Pipfile.lock" }}
-          - h03-
+          - hrjw-{{ .Branch }}-{{ checksum "backend/Pipfile.lock" }}
+          - hrjw-
 
       - run:
           name: grant circleci access to dependency locations
@@ -42,13 +42,17 @@ jobs:
           command: cd backend && pipenv install --dev
 
       - save_cache:
-          key: h03-{{ .Branch }}-{{ checksum "backend/Pipfile.lock" }}
+          key: hrjw-{{ .Branch }}-{{ checksum "backend/Pipfile.lock" }}
           paths:
             - ".venv"
             - "/usr/local/bin"
             - "/usr/local/lib/python3.7/site-packages"
 
+      - run: sudo apt install curl
+      - run: curl -sL https://deb.nodesource.com/setup_11.x | sudo bash -
       - run: sudo apt-get install -y nodejs
+
+      - run: sudo apt-get install -y npm
       - run: cd frontend && npm install
       - run: cd frontend && npm run build
 
