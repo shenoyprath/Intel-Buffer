@@ -9,7 +9,7 @@ class Base(Model):
         database = db
 
     @classmethod
-    def instantiate(cls, *instantiation_args, **instantiation_kwargs):
+    def instantiate(cls, *instance_args, **instance_kwargs):
         """
         Interface method for creating instances of models.
         If complex logic is needed before creating an instance, simply override this method and add the additional
