@@ -9,37 +9,35 @@ class Base(Model):
         database = db
 
     @classmethod
-    def instantiate(cls, **query):
+    def instantiate(cls, *instantiation_args, **instantiation_kwargs):
         """
-        Abstract method for creating instances of models.
+        Interface method for creating instances of models.
         If complex logic is needed before creating an instance, simply override this method and add the additional
         functionality before creating the instance.
+        Also helpful because the class does not need to be referenced again and again as in
+        `User.create(User.name == name, User.email == email, User.pass == pass...)`
 
-        Note: This method is used because Peewee advices against overriding `Model.__init__` or `Model.create`.
-        Named 'instantiate' to avoid conflict with `Model.create`.
+        Note: This method is used instead of overriding `Base.__init__` or `Base.create` because Peewee advices against
+        overriding them.
         https://github.com/coleifer/peewee/issues/856
 
-        :param query: Same parameters that are passed to the Peewee's 'Model.create'.
         :return: New instance of the the model.
         """
 
-        return cls.create(**query)
+        raise NotImplementedError
 
     @classmethod
-    def retrieve(cls, identity):
+    def retrieve(cls, *uid_args, **uid_kwargs):
         """
-        Abstract method to retrieve an instance from a model using a unique identifier.
-
-        :param identity: Default unique identifier is the id. Named 'identity' to avoid shadowing built-in name 'id'.
-        :return: Instance that matches the identifier or None if nothing matches.
+        Interface method to retrieve an instance from a model using unique identifiers other than id.
         """
 
-        return cls.get_or_none(cls.id == identity)
+        raise NotImplementedError
 
     @classmethod
     def safe_get_by_id(cls, id_):
         """
-        Essentially implements a get_or_none_by_id method.
+        Abstract method that essentially implements a get_or_none_by_id method.
         """
 
         try:
