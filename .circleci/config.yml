@@ -1,7 +1,7 @@
 version: 2.1
 
 jobs:
-  build:
+  backend:
     docker:
       - image: circleci/python:3.7.2
         environment:
@@ -50,7 +50,7 @@ jobs:
           name: run tests with coverage and statistics from hypothesis
           command: cd backend && pipenv run python -m pytest --cov --hypothesis-show-statistics
 
-  frontend:
+  build:
     docker:
       - image: circleci/node:11.6.0
 
