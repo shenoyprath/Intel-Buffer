@@ -28,12 +28,12 @@ jobs:
       - run:
           name: grant circleci access to dependency locations
           command: |
-            chown -R circleci:circleci /usr/local/bin
-            chown -R circleci:circleci /usr/local/lib/python3.7/site-packages
+            sudo chown -R circleci:circleci /usr/local/bin
+            sudo chown -R circleci:circleci /usr/local/lib/python3.7/site-packages
 
       - run:
           name: install pipenv
-          command: cd backend && pip install pipenv
+          command: cd backend && sudo pip install pipenv
 
       - run:
           name: install dependencies
