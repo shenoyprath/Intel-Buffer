@@ -22,16 +22,16 @@ jobs:
     steps:
       - checkout
 
-      - restore_cache:
-          keys:
-          - abc-{{ .Branch }}-{{ checksum "backend/Pipfile.lock" }}
-          - abc-
-
       - run:
           name: grant circleci access to dependency locations
           command: |
             sudo chown -R circleci:circleci /usr/local/bin
             sudo chown -R circleci:circleci /usr/local/lib/python3.7/site-packages
+
+      - restore_cache:
+          keys:
+          - abc-{{ .Branch }}-{{ checksum "backend/Pipfile.lock" }}
+          - abc-
 
       - run:
           name: install pipenv
