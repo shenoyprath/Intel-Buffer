@@ -1,0 +1,23 @@
+from werkzeug.exceptions import BadRequest
+
+from marshmallow import ValidationError
+
+from hypothesis import given
+from hypothesis.strategies import text
+
+from pytest import raises
+
+from api.error_handler import handle_error
+
+
+class TestErrorHandler:
+    @given(error_msg=text())
+    def test_handle_error(self, error_msg):
+        with raises(BadRequest):
+            handle_error(
+                error=ValidationError(error_msg),
+                request=None,
+                schema=None,
+                status_code=400,
+                error_headers=None
+            )
