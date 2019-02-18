@@ -16,5 +16,5 @@ class Config:
     JWT_BLACKLIST_ENABLED = True
     JWT_BLACKLIST_TOKEN_CHECKS = ["access", "refresh"]
 
-    if not os.path.exists(DIST_DIR):
+    if not os.path.exists(DIST_DIR):  # pragma: no cover
         raise NotADirectoryError(f"DIST_DIR not found: {DIST_DIR}")
