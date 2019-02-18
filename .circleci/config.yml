@@ -17,6 +17,8 @@ jobs:
           MYSQL_USER: root
           MYSQL_PASSWORD: pass
 
+      - image: circleci/node:11.6.0
+
     steps:
       - checkout
 
@@ -46,6 +48,9 @@ jobs:
             - "/usr/local/bin"
             - "/usr/local/lib/python3.7/site-packages"
 
+      - run: cd frontend && npm install
+      - run: cd frontend && npm run build
+
       - run:
           name: run tests with coverage and statistics from hypothesis
           command: cd backend && pipenv run python -m pytest --cov --hypothesis-show-statistics
@@ -71,7 +76,6 @@ jobs:
           key: intel-buffer-frontend-{{ .Branch }}-{{ checksum "frontend/package.json" }}
 
       - run: cd frontend && npm run test:unit
-      - run: cd frontend && npm run build
 
 workflows:
   version: 2.1
