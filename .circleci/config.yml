@@ -1,7 +1,7 @@
 version: 2.1
 
 jobs:
-  backend:
+  backend_build_and_test:
     docker:
       - image: circleci/python:3.7.2
         environment:
@@ -22,8 +22,8 @@ jobs:
 
       - restore_cache:
           keys:
-          - v1-dependencies-{{ .Branch }}-{{ checksum "backend/Pipfile.lock" }}
-          - v1-dependencies-
+          - intel-buffer-backend-{{ .Branch }}-{{ checksum "backend/Pipfile.lock" }}
+          - intel-buffer-backend-
 
       - run:
           name: grant circleci access to dependency locations
@@ -40,7 +40,7 @@ jobs:
           command: cd backend && pipenv install --dev
 
       - save_cache:
-          key: v1-dependencies-{{ .Branch }}-{{ checksum "backend/Pipfile.lock" }}
+          key: intel-buffer-backend-{{ .Branch }}-{{ checksum "backend/Pipfile.lock" }}
           paths:
             - ".venv"
             - "/usr/local/bin"
@@ -50,7 +50,7 @@ jobs:
           name: run tests with coverage and statistics from hypothesis
           command: cd backend && pipenv run python -m pytest --cov --hypothesis-show-statistics
 
-  build:
+  frontend_build_and_test:
     docker:
       - image: circleci/node:11.6.0
 
@@ -71,3 +71,11 @@ jobs:
           key: intel-buffer-frontend-{{ .Branch }}-{{ checksum "frontend/package.json" }}
 
       - run: cd frontend && npm run test:unit
+      - run: cd frontend && npm run build
+
+workflows:
+  version: 2.1
+  build_and_test:
+    jobs:
+      - frontend_build_and_test
+      - backend_build_and_test
