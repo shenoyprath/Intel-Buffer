@@ -8,3 +8,9 @@ class TestApp:
         extensions = "flask-jwt-extended",
         for extension in extensions:
             assert extension in app.extensions
+
+    def test_has_index_route(self, app):
+        assert any(
+            rule.rule == "/"
+            for rule in app.url_map.iter_rules("index")
+        )
