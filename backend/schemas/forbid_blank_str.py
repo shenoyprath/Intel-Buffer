@@ -24,5 +24,5 @@ class ForbidBlankStr(Validator):
         ):
             raise ValidationError(self.error)
 
-    def _repr_args(self):
+    def _repr_args(self):  # pragma: no cover
         return f"forbid_whitespace_str={self.forbid_whitespace_str}"
