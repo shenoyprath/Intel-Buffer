@@ -22,8 +22,8 @@ jobs:
 
       - restore_cache:
           keys:
-          - intel-buffer-backend-{{ .Branch }}-{{ checksum "backend/Pipfile.lock" }}
-          - intel-buffer-backend-
+          - v1-dependencies-{{ .Branch }}-{{ checksum "backend/Pipfile.lock" }}
+          - v1-dependencies-
 
       - run:
           name: grant circleci access to dependency locations
@@ -40,7 +40,7 @@ jobs:
           command: cd backend && pipenv install --dev
 
       - save_cache:
-          key: intel-buffer-backend-{{ .Branch }}-{{ checksum "backend/Pipfile.lock" }}
+          key: v1-dependencies-{{ .Branch }}-{{ checksum "backend/Pipfile.lock" }}
           paths:
             - ".venv"
             - "/usr/local/bin"
