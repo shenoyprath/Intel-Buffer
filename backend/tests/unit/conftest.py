@@ -18,8 +18,8 @@ def app():
 def database():
     db = MySQLDatabase(
         "intel_buffer_test_db",
-        user=os.environ.get(db_user_environ_var),
-        password=os.environ.get(db_pass_environ_var),
+        user=os.getenv(db_user_environ_var),
+        password=os.getenv(db_pass_environ_var),
         charset="utf8mb4"
     )
     models = Base.__subclasses__()
