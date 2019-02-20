@@ -28,7 +28,7 @@ class TestForbidBlankStr:
         string=text(
             characters(
                 whitelist_categories=(),
-                whitelist_characters=list(whitespace)
+                whitelist_characters=tuple(whitespace)
             )
         )
     )
