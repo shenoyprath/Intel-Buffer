@@ -14,8 +14,6 @@ class Base(Model):
         Interface method for creating instances of models.
         If complex logic is needed before creating an instance, simply override this method and add the additional
         functionality before creating the instance.
-        Also helpful because the class does not need to be referenced again and again as in
-        `User.create(User.name == name, User.email == email, User.pass == pass...)`
 
         Note: This method is used instead of overriding `Base.__init__` or `Base.create` because Peewee advices against
         overriding them.
