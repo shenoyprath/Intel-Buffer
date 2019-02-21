@@ -25,4 +25,5 @@ redis_db = Redis(
     password=os.getenv(redis_pass_environ_var)
 )
 
+
 from api import auth_token, error_handler

@@ -2,10 +2,10 @@ from werkzeug.exceptions import BadRequest
 
 from marshmallow import ValidationError
 
+from pytest import raises
+
 from hypothesis import given
 from hypothesis.strategies import text
-
-from pytest import raises
 
 from api.error_handler import handle_error
 

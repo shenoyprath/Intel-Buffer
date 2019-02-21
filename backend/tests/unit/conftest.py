@@ -1,6 +1,7 @@
 import os
 
 from peewee import MySQLDatabase
+
 from pytest import fixture
 
 from app import create_app

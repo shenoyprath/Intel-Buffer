@@ -3,9 +3,7 @@ from datetime import datetime
 from flask import jsonify
 
 from flask_restplus import Resource
-
 from flask_jwt_extended import create_access_token, create_refresh_token
-
 from webargs.flaskparser import use_args
 
 from api import rest_api, jwt

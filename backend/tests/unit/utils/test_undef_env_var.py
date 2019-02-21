@@ -1,10 +1,10 @@
 import os
 from string import ascii_letters, digits
 
+from pytest import raises, fail
+
 from hypothesis import given
 from hypothesis.strategies import text, characters
-
-from pytest import raises, fail
 
 from utils.undef_env_var import error_if_undef, UndefinedEnvironmentVariable
 

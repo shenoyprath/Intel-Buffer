@@ -1,9 +1,9 @@
 from string import whitespace
 
+from pytest import mark
+
 from hypothesis import given
 from hypothesis.strategies import text, one_of, characters, emails
-
-from pytest import mark
 
 from models.user import User
 

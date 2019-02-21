@@ -3,10 +3,9 @@ import sys
 
 from flask import Flask
 
-from logger import logger
 from config import Config
-
 from index import index
+from logger import logger
 
 from api import api_blueprint, jwt
 

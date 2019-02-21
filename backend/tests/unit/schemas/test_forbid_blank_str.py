@@ -1,12 +1,12 @@
 from string import whitespace
 
-from hypothesis import given, example
-from hypothesis.strategies import text, characters
+from marshmallow import ValidationError
+from marshmallow.fields import Field
 
 from pytest import raises, fail
 
-from marshmallow import ValidationError
-from marshmallow.fields import Field
+from hypothesis import given, example
+from hypothesis.strategies import text, characters
 
 from schemas.forbid_blank_str import ForbidBlankStr
 

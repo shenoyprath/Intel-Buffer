@@ -1,7 +1,7 @@
+from pytest import mark
+
 from hypothesis import given
 from hypothesis.strategies import emails, text
-
-from pytest import mark
 
 from models.user import User
 
