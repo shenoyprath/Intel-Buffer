@@ -27,12 +27,12 @@ class AuthToken(Resource):
 
     @staticmethod
     @use_args(LoginSchema(), error_status_code=401)
-    def post(args):
+    def post(credentials):
         """
         Creates a new authentication (access and refresh) token for the client.
         """
 
-        email_address = args.get("email_address")
+        email_address = credentials.get("email_address")
 
         access_token = create_access_token(email_address)
         refresh_token = create_refresh_token(email_address)
