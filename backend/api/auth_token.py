@@ -42,6 +42,4 @@ class AuthToken(Resource):
         email_address = credentials.get("email_address")
         tokens = AuthToken.create_tokens(email_address)
 
-        response = jsonify(tokens)
-        response.status_code = 200
-        return response
+        return jsonify(tokens)

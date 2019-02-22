@@ -19,6 +19,4 @@ class User(Resource):
         new_user = UserModel.instantiate(**user_details)
         tokens = AuthToken.create_tokens(new_user.email_address)
 
-        response = jsonify(tokens)
-        response.status_code = 200
-        return response
+        return jsonify(tokens)
