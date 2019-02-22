@@ -26,6 +26,13 @@ class AuthToken(Resource):
         }
 
     @staticmethod
+    def create_tokens(identity):
+        return {
+            "access_token": create_access_token(identity),
+            "refresh_token": create_refresh_token(identity)
+        }
+
+    @staticmethod
     @use_args(LoginSchema(), error_status_code=401)
     def post(credentials):
         """
@@ -33,13 +40,8 @@ class AuthToken(Resource):
         """
 
         email_address = credentials.get("email_address")
+        tokens = AuthToken.create_tokens(email_address)
 
-        access_token = create_access_token(email_address)
-        refresh_token = create_refresh_token(email_address)
-
-        response = jsonify(
-            access_token=access_token,
-            refresh_token=refresh_token
-        )
+        response = jsonify(tokens)
         response.status_code = 200
         return response
