@@ -17,9 +17,9 @@ if sys.version_info < (3, 7):  # pragma: no cover
     raise RuntimeError("Python version >= 3.7 is required.")
 
 
-def create_app():
+def create_app(config):
     new_app = Flask(__name__)
-    new_app.config.from_object(Config)
+    new_app.config.from_object(config)
     new_app.static_folder = os.path.join(
         new_app.config["DIST_DIR"],
         "static"
@@ -47,7 +47,7 @@ def create_app():
     return new_app
 
 
-app = create_app()
+app = create_app(Config)
 
 with db:
     db.create_tables(Base.__subclasses__(), safe=True)
