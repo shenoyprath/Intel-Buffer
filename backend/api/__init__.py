@@ -26,4 +26,4 @@ redis_db = Redis(
 )
 
 
-from api import auth_token, error_handler
+from api import auth_token, error_handler, user
