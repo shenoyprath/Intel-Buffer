@@ -1,6 +1,6 @@
 from werkzeug.security import check_password_hash
 
-from marshmallow import validates_schema, ValidationError
+from marshmallow import validates_schema, ValidationError, post_load
 from marshmallow.fields import String
 
 from models import db
@@ -30,3 +30,7 @@ class LoginSchema(Base):
                 raise ValidationError(
                     LoginSchema.custom_errors["invalid_credentials"]
                 )
+
+    @post_load
+    def get_user_match(self, data):
+        return User.retrieve(data["email_address"])

@@ -32,14 +32,12 @@ class AuthToken(Resource):
             "refresh_token": create_refresh_token(identity)
         }
 
-    @staticmethod
+    @classmethod
     @use_args(LoginSchema(), error_status_code=401)
-    def post(credentials):
+    def post(cls, user):
         """
         Creates a new authentication (access and refresh) token for the client.
         """
 
-        email_address = credentials.get("email_address")
-        tokens = AuthToken.create_tokens(email_address)
-
+        tokens = cls.create_tokens(user.email_address)
         return jsonify(tokens)
