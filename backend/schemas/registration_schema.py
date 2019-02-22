@@ -1,4 +1,4 @@
-from marshmallow import ValidationError, validates, validates_schema
+from marshmallow import ValidationError, validates, validates_schema, post_load
 from marshmallow.fields import String, Email
 from marshmallow.validate import Length
 
@@ -66,3 +66,7 @@ class RegistrationSchema(Base):
                 message=RegistrationSchema.custom_errors["password_is_email"],
                 field_name="password"
             )
+
+    @post_load
+    def register_user(self, data):
+        return User.instantiate(**data)
