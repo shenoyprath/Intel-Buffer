@@ -3,7 +3,7 @@ import sys
 
 from flask import Flask
 
-from config import Config
+from config import DevConfig
 from index import index
 from logger import logger
 
@@ -47,7 +47,7 @@ def create_app(config):
     return new_app
 
 
-app = create_app(Config)
+app = create_app(DevConfig)
 
 with db:
     db.create_tables(Base.__subclasses__(), safe=True)
