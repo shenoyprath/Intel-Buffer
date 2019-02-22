@@ -18,3 +18,18 @@ class Config:
 
     if not os.path.exists(DIST_DIR):  # pragma: no cover
         raise NotADirectoryError(f"DIST_DIR not found: {DIST_DIR}")
+
+
+class DevConfig(Config):
+    DEBUG = True
+    DATABASE_NAME = "intel_buffer_db"
+
+
+class TestConfig(Config):
+    DEBUG = True
+    TESTING = True
+    DATABASE_NAME = "intel_buffer_test_db"
+
+
+class ProdConfig(Config):
+    DEBUG = False
