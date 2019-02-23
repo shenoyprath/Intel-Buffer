@@ -1,13 +1,9 @@
-import os
-
-from peewee import MySQLDatabase
-
 from pytest import fixture
 
 from app import create_app
 from config import TestConfig
 
-from models import db_user_environ_var, db_pass_environ_var
+from models import db, init_db
 from models.base import Base
 
 
@@ -18,16 +14,12 @@ def app():
 
 @fixture
 def database():
-    db = MySQLDatabase(
-        "intel_buffer_test_db",
-        user=os.getenv(db_user_environ_var),
-        password=os.getenv(db_pass_environ_var),
-        charset="utf8mb4"
-    )
+    init_db("intel_buffer_test_db")
     models = Base.__subclasses__()
-    db.bind(models, bind_refs=False, bind_backrefs=False)
 
-    with db:
+    # Don't use `with db:` here. It opens a new transaction
+    # which interferes with transactions in the actual code.
+    with db.connection_context():
         db.create_tables(models)
         yield db
         db.drop_tables(models)
