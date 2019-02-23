@@ -22,10 +22,10 @@ class TestUndefEnvVar:
         ),
         min_size=1
     ))
-    def test_passes_defined_env_var(self, env_var):
+    def test_gets_defined_env_var(self, env_var):
         os.environ[env_var] = env_var
         try:
-            getenv_or_err(env_var)
+            assert getenv_or_err(env_var) == env_var
         except UndefinedEnvironmentVariable:
             fail(
                 f"Raised UndefinedEnvironmentVariable exception when "
