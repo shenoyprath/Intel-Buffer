@@ -18,36 +18,36 @@ if sys.version_info < (3, 7):  # pragma: no cover
 
 
 def create_app(config):
-    new_app = Flask(__name__)
-    new_app.config.from_object(config)
-    new_app.static_folder = os.path.join(
-        new_app.config["DIST_DIR"],
+    app = Flask(__name__)
+    app.config.from_object(config)
+    app.static_folder = os.path.join(
+        app.config["DIST_DIR"],
         "static"
     )
 
-    new_app.add_url_rule(
+    app.add_url_rule(
         rule="/",
         view_func=index,
         defaults={"path": ""}
     )
-    new_app.add_url_rule(
+    app.add_url_rule(
         rule="/<path>",
         view_func=index
     )
 
     def register_blueprints():
-        new_app.register_blueprint(api_blueprint)
+        app.register_blueprint(api_blueprint)
 
     def register_extensions():
-        jwt.init_app(new_app)
+        jwt.init_app(app)
 
     register_blueprints()
     register_extensions()
 
-    return new_app
+    return app
 
 
-app = create_app(DevConfig)
+application = create_app(DevConfig)
 
 with db:
     db.create_tables(Base.__subclasses__(), safe=True)
@@ -55,4 +55,4 @@ with db:
 
 if __name__ == "__main__":
     logger()
-    app.run(host="0.0.0.0", port=8888, debug=True)
+    application.run(host="0.0.0.0", port=8888, debug=True)
