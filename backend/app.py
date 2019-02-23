@@ -10,7 +10,7 @@ from logger import logger
 from api import api_blueprint, jwt
 
 from models import init_db
-from models.base import Base
+from models.create_tables import create_tables
 
 
 if sys.version_info < (3, 7):  # pragma: no cover
@@ -47,17 +47,10 @@ def create_app(config):
     return app
 
 
-def init_db_models(database):
-    db = init_db(database)
-
-    all_models = Base.__subclasses__()
-    with db:
-        db.create_tables(all_models, safe=True)
-
-
 if __name__ == "__main__":
     application = create_app(DevConfig)
-    init_db_models("intel_buffer_db")
+    init_db("intel_buffer_db")
+    create_tables()
 
     logger()
     application.run(host="0.0.0.0", port=8888, debug=True)

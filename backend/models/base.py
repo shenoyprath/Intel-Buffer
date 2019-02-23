@@ -4,7 +4,18 @@ from playhouse.shortcuts import model_to_dict
 from models import db
 
 
-class Base(Model):
+class AbstractModel:
+    """
+    Tables won't be created for models that are **DIRECT** subclasses of this class.
+    Using the built-in ABC module to create abstract models is not supported by peewee and will generate conflict with
+    meta classes.
+
+    Note: This class is not supposed to implement functionality provided by ABC.
+    It purely exists to tell the function `create_tables` whether the model needs a table in the database.
+    """
+
+
+class Base(AbstractModel, Model):
     class Meta:
         database = db
 
