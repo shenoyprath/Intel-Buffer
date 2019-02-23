@@ -58,7 +58,8 @@ class TestRegistrationSchema:
     ))
     def test_invalidates_password_matching_email(self, email_address):
         errors = RegistrationSchema().validate({
-            # names given as skip_on_field_errors is True, so @validates_schema won't run if required fields are missing
+            # names given as skip_on_field_errors is True,
+            # so @validates_schema won't run if required fields are missing
             "first_name": "John",
             "last_name": "Doe",
             "email_address": email_address,

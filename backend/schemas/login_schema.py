@@ -14,7 +14,8 @@ class LoginSchema(Base):
         "invalid_credentials": "Invalid credentials. Please try again."
     }
 
-    # will check if email is in db anyway, Email() field validation isn't needed.
+    # will check if email is in db anyway, so
+    # marshmallow's Email() field validation isn't needed.
     email_address = String(required=True)
 
     password = String(required=True)

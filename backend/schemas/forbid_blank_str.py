@@ -10,12 +10,15 @@ class ForbidBlankStr(Validator):
     Use the 'required' parameter to invalidate no field supplied and 'allow_none' parameter to invalidate a None value.
     """
 
-    def __init__(self, forbid_whitespace_str=False, error=None):  # whitespace str only contains whitespace characters
+    # whitespace str only contains whitespace characters
+    def __init__(self, forbid_whitespace_str=False, error=None):
         self.forbid_whitespace_str = forbid_whitespace_str
         self.error = error or Field.default_error_messages["required"]
 
     def __call__(self, value):
-        if value is None:  # if value=None and allow_none=False, required err msg shouldn't duplicate in err msgs dict
+        # if value=None and allow_none=False, required
+        # err msg shouldn't duplicate in err msgs dict
+        if value is None:
             return
 
         if (

@@ -14,7 +14,9 @@ def model_instance(model, *instance_args, **instance_kwargs):
 
     instance = model.instantiate(*instance_args, **instance_kwargs)
 
+    # If cleanup is not included in a 'finally' block,
+    # pytest will skip cleanup if test/assertion fails
     try:
         yield instance
-    finally:  # If cleanup is not included in a 'finally' block, pytest will skip cleanup if test/assertion fails
+    finally:
         instance.delete_instance()
