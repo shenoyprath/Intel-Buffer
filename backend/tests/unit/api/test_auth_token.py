@@ -2,11 +2,14 @@ import json
 
 from flask import url_for
 
+from pytest import mark
+
 from models.user import User
 
 from tests.unit.models.model_instance import model_instance
 
 
+@mark.usefixtures("database")
 class TestAuthToken:
     def test_post_returns_access_and_refresh_tokens(self, client):
         dummy_email = "example@example.com"
