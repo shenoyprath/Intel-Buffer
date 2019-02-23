@@ -1,14 +1,19 @@
 import os
+from abc import ABC
 from datetime import timedelta
 
+from utils.getenv_or_err import getenv_or_err
 
-class Config:
-    ENV = os.getenv("FLASK_ENV", "development")
-    SECRET_KEY = os.getenv("FLASK_SECRET_KEY", "DevelopmentKey")
+
+class Config(ABC):
+    SECRET_KEY = getenv_or_err("FLASK_SECRET_KEY")
 
     APP_DIR = os.path.dirname(__file__)
     ROOT_DIR = os.path.dirname(APP_DIR)
     DIST_DIR = os.path.join(ROOT_DIR, "frontend/dist")
+
+    DB_USER = getenv_or_err("INTEL_BUFFER_DB_USER")
+    DB_PASS = getenv_or_err("INTEL_BUFFER_DB_PASS")
 
     JWT_SECRET_KEY = SECRET_KEY
     JWT_ACCESS_TOKEN_EXPIRES = timedelta(minutes=15)
@@ -21,15 +26,16 @@ class Config:
 
 
 class DevConfig(Config):
+    ENV = "development"
     DEBUG = True
-    DATABASE_NAME = "intel_buffer_db"
 
 
 class TestConfig(Config):
+    ENV = "testing"
     DEBUG = True
     TESTING = True
-    DATABASE_NAME = "intel_buffer_test_db"
 
 
 class ProdConfig(Config):
+    ENV = "production"
     DEBUG = False
