@@ -21,3 +21,4 @@ def init_db(db_name):
         password=os.getenv(pass_env_var),
         charset="utf8mb4"
     )
+    return db

@@ -3,7 +3,7 @@ from pytest import fixture
 from app import create_app
 from config import TestConfig
 
-from models import db, init_db
+from models import init_db
 from models.base import Base
 
 
@@ -14,7 +14,7 @@ def app():
 
 @fixture
 def database():
-    init_db("intel_buffer_test_db")
+    db = init_db("intel_buffer_test_db")
     models = Base.__subclasses__()
 
     # Don't use `with db:` here. It opens a new transaction

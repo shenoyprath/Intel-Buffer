@@ -9,7 +9,7 @@ from logger import logger
 
 from api import api_blueprint, jwt
 
-from models import db, init_db
+from models import init_db
 from models.base import Base
 
 
@@ -48,7 +48,7 @@ def create_app(config):
 
 
 def init_db_models(database):
-    init_db(database)
+    db = init_db(database)
 
     all_models = Base.__subclasses__()
     with db:
