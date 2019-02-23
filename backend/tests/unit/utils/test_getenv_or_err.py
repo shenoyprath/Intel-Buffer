@@ -6,14 +6,14 @@ from pytest import raises, fail
 from hypothesis import given
 from hypothesis.strategies import text, characters
 
-from utils.undef_env_var import error_if_undef, UndefinedEnvironmentVariable
+from utils.getenv_or_err import getenv_or_err, UndefinedEnvironmentVariable
 
 
 class TestUndefEnvVar:
     @given(env_var=text())
     def test_errors_undef_env_var(self, env_var):
         with raises(UndefinedEnvironmentVariable):
-            error_if_undef(env_var)
+            getenv_or_err(env_var)
 
     @given(env_var=text(
         characters(
@@ -25,7 +25,7 @@ class TestUndefEnvVar:
     def test_passes_defined_env_var(self, env_var):
         os.environ[env_var] = env_var
         try:
-            error_if_undef(env_var)
+            getenv_or_err(env_var)
         except UndefinedEnvironmentVariable:
             fail(
                 f"Raised UndefinedEnvironmentVariable exception when "
