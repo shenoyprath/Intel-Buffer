@@ -9,7 +9,7 @@ from logger import logger
 
 from api import api_blueprint, jwt
 
-from models import db
+from models import db, init_db
 from models.base import Base
 
 
@@ -47,12 +47,17 @@ def create_app(config):
     return app
 
 
-application = create_app(DevConfig)
+def init_db_models(database):
+    init_db(database)
 
-with db:
-    db.create_tables(Base.__subclasses__(), safe=True)
+    all_models = Base.__subclasses__()
+    with db:
+        db.create_tables(all_models, safe=True)
 
 
 if __name__ == "__main__":
+    application = create_app(DevConfig)
+    init_db_models("intel_buffer_db")
+
     logger()
     application.run(host="0.0.0.0", port=8888, debug=True)
