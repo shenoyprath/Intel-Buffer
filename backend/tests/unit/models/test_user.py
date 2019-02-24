@@ -9,7 +9,7 @@ from models.user import User
 
 from utils.remove_extra_spaces import remove_extra_spaces
 
-from tests.unit.models.model_instance import model_instance
+from tests.utils.model_instance import model_instance
 
 
 @mark.usefixtures("database")

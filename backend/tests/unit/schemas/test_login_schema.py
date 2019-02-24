@@ -7,7 +7,7 @@ from models.user import User
 
 from schemas.login_schema import LoginSchema
 
-from tests.unit.models.model_instance import model_instance
+from tests.utils.model_instance import model_instance
 
 
 @mark.usefixtures("database")

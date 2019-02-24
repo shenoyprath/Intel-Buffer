@@ -11,7 +11,7 @@ from schemas.registration_schema import RegistrationSchema
 
 from utils.has_alphanum_chars import has_alphanum_chars
 
-from tests.unit.models.model_instance import model_instance
+from tests.utils.model_instance import model_instance
 
 
 @mark.usefixtures("database")
