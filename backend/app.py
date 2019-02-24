@@ -49,7 +49,7 @@ def create_app(config):
 
 if __name__ == "__main__":
     application = create_app(DevConfig)
-    init_db("intel_buffer_db")
+    init_db(DevConfig)
     create_tables()
 
     logger()

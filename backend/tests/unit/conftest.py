@@ -14,7 +14,7 @@ def app():
 
 @fixture
 def database():
-    db = init_db("intel_buffer_test_db")
+    db = init_db(TestConfig)
 
     # Don't use `with db:` here. It opens a new transaction
     # which interferes with transactions in the actual code.

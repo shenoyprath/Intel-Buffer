@@ -28,12 +28,14 @@ class Config(ABC):
 class DevConfig(Config):
     ENV = "development"
     DEBUG = True
+    DB_NAME = "intel_buffer_db"
 
 
 class TestConfig(Config):
     ENV = "testing"
     DEBUG = True
     TESTING = True
+    DB_NAME = "intel_buffer_test_db"
 
 
 class ProdConfig(Config):
