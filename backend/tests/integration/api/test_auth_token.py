@@ -11,19 +11,19 @@ from tests.utils.model_instance import model_instance
 
 @mark.usefixtures("database")
 class TestAuthToken:
-    def test_post_returns_access_and_refresh_tokens(self, client):
-        dummy_email = "example@example.com"
-        dummy_password = "Password123"
+    def test_post_returns_access_and_refresh_tokens(self, client, valid_user_info):
+        email_address = valid_user_info["email_address"]
+        password = valid_user_info["password"]
         with model_instance(
             User,
-            first_name="John",
-            last_name="Doe",
-            email_address=dummy_email,
-            password=dummy_password
+            first_name=valid_user_info["first_name"],
+            last_name=valid_user_info["first_name"],
+            email_address=email_address,
+            password=password
         ):
             response = client.post(
                 url_for("api.auth_token"),
-                data=dict(email_address=dummy_email, password=dummy_password)
+                data=dict(email_address=email_address, password=password)
             )
 
         assert response.status_code == 200
