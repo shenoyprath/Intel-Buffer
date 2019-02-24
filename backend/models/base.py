@@ -2,10 +2,18 @@ from peewee import Model, DoesNotExist
 from playhouse.shortcuts import model_to_dict
 
 from models import db
-from models.abstract import Abstract
 
 
-class Base(Abstract, Model):
+class Base(Model):
+    # In Peewee, an abstract meta class variable is not implemented like it is in Django's ORM.
+    # To know whether a model requires a table in the database, we have to implement it ourselves.
+    # Using built-in `ABC` won't work as it creates conflicts between `ABCMeta` and the Meta classes of `peewee.Model`.
+    # In order for a model to be considered abstract, this variable needs to be explicitly set to True.
+    # Therefore, this variable should not be moved to the Meta class as all variables in Meta end up in __dict__,
+    # whether or not they're inherited or explicitly set.
+    # Look at the class method `is_abstract()` for more details on implementation.
+    __is_abstract = True
+
     class Meta:
         database = db
 
@@ -47,17 +55,22 @@ class Base(Abstract, Model):
             return
 
     @classmethod
-    def is_concrete(cls):
+    def is_abstract(cls):
         """
-        Concrete models are models that are not **DIRECT** subclasses of the Abstract model.
+        In order for a model to be considered abstract, it needs to have `__is_abstract` explicitly defined to be True.
+        This means that if a model inherits from a parent model that has set `__is_abstract` to True, the child will
+        still be considered a concrete model because it doesn't explicitly define the class variable as True.
         """
 
-        return Abstract not in cls.__bases__
+        return (
+            cls.__is_abstract and
+            f"_{cls.__name__}__is_abstract" in cls.__dict__
+        )
 
     @classmethod
     def get_concrete_descendants(cls):
         for descendant in cls.__subclasses__():
-            if descendant.is_concrete():
+            if not descendant.is_abstract():
                 yield descendant
 
             yield from descendant.get_concrete_descendants()
