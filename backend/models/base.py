@@ -2,20 +2,10 @@ from peewee import Model, DoesNotExist
 from playhouse.shortcuts import model_to_dict
 
 from models import db
+from models.abstract import Abstract
 
 
-class AbstractModel:
-    """
-    Tables won't be created for models that are **DIRECT** subclasses of this class.
-    Using the built-in ABC module to create abstract models is not supported by peewee and will generate conflict with
-    meta classes.
-
-    Note: This class is not supposed to implement functionality provided by ABC.
-    It purely exists to tell the function `create_tables` whether the model needs a table in the database.
-    """
-
-
-class Base(AbstractModel, Model):
+class Base(Abstract, Model):
     class Meta:
         database = db
 
@@ -59,10 +49,10 @@ class Base(AbstractModel, Model):
     @classmethod
     def is_concrete(cls):
         """
-        Concrete models are models that are not **DIRECT** subclasses of AbstractModel.
+        Concrete models are models that are not **DIRECT** subclasses of the Abstract model.
         """
 
-        return AbstractModel not in cls.__bases__
+        return Abstract not in cls.__bases__
 
     @classmethod
     def get_concrete_descendants(cls):
