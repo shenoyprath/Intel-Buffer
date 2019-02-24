@@ -81,11 +81,18 @@ class TestRegistrationSchema:
             max_size=RegistrationSchema.max_password_len
         ).filter(lambda password: has_alphanum_chars(password))
     )
-    def test_validates_when_all_criteria_meet(self, name, email_address, password):
-        errors = RegistrationSchema().validate({
+    def test_validates_when_all_criteria_meet_and_loads_user(self, name, email_address, password):
+        credentials = {
             "first_name": name,
             "last_name": name,
             "email_address": email_address,
             "password": password
-        })
+        }
+        errors = RegistrationSchema().validate(credentials)
         assert not errors
+
+        new_user = RegistrationSchema().load(credentials)
+        for attr, val in credentials.items():
+            if attr != "password":  # password gets hashed
+                assert getattr(new_user, attr) == val
+        new_user.delete_instance()  # clean up to avoid IntegrityError
