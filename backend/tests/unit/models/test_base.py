@@ -16,15 +16,16 @@ class TestBase:
     def test_get_concrete_descendants(self):
         """
         Class hierarchy/tree for testing this method:
-                                            AbstractModel1
-                                            |            |
-                                    AbstractModel2    ConcreteModel1
-                                            |            |
-                                    ConcreteModel3    ConcreteModel2
-                                            |
-                                    AbstractModel3
-                                            |
-                                    ConcreteModel4
+
+                AbstractModel1
+                |            |
+        AbstractModel2    ConcreteModel1
+                |            |
+        ConcreteModel3    ConcreteModel2
+                |
+        AbstractModel3
+                |
+        ConcreteModel4
         """
 
         # noinspection PyAbstractClass
