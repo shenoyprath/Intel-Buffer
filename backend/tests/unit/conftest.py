@@ -4,7 +4,7 @@ from app import create_app
 from config import TestConfig
 
 from models import init_db
-from models.base import Base
+from models.table_modifiers import create_tables, drop_tables
 
 
 @fixture
@@ -15,11 +15,10 @@ def app():
 @fixture
 def database():
     db = init_db("intel_buffer_test_db")
-    models = Base.__subclasses__()
 
     # Don't use `with db:` here. It opens a new transaction
     # which interferes with transactions in the actual code.
     with db.connection_context():
-        db.create_tables(models)
+        create_tables()
         yield db
-        db.drop_tables(models)
+        drop_tables()
