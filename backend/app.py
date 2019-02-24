@@ -10,7 +10,7 @@ from logger import logger
 from api import api_blueprint, jwt
 
 from models import init_db
-from models.create_tables import create_tables
+from models.table_modifiers import create_tables
 
 
 if sys.version_info < (3, 7):  # pragma: no cover
