@@ -1,15 +1,9 @@
 from pytest import fixture
 
-from app import create_app
 from config import TestConfig
 
 from models import init_db
 from models.table_modifiers import create_tables, drop_tables
-
-
-@fixture
-def app():
-    return create_app(TestConfig)
 
 
 @fixture
