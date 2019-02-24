@@ -1,18 +1,12 @@
-from models.base import Base, AbstractModel
+from models.base import Base
 
 
-def create_tables(base_cls=Base):
-    """
-    It can be annoying to keep importing new models and creating a table for each of them.
-    This function automates the process by recursively creating tables for the  base class and all of its subclasses.
-    Tables will only be created for a class/subclass if that that particular class/subclass doesn't inherit **DIRECTLY**
-    from AbstractModel.
+def create_tables():
+    for descendant in Base.get_concrete_descendants():
+        descendant.create_table()
 
-    :param base_cls: Base class used as the starting point of recursion for recursively creating the tables.
-    """
 
-    if AbstractModel not in base_cls.__bases__:
-        base_cls.create_table()
-
-    for model in base_cls.__subclasses__():
-        create_tables(base_cls=model)
+def drop_tables():
+    for descendant in Base.get_concrete_descendants():
+        if descendant.table_exists():
+            descendant.drop_table()

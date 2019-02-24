@@ -56,5 +56,21 @@ class Base(AbstractModel, Model):
         except DoesNotExist:
             return
 
+    @classmethod
+    def is_concrete(cls):
+        """
+        Concrete models are models that are not **DIRECT** subclasses of AbstractModel.
+        """
+
+        return AbstractModel not in cls.__bases__
+
+    @classmethod
+    def get_concrete_descendants(cls):
+        for descendant in cls.__subclasses__():
+            if descendant.is_concrete():
+                yield descendant
+
+            yield from descendant.get_concrete_descendants()
+
     def __repr__(self):
         return f"<{self.__class__.__name__} {model_to_dict(self)}>"
