@@ -1,92 +1,16 @@
-# version: 2.1
+version: 2.1
 
-# jobs:
-#   backend_build_and_test:
-#     docker:
-#       - image: circleci/python:3.7.2
-#         environment:
-#           INTEL_BUFFER_DB_USER: root
-#           INTEL_BUFFER_DB_PASS: pass
-#           REDIS_DB_PASS: pass
+jobs:
+  test:
+    docker:
+      - image: shenoyprathamesh123/py-node-mysql:0.0.1
 
-#       - image: circleci/mysql:latest
-#         environment:
-#           MYSQL_HOST: localhost
-#           MYSQL_PORT: 3306
-#           MYSQL_DB: intel_buffer_test_db
-#           MYSQL_ROOT_PASS: pass
+    steps:
+      - checkout
 
-#       - image: circleci/node:11.6.0
-
-#     steps:
-#       - checkout
-
-#       - run:
-#           name: grant circleci access to dependency locations
-#           command: |
-#             sudo chown -R circleci:circleci /usr/local/bin
-#             sudo chown -R circleci:circleci /usr/local/lib/python3.7/site-packages
-
-#       - restore_cache:
-#           keys:
-#           - abc-{{ .Branch }}-{{ checksum "backend/Pipfile.lock" }}
-#           - abc-
-
-#       - run:
-#           name: install pipenv
-#           command: cd backend && sudo pip install pipenv
-
-#       - run:
-#           name: install dependencies
-#           command: cd backend && pipenv install --dev
-
-#       - save_cache:
-#           key: abc-{{ .Branch }}-{{ checksum "backend/Pipfile.lock" }}
-#           paths:
-#             - ".venv"
-#             - "/usr/local/bin"
-#             - "/usr/local/lib/python3.7/site-packages"
-
-#       # - run: sudo service mysql status
-
-#       - run: sudo apt install curl
-#       - run: curl -sL https://deb.nodesource.com/setup_11.x | sudo bash -
-#       - run: sudo apt-get install -y nodejs
-
-#       - run: sudo apt-get install -y npm
-#       - run: cd frontend && npm install
-#       - run: cd frontend && npm run build
-#       - run: cd backend && pipenv install cryptography
-
-#       - run:
-#           name: run tests with coverage and statistics from hypothesis
-#           command: cd backend && pipenv run python -m pytest --cov --hypothesis-show-statistics
-
-  # frontend_build_and_test:
-  #   docker:
-  #     - image: circleci/node:11.6.0
-
-  #   steps:
-  #     - checkout
-
-  #     - restore_cache:
-  #         keys:
-  #         - intel-buffer-frontend-{{ .Branch }}-{{ checksum "frontend/package.json" }}
-  #         - intel-buffer-frontend-
-
-  #     # TODO: find a better way so 'cd' doesn't have to be done a million times
-  #     - run: cd frontend && npm install
-
-  #     - save_cache:
-  #         paths:
-  #           - node_modules
-  #         key: intel-buffer-frontend-{{ .Branch }}-{{ checksum "frontend/package.json" }}
-
-  #     - run: cd frontend && npm run test:unit
-
-# workflows:
-#   version: 2.1
-#   build_and_test:
-#     jobs:
-#       - frontend_build_and_test
-#       - backend_build_and_test
+      - run:
+          name: Check if python, node, and mysql are installed
+          command: |
+            python --version
+            node --version
+            mysql --version
