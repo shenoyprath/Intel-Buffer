@@ -8,6 +8,8 @@ jobs:
     steps:
       - checkout
 
+      - run: sudo chown -R circleci:circleci /usr/local/bin
+      - run: sudo chown -R circleci:circleci /usr/local/lib/python3.7/site-packages
       - run:
           name: Check if python, node, and mysql are installed
           command: |
