@@ -53,4 +53,4 @@ if __name__ == "__main__":
     create_tables()
 
     logger()
-    application.run(host="127.0.0.1", port=8888)  # nosec make bandit ignore flask run on debug mode.
+    application.run(host="127.0.0.1", port=8888)
