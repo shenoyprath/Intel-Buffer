@@ -29,7 +29,7 @@ class ForbidBlankStr(Validator):
 
     def _repr_args(self):  # pragma: no cover
         """
-        Abstract method that is defined in Validator. Used in __repr__.
+        Abstract method that is defined in `Validator`. Used in `__repr__`.
         """
 
         return f"forbid_whitespace_str={self.forbid_whitespace_str}"
