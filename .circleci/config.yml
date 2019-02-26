@@ -28,7 +28,7 @@ jobs:
           name: grant circleci access to backend dependency locations
           command: |
             sudo chown -R circleci:circleci /usr/local/bin
-            sudo chown -R circleci:circleci /usr/local/lib/python3.7/site-packages 
+            sudo chown -R circleci:circleci /usr/local/lib/python3.7/site-packages
 
       - restore_cache:
           keys:
