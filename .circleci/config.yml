@@ -3,14 +3,26 @@ version: 2.1
 jobs:
   build:
     docker:
-      - image: shenoyprathamesh123/py-node-mysql:0.0.1
+      - image: circleci/python:3-node
+        environment:
+          FLASK_SECRET_KEY: testing
+          INTEL_BUFFER_DB_USER: root
+          INTEL_BUFFER_DB_PASS: pass
+          REDIS_DB_PASS: pass
+      - image: circleci/mysql:latest
+        environment:
+          MYSQL_HOST: 127.0.0.1
+          MYSQL_PORT: 3306
+          MYSQL_DB: intel_buffer_test_db
+          MYSQL_USER: root
+          MYSQL_PASSWORD: pass
 
     steps:
       - checkout
 
       - run:
-          name: Check if python, node, and mysql are installed
+          name: Check if python and node are installed
           command: |
             pip --version
             node --version
-            mysql --version
+
