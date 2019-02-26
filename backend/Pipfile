@@ -18,9 +18,10 @@ redis = "*"
 marshmallow = "*"
 webargs = "*"
 pymysql = "*"
+cryptography = "*"  # needed for sha256 passwords when using pymysql driver
 
 [requires]
 python_version = "3.7"
 
 [pipenv]
-allow_prereleases = true
+allow_prereleases = true  # required for using the release candidate (3.0.0rc4) of marshmallow
