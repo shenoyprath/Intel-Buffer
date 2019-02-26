@@ -16,7 +16,7 @@ from tests.utils.model_instance import model_instance
 class TestUser:
     @given(first_name=text(), last_name=text())
     def test_user_instantiation_removes_extra_spaces_in_names(self, first_name, last_name):
-        with model_instance(
+        with model_instance(  # nosec make bandit ignore hardcoded password.
             User,
             first_name=first_name,
             last_name=last_name,

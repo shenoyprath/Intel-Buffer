@@ -18,7 +18,7 @@ from tests.utils.model_instance import model_instance
 class TestRegistrationSchema:
     @given(email_address=emails())
     def test_invalidates_existing_email(self, email_address):
-        with model_instance(
+        with model_instance(  # nosec make bandit ignore hardcoded password.
             User,
             first_name="John",
             last_name="Doe",

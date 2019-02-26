@@ -8,6 +8,8 @@ hypothesis = "*"
 pytest = "*"
 pytest-cov = "*"
 pytest-flask = "*"
+flake8 = "*"
+bandit = "*"
 
 [packages]
 flask = "*"

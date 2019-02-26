@@ -3,6 +3,8 @@ version: 2.1
 jobs:
   build:
     docker:
+      # this gets the latest version of python and node which might break the
+      # build if python or node suddenly release a backwards incompatible update.
       - image: circleci/python:3-node
         environment:
           FLASK_SECRET_KEY: testing
@@ -38,7 +40,7 @@ jobs:
           command: cd backend && pip install pipenv
 
       - run:
-          name: install all backend dependencies
+          name: install backend dependencies
           command: cd backend && pipenv install --dev
 
       - run:
@@ -54,14 +56,22 @@ jobs:
             - node_modules
 
       - run:
-          name: run frontend tests
+          name: frontend tests
           command: cd frontend && npm run test:unit
 
       - run:
-          name: build frontend files
+          # needed for backend to run some quick checks using the compiled dist folder.
+          name: compile frontend
           command: cd frontend && npm run build
 
       - run:
-          name: run backend tests
-          command: cd backend && pipenv run python -m pytest --cov
+          name: flake8 linting
+          command: cd backend && pipenv run flake8
 
+      - run:
+          name: bandit security linting
+          command: cd backend && pipenv run bandit -r . -c bandit.yml
+
+      - run:
+          name: backend tests with coverage
+          command: cd backend && pipenv run python -m pytest --cov
