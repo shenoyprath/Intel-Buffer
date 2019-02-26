@@ -1,4 +1,4 @@
-from _pytest.fixtures import fixture
+from pytest import fixture
 
 from app import create_app
 from config import TestConfig
