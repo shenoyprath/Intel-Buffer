@@ -52,3 +52,11 @@ jobs:
             - "/usr/local/lib/python3.7/site-packages"
             - node_modules
 
+      - run:
+          name: run frontend tests
+          command: cd frontend && npm run test:unit
+
+      - run:
+          name: run backend tests
+          command: cd backend && pipenv run python -m pytest --cov --hypothesis-show-statistics
+
