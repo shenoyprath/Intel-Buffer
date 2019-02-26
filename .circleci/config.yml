@@ -9,6 +9,7 @@ jobs:
           INTEL_BUFFER_DB_USER: root
           INTEL_BUFFER_DB_PASS: pass
           REDIS_DB_PASS: pass
+
       - image: circleci/mysql:latest
         environment:
           MYSQL_HOST: 127.0.0.1
@@ -21,8 +22,33 @@ jobs:
       - checkout
 
       - run:
-          name: Check if python and node are installed
+          name: grant circleci access to backend dependency locations
           command: |
-            pip --version
-            node --version
+            sudo chown -R circleci:circleci /usr/local/bin
+            sudo chown -R circleci:circleci /usr/local/lib/python3.7/site-packages 
+
+      - restore_cache:
+          keys:
+          - ib-{{ .Branch }}-{{ .BuildNum }}-{{ epoch }}-{{ checksum "backend/Pipfile.lock" }}-{{ checksum "frontend/package.json" }}
+          - ib-
+
+      - run:
+          name: install pipenv
+          command: cd backend && pip install pipenv
+
+      - run:
+          name: install all backend dependencies
+          command: cd backend && pipenv install --dev
+
+      - run:
+          name: install frontend dependencies
+          command: cd frontend && npm install
+
+      - save_cache:
+          key: ib-{{ .Branch }}-{{ .BuildNum }}-{{ epoch }}-{{ checksum "backend/Pipfile.lock" }}-{{ checksum "frontend/package.json" }}
+          paths:
+            - ".venv"
+            - "/usr/local/bin"
+            - "/usr/local/lib/python3.7/site-packages"
+            - node_modules
 
