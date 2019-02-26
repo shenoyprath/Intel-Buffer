@@ -15,8 +15,7 @@ jobs:
           MYSQL_HOST: 127.0.0.1
           MYSQL_PORT: 3306
           MYSQL_DB: intel_buffer_test_db
-          MYSQL_USER: root
-          MYSQL_PASSWORD: pass
+          MYSQL_ROOT_PASSWORD: pass
 
     steps:
       - checkout
