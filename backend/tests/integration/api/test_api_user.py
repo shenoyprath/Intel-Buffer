@@ -1,11 +1,11 @@
-# file named test_api_user to avoid pytest conflict with test_user from unit/models.
+import json
+
 from flask import url_for
 
 from pytest import mark
 
-from tests.integration.api.test_auth_token import TestAuthToken
 
-
+# file named test_api_user to avoid pytest conflict with test_user from unit/models.
 @mark.usefixtures("database")
 class TestUser:
     def test_post_returns_auth_tokens(self, client, valid_user_info):
@@ -13,5 +13,8 @@ class TestUser:
             url_for("api.user"),
             data=valid_user_info
         )
+
         assert response.status_code == 200
-        TestAuthToken.check_if_response_has_auth_tokens(response)
+        json_response = json.loads(response.data)
+        assert json_response.get("access_token")
+        assert json_response.get("refresh_token")
