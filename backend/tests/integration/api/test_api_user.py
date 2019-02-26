@@ -3,7 +3,7 @@ from flask import url_for
 
 from pytest import mark
 
-from tests.integration.api.test_auth_token import check_if_response_has_auth_tokens
+from tests.integration.api.test_auth_token import TestAuthToken
 
 
 @mark.usefixtures("database")
@@ -14,4 +14,4 @@ class TestUser:
             data=valid_user_info
         )
         assert response.status_code == 200
-        check_if_response_has_auth_tokens(response)
+        TestAuthToken.check_if_response_has_auth_tokens(response)
