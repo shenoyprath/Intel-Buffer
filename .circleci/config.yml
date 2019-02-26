@@ -11,6 +11,8 @@ jobs:
           REDIS_DB_PASS: pass
 
       - image: circleci/mysql:latest
+        command: |
+          mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_general_ci
         environment:
           MYSQL_HOST: 127.0.0.1
           MYSQL_PORT: 3306
