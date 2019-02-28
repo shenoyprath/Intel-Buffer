@@ -31,16 +31,14 @@ class AuthToken(Resource):
 
     @classmethod
     def get_db_key(cls, token):
-        return (
-            f"{cls.redis_namespace}:{token['identity']}{token['iat']}"
-        )
+        return f"{cls.redis_namespace}:{token['jti']}"
 
     # making this a class method messes with jwt as it passes one arg without passing the class.
     @staticmethod
     @jwt.token_in_blacklist_loader
     def is_token_revoked(token):
-        db_key = AuthToken.get_db_key(token)
-        return redis_db.get(db_key) == token["jti"]
+        key = AuthToken.get_db_key(token)
+        return redis_db.get(key) is not None
 
     @classmethod
     @jwt_required
@@ -55,7 +53,7 @@ class AuthToken(Resource):
         storage_duration = token["exp"] - int(time())
         redis_db.set(
             name=cls.get_db_key(token),
-            value=token["jti"],
+            value=token["identity"],  # redis doesn't allow expiration for sets/lists.
             ex=storage_duration
         )
 
