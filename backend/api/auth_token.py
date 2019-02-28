@@ -39,7 +39,7 @@ class AuthToken(Resource):
     # making this a class method messes with jwt as it passes one arg without passing the class.
     @staticmethod
     @jwt.token_in_blacklist_loader
-    def is_token_blacklisted(token):
+    def is_token_revoked(token):
         db_key = AuthToken.get_db_key(token)
         return redis_db.get(db_key) == token["jti"]
 
