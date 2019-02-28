@@ -49,7 +49,7 @@ class AuthToken(Resource):
         """
         No way to avoid state management here because when the user logs out, the token is not immediately invalidated.
         However, some way to reject these tokens is still necessary. Therefore, the token is added to the redis database
-        until it expires. Any token that's in the database is automatically rejected
+        until it expires. Any token that's in the database is automatically rejected.
         """
 
         token = get_raw_jwt()
