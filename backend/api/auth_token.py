@@ -26,10 +26,6 @@ class AuthToken(Resource):
     @classmethod
     @use_args(LoginSchema(), error_status_code=401)
     def post(cls, user):
-        """
-        Creates a new authentication (access and refresh) token for the client.
-        """
-
         tokens = cls.create_tokens(user.email_address)
         return jsonify(tokens)
 
