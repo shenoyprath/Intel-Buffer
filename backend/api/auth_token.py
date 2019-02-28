@@ -64,5 +64,4 @@ class AuthToken(Resource):
             ex=storage_duration
         )
 
-        response = jsonify(msg="Token successfully invalidated.")
-        return response
+        return jsonify(msg="Token successfully invalidated.")
