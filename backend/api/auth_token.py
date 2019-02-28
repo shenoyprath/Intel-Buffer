@@ -1,7 +1,10 @@
+from datetime import datetime
+
 from flask import jsonify
 
 from flask_restplus import Resource
-from flask_jwt_extended import create_access_token, create_refresh_token
+from flask_jwt_extended import create_access_token, create_refresh_token, get_jwt_claims, get_jwt_identity, \
+                               get_raw_jwt, jwt_required
 from webargs.flaskparser import use_args
 
 from api import rest_api, jwt, redis_db
@@ -9,7 +12,7 @@ from api import rest_api, jwt, redis_db
 from schemas.login_schema import LoginSchema
 
 
-@rest_api.route("/auth_token", methods=("POST",))
+@rest_api.route("/auth_token", methods=("POST", "DELETE"))
 class AuthToken(Resource):
 
     redis_namespace = "auth_blacklist"
@@ -35,10 +38,31 @@ class AuthToken(Resource):
     def concat_namespace(cls, key):
         return f"{cls.redis_namespace}:{key}"
 
-    @classmethod
+    # making this a class method messes with jwt as it
+    # passes one arg without passing the class.
+    @staticmethod
     @jwt.token_in_blacklist_loader
-    def is_token_blacklisted(cls, token):
+    def is_token_blacklisted(token):
         email_address = token.get("jti")
         return redis_db.get(
-            cls.concat_namespace(email_address)
+            AuthToken.concat_namespace(email_address)
         ) is not None
+
+    @classmethod
+    @jwt_required
+    def delete(cls):
+        """
+        When the user logs out, the token is not immediately invalidated.
+        However, some way to reject these tokens is still necessary.
+        Therefore, the token is added to a redis database until it expires and any token that's in the database is
+        automatically rejected. No way to avoid state management here.
+        """
+
+        email_address = get_jwt_identity()
+        expiration_time = get_jwt_claims().get("exp")
+        storage_delta = expiration_time - datetime.utcnow()
+        redis_db.set(
+            name=cls.concat_namespace(email_address),
+            value=get_raw_jwt(),
+            ex=storage_delta.total_seconds()
+        )
