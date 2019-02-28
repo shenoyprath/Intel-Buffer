@@ -1,10 +1,9 @@
-from datetime import datetime
+from time import time
 
 from flask import jsonify
 
 from flask_restplus import Resource
-from flask_jwt_extended import create_access_token, create_refresh_token, get_jwt_claims, get_jwt_identity, \
-                               get_raw_jwt, jwt_required
+from flask_jwt_extended import create_access_token, create_refresh_token, get_jwt_identity, get_raw_jwt, jwt_required
 from webargs.flaskparser import use_args
 
 from api import rest_api, jwt, redis_db
@@ -38,12 +37,11 @@ class AuthToken(Resource):
     def concat_namespace(cls, key):
         return f"{cls.redis_namespace}:{key}"
 
-    # making this a class method messes with jwt as it
-    # passes one arg without passing the class.
+    # making this a class method messes with jwt as it passes one arg without passing the class.
     @staticmethod
     @jwt.token_in_blacklist_loader
     def is_token_blacklisted(token):
-        email_address = token.get("jti")
+        email_address = token.get("identity")
         return redis_db.get(
             AuthToken.concat_namespace(email_address)
         ) is not None
@@ -59,10 +57,15 @@ class AuthToken(Resource):
         """
 
         email_address = get_jwt_identity()
-        expiration_time = get_jwt_claims().get("exp")
-        storage_delta = expiration_time - datetime.utcnow()
+        jwt_id = get_raw_jwt().get("jti")
+
+        expiration_time = get_raw_jwt().get("exp")
+        storage_delta = expiration_time - int(time())
         redis_db.set(
             name=cls.concat_namespace(email_address),
-            value=get_raw_jwt(),
-            ex=storage_delta.total_seconds()
+            value=jwt_id,
+            ex=storage_delta
         )
+
+        response = jsonify(msg="Token successfully invalidated.")
+        return response
