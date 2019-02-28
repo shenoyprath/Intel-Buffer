@@ -15,6 +15,9 @@ class Config(ABC):
     DB_USER = getenv_or_err("INTEL_BUFFER_DB_USER")
     DB_PASS = getenv_or_err("INTEL_BUFFER_DB_PASS")
 
+    REDIS_HOST = "127.0.0.1"
+    REDIS_DB_PASS = getenv_or_err("REDIS_DB_PASS")
+
     JWT_SECRET_KEY = SECRET_KEY
     JWT_ACCESS_TOKEN_EXPIRES = timedelta(minutes=15)
     JWT_REFRESH_TOKEN_EXPIRES = timedelta(days=30)
@@ -29,6 +32,7 @@ class DevConfig(Config):
     ENV = "development"
     DEBUG = True
     DB_NAME = "intel_buffer_db"
+    REDIS_PORT = 6379
 
 
 class TestConfig(Config):
@@ -36,8 +40,10 @@ class TestConfig(Config):
     DEBUG = True
     TESTING = True
     DB_NAME = "intel_buffer_test_db"
+    REDIS_PORT = 6380
 
 
 class ProdConfig(Config):
     ENV = "production"
     DEBUG = False
+    REDIS_PORT = 6381
