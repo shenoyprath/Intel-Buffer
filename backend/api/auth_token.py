@@ -3,7 +3,7 @@ from time import time
 from flask import jsonify
 
 from flask_restplus import Resource
-from flask_jwt_extended import create_access_token, create_refresh_token, get_raw_jwt, jwt_required, get_jti
+from flask_jwt_extended import create_access_token, create_refresh_token, get_raw_jwt, jwt_required
 from webargs.flaskparser import use_args
 
 from api import rest_api, jwt, redis_db
@@ -40,7 +40,7 @@ class AuthToken(Resource):
     @jwt.token_in_blacklist_loader
     def is_token_revoked(token):
         db_key = AuthToken.get_db_key(token)
-        return redis_db.get(db_key) == get_jti(token)
+        return redis_db.get(db_key) == token["jti"]
 
     @classmethod
     @jwt_required
@@ -55,7 +55,7 @@ class AuthToken(Resource):
         storage_duration = token["exp"] - int(time())
         redis_db.set(
             name=cls.get_db_key(token),
-            value=get_jti(token),
+            value=token["jti"],
             ex=storage_duration
         )
 
