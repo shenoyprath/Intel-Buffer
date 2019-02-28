@@ -31,9 +31,8 @@ class AuthToken(Resource):
 
     @classmethod
     def get_db_key(cls, token):
-        email_address, token_iat = token["identity"], token["iat"]
         return (
-            f"{cls.redis_namespace}:{email_address}{token_iat}"
+            f"{cls.redis_namespace}:{token['identity']}{token['iat']}"
         )
 
     # making this a class method messes with jwt as it passes one arg without passing the class.
