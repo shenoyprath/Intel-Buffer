@@ -17,7 +17,8 @@ class AuthToken(Resource):
     redis_namespace = "auth_blacklist"
 
     @staticmethod
-    def create_tokens(identity):
+    def create_tokens(user):
+        identity = user.email_address
         return {
             "access_token": create_access_token(identity),
             "refresh_token": create_refresh_token(identity)
@@ -26,7 +27,7 @@ class AuthToken(Resource):
     @classmethod
     @use_args(LoginSchema(), error_status_code=401)
     def post(cls, user):
-        tokens = cls.create_tokens(user.email_address)
+        tokens = cls.create_tokens(user)
         return jsonify(tokens)
 
     @classmethod

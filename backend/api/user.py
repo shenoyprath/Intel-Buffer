@@ -14,5 +14,5 @@ class User(Resource):
     @staticmethod
     @use_args(RegistrationSchema(), error_status_code=422)
     def post(new_user):
-        tokens = AuthToken.create_tokens(new_user.email_address)
+        tokens = AuthToken.create_tokens(new_user)
         return jsonify(tokens)
