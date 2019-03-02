@@ -22,9 +22,10 @@ class AuthToken(Resource):
     @staticmethod
     def create_tokens(user):
         """
-        JWT Extended can only ask for one of the tokens for an endpoint. However, when the user requests to the `DELETE`
-        method, both tokens need to be immediately invalidated, which means both tokens are required. To solve this, a
-        reference to the refresh token JTI is added in the access token user claims. See issue #5 for more details.
+        JWT Extended can only ask for one of the tokens for an endpoint. However, when the user sends a request to the
+        `DELETE` method, both tokens need to be immediately invalidated, which means both tokens are required. To solve
+        this, a reference to the refresh token JTI and expiration time is added in the access token user claims.
+        See issue #5 for more details.
         """
 
         identity = user.email_address
@@ -64,9 +65,9 @@ class AuthToken(Resource):
     @jwt_required
     def delete(cls):
         """
-        No way to avoid state management here because when the user logs out, the token is not immediately invalidated.
-        However, some way to reject these tokens is still necessary. Therefore, the token is added to the redis database
-        until it expires. Any token that's in the database is automatically rejected.
+        No way to avoid state management here because when the user logs out, the tokens aren't immediately invalidated.
+        However, some way to reject these tokens is still necessary. Therefore, the tokens are added to the redis
+        database until they expire. Any token that's in the database is automatically rejected.
         """
 
         access_token = get_raw_jwt()
