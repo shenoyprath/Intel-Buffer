@@ -3,7 +3,9 @@ from time import time
 from flask import jsonify
 
 from flask_restplus import Resource
-from flask_jwt_extended import create_access_token, create_refresh_token, get_raw_jwt, jwt_required, get_jti
+from flask_jwt_extended import (
+    create_access_token, create_refresh_token, get_raw_jwt, jwt_required, get_jti, decode_token
+)
 from webargs.flaskparser import use_args
 
 from api import rest_api, jwt, redis_db
@@ -29,7 +31,10 @@ class AuthToken(Resource):
         access_token = create_access_token(
             identity=identity,
             user_claims={
-                "refresh_jti": get_jti(refresh_token)
+                "refresh_token": {
+                    "jti": get_jti(refresh_token),
+                    "exp": decode_token(refresh_token)["exp"]
+                }
             }
         )
         return {
