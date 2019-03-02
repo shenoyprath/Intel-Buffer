@@ -4,7 +4,8 @@ from flask import jsonify
 
 from flask_restplus import Resource
 from flask_jwt_extended import (
-    create_access_token, create_refresh_token, get_raw_jwt, jwt_required, get_jti, decode_token
+    create_access_token, create_refresh_token, get_raw_jwt, jwt_required, get_jti, decode_token, get_jwt_claims,
+    get_jwt_identity
 )
 from webargs.flaskparser import use_args
 
@@ -68,12 +69,15 @@ class AuthToken(Resource):
         until it expires. Any token that's in the database is automatically rejected.
         """
 
-        token = get_raw_jwt()
-        storage_duration = token["exp"] - int(time())
-        redis_db.set(
-            name=cls.get_db_key(token),
-            value=token["identity"],  # redis doesn't allow expiration for sets/lists.
-            ex=storage_duration
-        )
+        access_token = get_raw_jwt()
+        refresh_token = get_jwt_claims()["refresh_token"]
+
+        for token in (access_token, refresh_token):
+            storage_duration = token["exp"] - int(time())
+            redis_db.set(
+                name=cls.get_db_key(token),
+                value=get_jwt_identity(),
+                ex=storage_duration
+            )
 
         return jsonify(msg="Token successfully invalidated.")
