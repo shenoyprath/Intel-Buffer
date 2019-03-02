@@ -10,7 +10,7 @@ jobs:
           FLASK_SECRET_KEY: testing
           INTEL_BUFFER_DB_USER: root
           INTEL_BUFFER_DB_PASS: pass
-          REDIS_DB_PASS: pass
+          REDIS_DB_PASS: ''
 
       - image: circleci/mysql:latest
         command: |
@@ -20,6 +20,8 @@ jobs:
           MYSQL_PORT: 3306
           MYSQL_DATABASE: intel_buffer_test_db
           MYSQL_ROOT_PASSWORD: pass
+
+      - image: redis:5.0.3
 
     steps:
       - checkout
