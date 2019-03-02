@@ -40,3 +40,21 @@ class TestAuthToken:
         assert refresh_token_key in claims
         assert "jti" in claims[refresh_token_key]
         assert "exp" in claims[refresh_token_key]
+
+    def test_delete_invalidates_access_and_refresh_tokens(self, client, post_response):
+        json_response = json.loads(post_response.data)
+        access_token = json_response["access_token"]
+
+        def send_delete_request():
+            return client.delete(
+                url_for("api.auth_token"),
+                headers={"Authorization": f"Bearer {access_token}"}
+            )
+
+        assert send_delete_request().status_code == 200
+
+        # send delete request again with revoked token
+        response = send_delete_request()
+        json_response = json.loads(response.data)
+        assert response.status_code == 401
+        assert json_response["msg"] == "Token has been revoked"
