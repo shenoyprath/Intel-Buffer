@@ -7,7 +7,7 @@ from config import DevConfig
 from index import index
 from logger import logger
 
-from api import api_blueprint, jwt
+from api import api_blueprint, jwt, init_redis_db
 
 from models import init_db
 from models.table_modifiers import create_tables
@@ -51,6 +51,7 @@ if __name__ == "__main__":
     application = create_app(DevConfig)
     init_db(DevConfig)
     create_tables()
+    init_redis_db(DevConfig)
 
     logger()
     application.run(host="127.0.0.1", port=8888)

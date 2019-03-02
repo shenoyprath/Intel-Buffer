@@ -30,7 +30,7 @@ def init_redis_db(config):
     )
 
 
-redis_db = init_redis_db(DevConfig)
+redis_db = None
 
 
 from api import auth_token, error_handler, user  # NOQA
