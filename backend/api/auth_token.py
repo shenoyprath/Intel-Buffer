@@ -19,9 +19,9 @@ class AuthToken(Resource):
     @staticmethod
     def create_tokens(user):
         """
-        This is mainly because JWT Extended can allow access to only of the tokens in an endpoint. However,
-        when the user accesses the `DELETE` route, both tokens need to be immediately invalidated. Therefore,
-        a reference to the refresh token JTI is added in the access token user claims. See issue #5 for more details.
+        JWT Extended can only ask for one of the tokens for an endpoint. However, when the user requests to the `DELETE`
+        method, both tokens need to be immediately invalidated, which means both tokens are required. To solve this, a
+        reference to the refresh token JTI is added in the access token user claims. See issue #5 for more details.
         """
 
         identity = user.email_address
