@@ -3,7 +3,7 @@ from time import time
 from flask import jsonify
 
 from flask_restplus import Resource
-from flask_jwt_extended import create_access_token, create_refresh_token, get_raw_jwt, jwt_required
+from flask_jwt_extended import create_access_token, create_refresh_token, get_raw_jwt, jwt_required, get_jti
 from webargs.flaskparser import use_args
 
 from api import rest_api, jwt, redis_db
@@ -18,10 +18,23 @@ class AuthToken(Resource):
 
     @staticmethod
     def create_tokens(user):
+        """
+        This is mainly because JWT Extended can allow access to only of the tokens in an endpoint. However,
+        when the user accesses the `DELETE` route, both tokens need to be immediately invalidated. Therefore,
+        a reference to the refresh token JTI is added in the access token user claims. See issue #5 for more details.
+        """
+
         identity = user.email_address
+        refresh_token = create_refresh_token(identity)
+        access_token = create_access_token(
+            identity=identity,
+            user_claims={
+                "refresh_jti": get_jti(refresh_token)
+            }
+        )
         return {
-            "access_token": create_access_token(identity),
-            "refresh_token": create_refresh_token(identity)
+            "access_token": access_token,
+            "refresh_token": refresh_token
         }
 
     @classmethod
