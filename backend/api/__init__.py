@@ -24,8 +24,9 @@ def init_redis_db(config):
     return Redis(
         host=config.REDIS_HOST,
         port=config.REDIS_PORT,
-        decode_responses=True,
-        password=config.REDIS_DB_PASS
+        db=config.REDIS_DB,
+        password=config.REDIS_DB_PASS,
+        decode_responses=True
     )
 
 

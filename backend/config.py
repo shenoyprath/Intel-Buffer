@@ -16,6 +16,7 @@ class Config(ABC):
     DB_PASS = getenv_or_err("INTEL_BUFFER_DB_PASS")
 
     REDIS_HOST = "127.0.0.1"
+    REDIS_PORT = 6379
     REDIS_DB_PASS = getenv_or_err("REDIS_DB_PASS")
 
     JWT_SECRET_KEY = SECRET_KEY
@@ -32,7 +33,7 @@ class DevConfig(Config):
     ENV = "development"
     DEBUG = True
     DB_NAME = "intel_buffer_db"
-    REDIS_PORT = 6379
+    REDIS_DB = 0
 
 
 class TestConfig(Config):
@@ -40,10 +41,10 @@ class TestConfig(Config):
     DEBUG = True
     TESTING = True
     DB_NAME = "intel_buffer_test_db"
-    REDIS_PORT = 6380
+    REDIS_DB = 1
 
 
 class ProdConfig(Config):
     ENV = "production"
     DEBUG = False
-    REDIS_PORT = 6381
+    REDIS_DB = 2
