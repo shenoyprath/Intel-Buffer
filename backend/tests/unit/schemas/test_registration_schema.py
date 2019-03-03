@@ -88,11 +88,12 @@ class TestRegistrationSchema:
             "email_address": email_address,
             "password": password
         }
-        errors = RegistrationSchema().validate(credentials)
-        assert not errors
 
         new_user = RegistrationSchema().load(credentials)
         for attr, val in credentials.items():
             if attr != "password":  # password gets hashed
                 assert getattr(new_user, attr) == val
         new_user.delete_instance()  # clean up to avoid IntegrityError
+
+        errors = RegistrationSchema().validate(credentials)
+        assert not errors
