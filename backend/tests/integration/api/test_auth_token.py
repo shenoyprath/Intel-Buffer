@@ -46,8 +46,8 @@ class TestAuthToken:
 
     @mark.usefixtures("redis_database")
     def test_delete_invalidates_access_and_refresh_tokens(self, client, post_response):
-        post_response = json.loads(post_response.data)
-        access_token = post_response["access_token"]
+        post_json = json.loads(post_response.data)
+        access_token = post_json["access_token"]
 
         def send_delete_request():
             return client.delete(
@@ -59,12 +59,12 @@ class TestAuthToken:
 
         # send delete request again with revoked token
         response = send_delete_request()
-        json_response = json.loads(response.data)
+        delete_json = json.loads(response.data)
         assert response.status_code == 401
-        assert json_response["msg"] == "Token has been revoked"
+        assert delete_json["msg"] == "Token has been revoked"
 
         # assert that refresh token is revoked
-        decoded_refresh_token = decode_token(post_response["refresh_token"])
+        decoded_refresh_token = decode_token(post_json["refresh_token"])
         assert redis_db.get(
             AuthToken.get_db_key(decoded_refresh_token)
         )
