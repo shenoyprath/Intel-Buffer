@@ -38,7 +38,7 @@ class Base(Model):
         """
         Interface method to retrieve an instance from a model using unique identifiers other than id.
 
-        :return: Instance of model that has the specified unique identifier values.
+        :return: Instance of model that has the specified unique identifier values. None if no match is found.
         """
 
         raise NotImplementedError
