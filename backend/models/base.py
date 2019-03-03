@@ -44,7 +44,7 @@ class Base(Model):
         raise NotImplementedError
 
     @classmethod
-    def get_by_id_or_none(cls, id_):
+    def get_or_none_by_id(cls, id_):
         try:
             return cls.get_by_id(id_)
         except DoesNotExist:
