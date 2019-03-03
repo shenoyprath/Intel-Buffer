@@ -5,8 +5,6 @@ from flask_jwt_extended import JWTManager
 
 from redis import Redis
 
-from config import DevConfig
-
 
 api_blueprint = Blueprint("api", __name__, url_prefix="/api")
 rest_api = Api(api_blueprint)
@@ -20,17 +18,24 @@ jwt = JWTManager()
 jwt._set_error_handler_callbacks(rest_api)
 
 
+# Redis py does not provide any method to define db at runtime.
+redis_db = None
+
+
 def init_redis_db(config):
-    return Redis(
+    """
+    Allows Redis database to be defined at runtime so that different configurations can be used for dev, test, & prod.
+    """
+
+    global redis_db
+    redis_db = Redis(
         host=config.REDIS_HOST,
         port=config.REDIS_PORT,
         db=config.REDIS_DB,
         password=config.REDIS_DB_PASS,
         decode_responses=True
     )
-
-
-redis_db = None
+    return redis_db
 
 
 from api import auth_token, error_handler, user  # NOQA
