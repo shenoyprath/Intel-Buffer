@@ -6,8 +6,8 @@ from utils.is_empty_or_space import is_empty_or_space
 
 class ForbidBlankStr(Validator):
     """
-    Will not invalidate when field is not supplied or a None value is supplied.
-    Use the 'required' parameter to invalidate no field supplied and 'allow_none' parameter to invalidate a None value.
+    Marshmallow has a `required` param to invalidate when field is not given and `allow_none` when None is given.
+    Therefore, to avoid duplication, this validator will not invalidate when field is not given or value given is None.
     """
 
     # whitespace str only contains whitespace characters
