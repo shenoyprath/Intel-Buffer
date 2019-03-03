@@ -20,7 +20,17 @@ class AuthToken(Resource):
     redis_namespace = "auth_blacklist"
 
     @staticmethod
-    def create_access_token(identity, refresh_token):  # refresh token can be encoded or decoded
+    def create_access_token(identity, refresh_token):
+        """
+        JWT Extended can only ask for one of the tokens for an endpoint. However, when the user sends a request to the
+        `DELETE` method, both tokens need to be immediately invalidated, which means both tokens are required. To solve
+        this, a reference to the refresh token JTI and expiration time is added in the access token user claims.
+        See issue #5 for more details.
+
+        :param identity: The user identity with which the token is created.
+        :param refresh_token: Can be encoded or decoded.
+        """
+
         try:
             refresh_token = decode_token(refresh_token)
         except JWTDecodeError:
@@ -38,13 +48,6 @@ class AuthToken(Resource):
 
     @staticmethod
     def create_tokens(user):
-        """
-        JWT Extended can only ask for one of the tokens for an endpoint. However, when the user sends a request to the
-        `DELETE` method, both tokens need to be immediately invalidated, which means both tokens are required. To solve
-        this, a reference to the refresh token JTI and expiration time is added in the access token user claims.
-        See issue #5 for more details.
-        """
-
         identity = user.email_address
         refresh_token = create_refresh_token(identity)
         access_token = AuthToken.create_access_token(identity, refresh_token)
