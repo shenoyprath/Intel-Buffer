@@ -7,7 +7,6 @@ from flask_jwt_extended import (
     create_access_token, create_refresh_token, get_raw_jwt, jwt_required, decode_token, get_jwt_claims,
     get_jwt_identity, jwt_refresh_token_required
 )
-from jwt import DecodeError
 from webargs.flaskparser import use_args
 
 from api import rest_api, jwt, redis_db
@@ -21,56 +20,64 @@ class AuthToken(Resource):
     redis_namespace = "auth_blacklist"
 
     @staticmethod
-    def create_access_token(identity, refresh_token):
+    def create_access_token(identity, decoded_refresh_token):
         """
         JWT Extended can only ask for one of the tokens for an endpoint. However, when the user sends a request to the
         `DELETE` method, both tokens need to be immediately invalidated, which means both tokens are required. To solve
         this, a reference to the refresh token JTI and expiration time is added in the access token user claims.
         See issue #5 for more details.
-
-        :param identity: The user identity with which the token is created.
-        :param refresh_token: Can be encoded or decoded.
         """
-
-        try:
-            refresh_token = decode_token(refresh_token)
-        except DecodeError:
-            pass
 
         return create_access_token(
             identity=identity,
             user_claims={
                 "refresh_token": {
-                    "jti": refresh_token["jti"],
-                    "exp": refresh_token["exp"]
+                    "jti": decoded_refresh_token["jti"],
+                    "exp": decoded_refresh_token["exp"]
                 }
             }
         )
+
+    @staticmethod
+    def serialize(*tokens):
+        """
+        Serializes access & refresh tokens to the dict `{"access_token": access_token, "refresh_token": refresh_token}`.
+        This return value can then be sent to the client after being dumped to json.
+        """
+
+        serialized = {}
+        for token in tokens:
+            token_type = decode_token(token)["type"]
+            suffixed_key = f"{token_type}_token"
+
+            if suffixed_key in serialized:
+                raise TypeError(
+                    f"Attempted to serialize multiple {token_type} tokens."
+                )
+            serialized[suffixed_key] = token
+        return serialized
 
     @classmethod
     def create_tokens(cls, user):
         identity = user.email_address
         refresh_token = create_refresh_token(identity)
-        access_token = cls.create_access_token(identity, refresh_token)
-        return {
-            "access_token": access_token,
-            "refresh_token": refresh_token
-        }
+        access_token = cls.create_access_token(identity, decode_token(refresh_token))
+        return access_token, refresh_token
 
     @classmethod
     @use_args(SignInSchema(), error_status_code=401)
     def post(cls, user):
         tokens = cls.create_tokens(user)
-        return jsonify(tokens)
+        return jsonify(cls.serialize(*tokens))
 
     @classmethod
     @jwt_refresh_token_required
     def patch(cls):
-        new_access_token = cls.create_access_token(
+        access_token = cls.create_access_token(
             identity=get_jwt_identity(),
-            refresh_token=get_raw_jwt()
+            decoded_refresh_token=get_raw_jwt()
         )
-        return jsonify({"access_token": new_access_token})
+        return jsonify(cls.serialize(access_token))
 
     @classmethod
     def get_db_key(cls, decoded_token):

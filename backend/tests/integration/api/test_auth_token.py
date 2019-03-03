@@ -2,9 +2,9 @@ import json
 
 from flask import url_for
 
-from flask_jwt_extended import decode_token
+from flask_jwt_extended import create_access_token, create_refresh_token, decode_token
 
-from pytest import mark, fixture
+from pytest import mark, fixture, raises
 
 from api import redis_db
 from api.auth_token import AuthToken
@@ -27,6 +27,18 @@ class TestAuthToken:
                 )
             )
         return response
+
+    @mark.usefixtures("client")
+    def test_serialization_fails_when_multiple_tokens_of_same_type_provided(self):
+        access_token1 = create_access_token("token1")
+        access_token2 = create_access_token("token2")
+        with raises(TypeError):
+            AuthToken.serialize(access_token1, access_token2)
+
+        refresh_token1 = create_refresh_token("token1")
+        refresh_token2 = create_refresh_token("token2")
+        with raises(TypeError):
+            AuthToken.serialize(refresh_token1, refresh_token2)
 
     def test_post_returns_access_and_refresh_tokens(self, post_response):
         assert post_response.status_code == 200
