@@ -3,8 +3,7 @@ import os
 from flask import current_app, send_file
 
 
-# noinspection PyUnusedLocal
-def index(path):
+def index(_path):
     """
     Redirect all paths/URLs to the home page. Vue will handle the routing from there.
     """

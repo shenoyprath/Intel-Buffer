@@ -16,8 +16,8 @@ class TestErrorHandler:
         with raises(BadRequest):
             handle_error(
                 error=ValidationError(error_msg),
-                request=None,
-                schema=None,
+                _request=None,
+                _schema=None,
                 status_code=400,
-                error_headers=None
+                _error_headers=None
             )
