@@ -44,6 +44,7 @@ class TestAuthToken:
         assert "jti" in claims[refresh_token_key]
         assert "exp" in claims[refresh_token_key]
 
+    @mark.usefixtures("redis_database")
     def test_delete_invalidates_access_and_refresh_tokens(self, client, post_response):
         post_response = json.loads(post_response.data)
         access_token = post_response["access_token"]
