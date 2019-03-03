@@ -12,7 +12,7 @@ from webargs.flaskparser import use_args
 
 from api import rest_api, jwt, redis_db
 
-from schemas.login_schema import LoginSchema
+from schemas.sign_in_schema import SignInSchema
 
 
 @rest_api.route("/auth_token", methods=("POST", "PATCH", "DELETE"))
@@ -58,7 +58,7 @@ class AuthToken(Resource):
         }
 
     @classmethod
-    @use_args(LoginSchema(), error_status_code=401)
+    @use_args(SignInSchema(), error_status_code=401)
     def post(cls, user):
         tokens = cls.create_tokens(user)
         return jsonify(tokens)
