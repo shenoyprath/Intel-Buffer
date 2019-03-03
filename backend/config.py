@@ -47,4 +47,5 @@ class TestConfig(Config):
 class ProdConfig(Config):
     ENV = "production"
     DEBUG = False
+    DB_NAME = "intel_buffer_prod_db"
     REDIS_DB = 2
