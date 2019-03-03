@@ -46,11 +46,11 @@ class AuthToken(Resource):
             }
         )
 
-    @staticmethod
-    def create_tokens(user):
+    @classmethod
+    def create_tokens(cls, user):
         identity = user.email_address
         refresh_token = create_refresh_token(identity)
-        access_token = AuthToken.create_access_token(identity, refresh_token)
+        access_token = cls.create_access_token(identity, refresh_token)
         return {
             "access_token": access_token,
             "refresh_token": refresh_token
