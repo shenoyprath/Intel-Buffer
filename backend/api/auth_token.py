@@ -4,9 +4,9 @@ from flask import jsonify
 
 from flask_restplus import Resource
 from flask_jwt_extended import (
-    create_access_token, create_refresh_token, get_raw_jwt, jwt_required, get_jti, decode_token, get_jwt_claims,
-    get_jwt_identity
+    create_access_token, create_refresh_token, get_raw_jwt, jwt_required, decode_token, get_jwt_claims, get_jwt_identity
 )
+from flask_jwt_extended.exceptions import JWTDecodeError
 from webargs.flaskparser import use_args
 
 from api import rest_api, jwt, redis_db
@@ -20,6 +20,23 @@ class AuthToken(Resource):
     redis_namespace = "auth_blacklist"
 
     @staticmethod
+    def create_access_token(identity, refresh_token):  # refresh token can be encoded or decoded
+        try:
+            refresh_token = decode_token(refresh_token)
+        except JWTDecodeError:
+            pass
+
+        return create_access_token(
+            identity=identity,
+            user_claims={
+                "refresh_token": {
+                    "jti": refresh_token["jti"],
+                    "exp": refresh_token["exp"]
+                }
+            }
+        )
+
+    @staticmethod
     def create_tokens(user):
         """
         JWT Extended can only ask for one of the tokens for an endpoint. However, when the user sends a request to the
@@ -30,15 +47,7 @@ class AuthToken(Resource):
 
         identity = user.email_address
         refresh_token = create_refresh_token(identity)
-        access_token = create_access_token(
-            identity=identity,
-            user_claims={
-                "refresh_token": {
-                    "jti": get_jti(refresh_token),
-                    "exp": decode_token(refresh_token)["exp"]
-                }
-            }
-        )
+        access_token = AuthToken.create_access_token(identity, refresh_token)
         return {
             "access_token": access_token,
             "refresh_token": refresh_token
