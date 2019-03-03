@@ -105,6 +105,16 @@ venv.bak/
 
 # Editor directories and files
 .idea
+.vscode
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw*
 
 # DS Store
 .DS_Store
+
+# backend test caches
+.hypothesis
+.pytest_cache

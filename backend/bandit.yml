@@ -1,0 +1,2 @@
+# B101 is the test that fails if assert is used (obviously needed for testing).
+skips: ["B101"]

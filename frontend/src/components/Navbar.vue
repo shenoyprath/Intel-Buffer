@@ -1,19 +1,37 @@
 <template>
   <nav class="navbar">
     <div class="nav-header">
-      <router-link to="/" id="logo"><logo></logo></router-link>
-      <button :class="['hamburger', menuOpenClass]" @click="isMenuOpen = !isMenuOpen">
+      <router-link to="/">
+        <base-logo/>
+      </router-link>
+
+      <button
+        :class="['hamburger', menuOpenClass]"
+        @click="isMenuOpen = !isMenuOpen"
+      >
         <span></span>
       </button>
     </div>
 
-    <transition enter-active-class="animated bounceInRight" leave-active-class="animated bounceOutRight">
-      <div :class="['nav-menu', menuOpenClass]" v-show="isMenuOpen">
-          <section :key="navSection.name" v-for="navSection in navSections">
+    <transition
+      enter-active-class="animated bounceInRight"
+      leave-active-class="animated bounceOutRight"
+    >
+      <div
+        :class="['nav-menu', menuOpenClass]"
+        v-show="isMenuOpen"
+      >
+          <section
+            :key="navSection.name"
+            v-for="navSection in navSections"
+          >
             <h1>{{ navSection.name }}</h1>
 
             <ul>
-              <li class="nav-link" v-for="navLink in navSection.links" :key="navLink">
+              <li
+                class="nav-link"
+                v-for="navLink in navSection.links"
+                :key="navLink">
                 <router-link to="#">{{ navLink }}</router-link>
               </li>
             </ul>
@@ -24,16 +42,19 @@
 </template>
 
 <script>
-import Logo from '@/components/Logo'
+import BaseLogo from '@/components/BaseLogo'
 
 export default {
   name: 'navbar',
+
   components: {
-    'logo': Logo
+    'base-logo': BaseLogo
   },
+
   data () {
     return {
       isMenuOpen: false,
+
       navSections: {
         personalize: {
           name: 'personalize',
@@ -42,6 +63,7 @@ export default {
             'sign in'
           ]
         },
+
         chronicles: {
           name: 'chronicles',
           links: [
@@ -54,6 +76,7 @@ export default {
             'write'
           ]
         },
+
         news: {
           name: 'news',
           links: [
@@ -62,6 +85,7 @@ export default {
             'opinion'
           ]
         },
+
         topics: {
           name: 'topics',
           links: [
@@ -80,6 +104,7 @@ export default {
       }
     }
   },
+
   computed: {
     menuOpenClass () {
       return this.isMenuOpen ? 'open' : ''
@@ -113,10 +138,6 @@ export default {
     display: inline;
     vertical-align: middle;
   }
-}
-
-.logo {
-  height: 40px;
 }
 
 $menu-open-class: open;

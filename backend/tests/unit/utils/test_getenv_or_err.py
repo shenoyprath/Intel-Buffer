@@ -1,0 +1,35 @@
+import os
+from string import ascii_letters, digits
+
+from pytest import raises, fail
+
+from hypothesis import given
+from hypothesis.strategies import text, characters
+
+from utils.getenv_or_err import getenv_or_err, UndefinedEnvironmentVariable
+
+
+class TestUndefEnvVar:
+    @given(env_var=text())
+    def test_errors_undef_env_var(self, env_var):
+        with raises(UndefinedEnvironmentVariable):
+            getenv_or_err(env_var)
+
+    @given(env_var=text(
+        characters(
+            whitelist_characters=tuple(ascii_letters + digits),  # avoids encoding & illegal name errors
+            whitelist_categories=()
+        ),
+        min_size=1
+    ))
+    def test_gets_defined_env_var(self, env_var):
+        os.environ[env_var] = env_var
+        try:
+            assert getenv_or_err(env_var) == env_var
+        except UndefinedEnvironmentVariable:
+            fail(
+                f"Raised UndefinedEnvironmentVariable exception when "
+                f"environment variable '{env_var}' was defined."
+            )
+        finally:
+            del os.environ[env_var]

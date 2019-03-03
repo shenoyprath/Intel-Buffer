@@ -4,10 +4,26 @@ url = "https://pypi.org/simple"
 verify_ssl = true
 
 [dev-packages]
+hypothesis = "*"
+pytest = "*"
+pytest-cov = "*"
+pytest-flask = "*"
+flake8 = "*"
+bandit = "*"
 
 [packages]
 flask = "*"
 flask-restplus = "*"
+flask-jwt-extended = "*"
+peewee = "*"
+redis = "*"
+marshmallow = "*"
+webargs = "*"
+pymysql = "*"
+cryptography = "*"  # needed for sha256 passwords when using pymysql driver
 
 [requires]
 python_version = "3.7"
+
+[pipenv]
+allow_prereleases = true  # required for using the release candidate (3.0.0rc4) of marshmallow
