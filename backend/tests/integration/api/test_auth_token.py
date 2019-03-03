@@ -34,8 +34,34 @@ class TestAuthToken:
         assert json_response.get("access_token")
         assert json_response.get("refresh_token")
 
-    def test_created_access_token_has_refresh_token_info_in_claims(self, post_response):
+    def test_post_created_access_token_has_refresh_token_info_in_claims(self, post_response):
         json_response = json.loads(post_response.data)
+        access_token = decode_token(json_response["access_token"])
+        claims = access_token["user_claims"]
+
+        refresh_token_key = "refresh_token"
+        assert refresh_token_key in claims
+        assert "jti" in claims[refresh_token_key]
+        assert "exp" in claims[refresh_token_key]
+
+    @fixture
+    def patch_response(self, client, post_response):
+        post_json = json.loads(post_response.data)
+        refresh_token = post_json["refresh_token"]
+        return client.patch(
+            url_for("api.auth_token"),
+            headers={"Authorization": f"Bearer {refresh_token}"}
+        )
+
+    def test_patch_returns_new_access_token_only(self, patch_response):
+        json_response = json.loads(patch_response.data)
+
+        assert patch_response.status_code == 200
+        assert json_response.get("access_token")
+        assert json_response.get("refresh_token") is None
+
+    def test_patch_created_access_token_has_refresh_token_info_in_claims(self, patch_response):
+        json_response = json.loads(patch_response.data)
         access_token = decode_token(json_response["access_token"])
         claims = access_token["user_claims"]
 

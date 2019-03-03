@@ -4,7 +4,8 @@ from flask import jsonify
 
 from flask_restplus import Resource
 from flask_jwt_extended import (
-    create_access_token, create_refresh_token, get_raw_jwt, jwt_required, decode_token, get_jwt_claims, get_jwt_identity
+    create_access_token, create_refresh_token, get_raw_jwt, jwt_required, decode_token, get_jwt_claims,
+    get_jwt_identity, jwt_refresh_token_required
 )
 from flask_jwt_extended.exceptions import JWTDecodeError
 from webargs.flaskparser import use_args
@@ -14,7 +15,7 @@ from api import rest_api, jwt, redis_db
 from schemas.login_schema import LoginSchema
 
 
-@rest_api.route("/auth_token", methods=("POST", "DELETE"))
+@rest_api.route("/auth_token", methods=("POST", "PATCH", "DELETE"))
 class AuthToken(Resource):
 
     redis_namespace = "auth_blacklist"
@@ -63,6 +64,11 @@ class AuthToken(Resource):
         return jsonify(tokens)
 
     @classmethod
+    @jwt_refresh_token_required
+    def patch(cls):
+        pass
+
+    @classmethod
     def get_db_key(cls, decoded_token):
         return f"{cls.redis_namespace}:{decoded_token['jti']}"
 
@@ -83,7 +89,7 @@ class AuthToken(Resource):
         """
 
         access_token = get_raw_jwt()
-        refresh_token = get_jwt_claims()["refresh_token"]
+        refresh_token = get_jwt_claims()["refresh_token"]  # treat claim like a decoded token
 
         for token in (access_token, refresh_token):
             storage_duration = token["exp"] - int(time())
