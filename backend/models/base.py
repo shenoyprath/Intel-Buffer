@@ -44,11 +44,7 @@ class Base(Model):
         raise NotImplementedError
 
     @classmethod
-    def safe_get_by_id(cls, id_):
-        """
-        Abstract method that essentially implements a get_or_none_by_id method.
-        """
-
+    def get_by_id_or_none(cls, id_):
         try:
             return cls.get_by_id(id_)
         except DoesNotExist:
