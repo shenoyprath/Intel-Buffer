@@ -18,17 +18,16 @@ jwt = JWTManager()
 jwt._set_error_handler_callbacks(rest_api)
 
 
-# Redis py does not provide any method to define db at runtime.
-redis_db = None
+# Construct now, defer initialization to runtime
+redis_db = Redis.__new__(Redis)
 
 
 def init_redis_db(config):
     """
-    Allows Redis database to be defined at runtime so that different configurations can be used for dev, test, & prod.
+    Defers Redis database initialization to runtime so that different configurations can be used for dev, test, & prod.
     """
 
-    global redis_db
-    redis_db = Redis(
+    redis_db.__init__(
         host=config.REDIS_HOST,
         port=config.REDIS_PORT,
         db=config.REDIS_DB,
