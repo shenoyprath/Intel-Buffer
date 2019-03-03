@@ -63,14 +63,14 @@ class AuthToken(Resource):
         return jsonify(tokens)
 
     @classmethod
-    def get_db_key(cls, token):
-        return f"{cls.redis_namespace}:{token['jti']}"
+    def get_db_key(cls, decoded_token):
+        return f"{cls.redis_namespace}:{decoded_token['jti']}"
 
     # making this a class method messes with jwt as it passes one arg without passing the class.
     @staticmethod
     @jwt.token_in_blacklist_loader
-    def is_token_revoked(token):
-        key = AuthToken.get_db_key(token)
+    def is_token_revoked(decoded_token):
+        key = AuthToken.get_db_key(decoded_token)
         return redis_db.get(key) is not None
 
     @classmethod
