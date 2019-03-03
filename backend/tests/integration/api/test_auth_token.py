@@ -53,6 +53,7 @@ class TestAuthToken:
             headers={"Authorization": f"Bearer {refresh_token}"}
         )
 
+    @mark.usefixtures("redis_database")
     def test_patch_returns_new_access_token_only(self, patch_response):
         json_response = json.loads(patch_response.data)
 
@@ -60,6 +61,7 @@ class TestAuthToken:
         assert json_response.get("access_token")
         assert json_response.get("refresh_token") is None
 
+    @mark.usefixtures("redis_database")
     def test_patch_created_access_token_has_refresh_token_info_in_claims(self, patch_response):
         json_response = json.loads(patch_response.data)
         access_token = decode_token(json_response["access_token"])

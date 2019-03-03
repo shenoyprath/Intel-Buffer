@@ -7,7 +7,7 @@ from flask_jwt_extended import (
     create_access_token, create_refresh_token, get_raw_jwt, jwt_required, decode_token, get_jwt_claims,
     get_jwt_identity, jwt_refresh_token_required
 )
-from flask_jwt_extended.exceptions import JWTDecodeError
+from jwt import DecodeError
 from webargs.flaskparser import use_args
 
 from api import rest_api, jwt, redis_db
@@ -34,7 +34,7 @@ class AuthToken(Resource):
 
         try:
             refresh_token = decode_token(refresh_token)
-        except JWTDecodeError:
+        except DecodeError:
             pass
 
         return create_access_token(
@@ -66,7 +66,11 @@ class AuthToken(Resource):
     @classmethod
     @jwt_refresh_token_required
     def patch(cls):
-        pass
+        new_access_token = cls.create_access_token(
+            identity=get_jwt_identity(),
+            refresh_token=get_raw_jwt()
+        )
+        return jsonify({"access_token": new_access_token})
 
     @classmethod
     def get_db_key(cls, decoded_token):
