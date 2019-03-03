@@ -13,7 +13,9 @@ def app():
 
 @fixture
 def redis_database():
-    yield init_redis_db(TestConfig)
+    redis_db = init_redis_db(TestConfig)
+    yield redis_db
+    redis_db.flushdb()
 
 
 @fixture
