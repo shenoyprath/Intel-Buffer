@@ -16,9 +16,10 @@
           placeholder="First Name"
           autofocus
         />
-        <input id="last-name"
-               type="text"
-               placeholder="Last Name"
+        <input
+          id="last-name"
+          type="text"
+          placeholder="Last Name"
         />
 
         <input
