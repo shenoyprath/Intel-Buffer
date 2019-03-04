@@ -1,26 +1,24 @@
 from time import time
 
-from flask import jsonify
-
 from flask_restplus import Resource
 from flask_jwt_extended import (
-    create_access_token, create_refresh_token, get_raw_jwt, jwt_required, get_jti, decode_token, get_jwt_claims,
-    get_jwt_identity
+    create_access_token, create_refresh_token, get_raw_jwt, jwt_required, decode_token, get_jwt_claims,
+    get_jwt_identity, jwt_refresh_token_required
 )
 from webargs.flaskparser import use_args
 
 from api import rest_api, jwt, redis_db
 
-from schemas.login_schema import LoginSchema
+from schemas.sign_in_schema import SignInSchema
 
 
-@rest_api.route("/auth_token", methods=("POST", "DELETE"))
+@rest_api.route("/auth_token", methods=("POST", "PATCH", "DELETE"))
 class AuthToken(Resource):
 
     redis_namespace = "auth_blacklist"
 
     @staticmethod
-    def create_tokens(user):
+    def create_access_token(identity, decoded_refresh_token):
         """
         JWT Extended can only ask for one of the tokens for an endpoint. However, when the user sends a request to the
         `DELETE` method, both tokens need to be immediately invalidated, which means both tokens are required. To solve
@@ -28,37 +26,66 @@ class AuthToken(Resource):
         See issue #5 for more details.
         """
 
-        identity = user.email_address
-        refresh_token = create_refresh_token(identity)
-        access_token = create_access_token(
+        return create_access_token(
             identity=identity,
             user_claims={
                 "refresh_token": {
-                    "jti": get_jti(refresh_token),
-                    "exp": decode_token(refresh_token)["exp"]
+                    "jti": decoded_refresh_token["jti"],
+                    "exp": decoded_refresh_token["exp"]
                 }
             }
         )
-        return {
-            "access_token": access_token,
-            "refresh_token": refresh_token
-        }
+
+    @staticmethod
+    def serialize(*tokens):
+        """
+        Serializes access & refresh tokens to the dict `{"access_token": access_token, "refresh_token": refresh_token}`.
+        This return value can then be sent to the client after being dumped to json.
+        """
+
+        serialized = {}
+        for token in tokens:
+            token_type = decode_token(token)["type"]
+            suffixed_key = f"{token_type}_token"
+
+            if suffixed_key in serialized:
+                raise TypeError(
+                    f"Attempted to serialize multiple {token_type} tokens."
+                )
+            serialized[suffixed_key] = token
+        return serialized
 
     @classmethod
-    @use_args(LoginSchema(), error_status_code=401)
+    def create_tokens(cls, user):
+        identity = user.email_address
+        refresh_token = create_refresh_token(identity)
+        access_token = cls.create_access_token(identity, decode_token(refresh_token))
+        return access_token, refresh_token
+
+    @classmethod
+    @use_args(SignInSchema(), error_status_code=401)
     def post(cls, user):
         tokens = cls.create_tokens(user)
-        return jsonify(tokens)
+        return cls.serialize(*tokens)
 
     @classmethod
-    def get_db_key(cls, token):
-        return f"{cls.redis_namespace}:{token['jti']}"
+    @jwt_refresh_token_required
+    def patch(cls):
+        access_token = cls.create_access_token(
+            identity=get_jwt_identity(),
+            decoded_refresh_token=get_raw_jwt()
+        )
+        return cls.serialize(access_token)
+
+    @classmethod
+    def get_db_key(cls, decoded_token):
+        return f"{cls.redis_namespace}:{decoded_token['jti']}"
 
     # making this a class method messes with jwt as it passes one arg without passing the class.
     @staticmethod
     @jwt.token_in_blacklist_loader
-    def is_token_revoked(token):
-        key = AuthToken.get_db_key(token)
+    def is_token_revoked(decoded_token):
+        key = AuthToken.get_db_key(decoded_token)
         return redis_db.get(key) is not None
 
     @classmethod
@@ -71,7 +98,7 @@ class AuthToken(Resource):
         """
 
         access_token = get_raw_jwt()
-        refresh_token = get_jwt_claims()["refresh_token"]
+        refresh_token = get_jwt_claims()["refresh_token"]  # treat claim like a decoded token
 
         for token in (access_token, refresh_token):
             storage_duration = token["exp"] - int(time())
@@ -81,4 +108,4 @@ class AuthToken(Resource):
                 ex=storage_duration
             )
 
-        return jsonify(msg="Token successfully invalidated.")
+        return {"msg": "Token successfully invalidated."}

@@ -9,7 +9,7 @@ from models.user import User
 from schemas.base import Base
 
 
-class LoginSchema(Base):
+class SignInSchema(Base):
     custom_errors = {
         "invalid_credentials": "Invalid credentials. Please try again."
     }
@@ -29,7 +29,7 @@ class LoginSchema(Base):
             user = User.retrieve(email_address)
             if user is None or not check_password_hash(user.password, password):
                 raise ValidationError(
-                    LoginSchema.custom_errors["invalid_credentials"]
+                    SignInSchema.custom_errors["invalid_credentials"]
                 )
 
     @post_load
