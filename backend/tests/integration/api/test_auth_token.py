@@ -28,29 +28,36 @@ class TestAuthToken:
 
     @mark.usefixtures("client")
     def test_serialization_fails_when_multiple_tokens_of_same_type_provided(self):
-        access_token1 = create_access_token("token1")
-        access_token2 = create_access_token("token2")
-        with raises(TypeError):
-            AuthToken.serialize(access_token1, access_token2)
+        access_tokens = (
+            create_access_token("token1"),
+            create_access_token("token2")
+        )
+        refresh_tokens = (
+            create_refresh_token("token1"),
+            create_refresh_token("token2")
+        )
 
-        refresh_token1 = create_refresh_token("token1")
-        refresh_token2 = create_refresh_token("token2")
-        with raises(TypeError):
-            AuthToken.serialize(refresh_token1, refresh_token2)
+        for same_tokens in (access_tokens, refresh_tokens):
+            with raises(TypeError):
+                AuthToken.serialize(*same_tokens)
 
     def test_post_returns_access_and_refresh_tokens(self, post_response):
         assert post_response.status_code == 200
         assert post_response.json.get("access_token")
         assert post_response.json.get("refresh_token")
 
-    def test_post_created_access_token_has_refresh_token_info_in_claims(self, post_response):
-        access_token = decode_token(post_response.json["access_token"])
+    @staticmethod
+    def verify_refresh_claims(access_token):
         claims = access_token["user_claims"]
 
         refresh_token_key = "refresh_token"
         assert refresh_token_key in claims
         assert "jti" in claims[refresh_token_key]
         assert "exp" in claims[refresh_token_key]
+
+    def test_post_created_access_token_has_refresh_token_info_in_claims(self, post_response):
+        access_token = decode_token(post_response.json["access_token"])
+        self.verify_refresh_claims(access_token)
 
     @fixture
     def patch_response(self, client, post_response):
@@ -69,12 +76,7 @@ class TestAuthToken:
     @mark.usefixtures("redis_database")
     def test_patch_created_access_token_has_refresh_token_info_in_claims(self, patch_response):
         access_token = decode_token(patch_response.json["access_token"])
-        claims = access_token["user_claims"]
-
-        refresh_token_key = "refresh_token"
-        assert refresh_token_key in claims
-        assert "jti" in claims[refresh_token_key]
-        assert "exp" in claims[refresh_token_key]
+        self.verify_refresh_claims(access_token)
 
     @mark.usefixtures("redis_database")
     def test_delete_invalidates_access_and_refresh_tokens(self, client, post_response):
