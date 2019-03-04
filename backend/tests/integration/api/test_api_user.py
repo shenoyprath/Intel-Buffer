@@ -1,5 +1,3 @@
-import json
-
 from flask import url_for
 
 from pytest import mark
@@ -15,6 +13,5 @@ class TestUser:
         )
 
         assert response.status_code == 200
-        json_response = json.loads(response.data)
-        assert json_response.get("access_token")
-        assert json_response.get("refresh_token")
+        assert response.json.get("access_token")
+        assert response.json.get("refresh_token")

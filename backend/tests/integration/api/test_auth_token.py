@@ -1,5 +1,3 @@
-import json
-
 from flask import url_for
 
 from flask_jwt_extended import create_access_token, create_refresh_token, decode_token
@@ -42,13 +40,11 @@ class TestAuthToken:
 
     def test_post_returns_access_and_refresh_tokens(self, post_response):
         assert post_response.status_code == 200
-        json_response = json.loads(post_response.data)
-        assert json_response.get("access_token")
-        assert json_response.get("refresh_token")
+        assert post_response.json.get("access_token")
+        assert post_response.json.get("refresh_token")
 
     def test_post_created_access_token_has_refresh_token_info_in_claims(self, post_response):
-        json_response = json.loads(post_response.data)
-        access_token = decode_token(json_response["access_token"])
+        access_token = decode_token(post_response.json["access_token"])
         claims = access_token["user_claims"]
 
         refresh_token_key = "refresh_token"
@@ -58,8 +54,7 @@ class TestAuthToken:
 
     @fixture
     def patch_response(self, client, post_response):
-        post_json = json.loads(post_response.data)
-        refresh_token = post_json["refresh_token"]
+        refresh_token = post_response.json["refresh_token"]
         return client.patch(
             url_for("api.auth_token"),
             headers={"Authorization": f"Bearer {refresh_token}"}
@@ -67,16 +62,13 @@ class TestAuthToken:
 
     @mark.usefixtures("redis_database")
     def test_patch_returns_new_access_token_only(self, patch_response):
-        json_response = json.loads(patch_response.data)
-
         assert patch_response.status_code == 200
-        assert json_response.get("access_token")
-        assert json_response.get("refresh_token") is None
+        assert patch_response.json.get("access_token")
+        assert patch_response.json.get("refresh_token") is None
 
     @mark.usefixtures("redis_database")
     def test_patch_created_access_token_has_refresh_token_info_in_claims(self, patch_response):
-        json_response = json.loads(patch_response.data)
-        access_token = decode_token(json_response["access_token"])
+        access_token = decode_token(patch_response.json["access_token"])
         claims = access_token["user_claims"]
 
         refresh_token_key = "refresh_token"
@@ -86,8 +78,7 @@ class TestAuthToken:
 
     @mark.usefixtures("redis_database")
     def test_delete_invalidates_access_and_refresh_tokens(self, client, post_response):
-        post_json = json.loads(post_response.data)
-        access_token = post_json["access_token"]
+        access_token = post_response.json["access_token"]
 
         def send_delete_request():
             return client.delete(
@@ -99,12 +90,11 @@ class TestAuthToken:
 
         # send delete request again with revoked token
         response = send_delete_request()
-        delete_json = json.loads(response.data)
         assert response.status_code == 401
-        assert delete_json["msg"] == "Token has been revoked"
+        assert response.json["msg"] == "Token has been revoked"
 
         # assert that refresh token is revoked
-        decoded_refresh_token = decode_token(post_json["refresh_token"])
+        decoded_refresh_token = decode_token(post_response.json["refresh_token"])
         assert redis_db.get(
             AuthToken.get_db_key(decoded_refresh_token)
         )
