@@ -1,7 +1,5 @@
 from time import time
 
-from flask import jsonify
-
 from flask_restplus import Resource
 from flask_jwt_extended import (
     create_access_token, create_refresh_token, get_raw_jwt, jwt_required, decode_token, get_jwt_claims,
@@ -68,7 +66,7 @@ class AuthToken(Resource):
     @use_args(SignInSchema(), error_status_code=401)
     def post(cls, user):
         tokens = cls.create_tokens(user)
-        return jsonify(cls.serialize(*tokens))
+        return cls.serialize(*tokens)
 
     @classmethod
     @jwt_refresh_token_required
@@ -77,7 +75,7 @@ class AuthToken(Resource):
             identity=get_jwt_identity(),
             decoded_refresh_token=get_raw_jwt()
         )
-        return jsonify(cls.serialize(access_token))
+        return cls.serialize(access_token)
 
     @classmethod
     def get_db_key(cls, decoded_token):
@@ -110,4 +108,4 @@ class AuthToken(Resource):
                 ex=storage_duration
             )
 
-        return jsonify(msg="Token successfully invalidated.")
+        return {"msg": "Token successfully invalidated."}
