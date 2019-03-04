@@ -5,6 +5,9 @@
     <div class="authentication-modal animated slideInUp">
       <base-logo height="25pt"/>
       <h2>Sign in to Continue</h2>
+      <p class="description">
+        Access your personalized content and interact with others
+      </p>
 
       <form class="animated zoomIn delay-1s">
         <input
