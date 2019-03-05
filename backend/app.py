@@ -8,6 +8,7 @@ from index import index
 from logger import logger
 
 from api import api_blueprint, jwt, init_redis_db
+from api.enable_cors import enable_cors
 
 from models import init_db
 from models.table_modifiers import create_tables
@@ -36,6 +37,8 @@ def create_app(config):
     )
 
     def register_blueprints():
+        if config.DEBUG:
+            api_blueprint.after_request(enable_cors)
         app.register_blueprint(api_blueprint)
 
     def register_extensions():
