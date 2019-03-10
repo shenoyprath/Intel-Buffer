@@ -1,4 +1,4 @@
-import axios from 'axios'
+import axios from "axios"
 
 /**
  * The function passed as the alteration will be applied recursively to all keys in a particular object.
@@ -10,7 +10,7 @@ function alterKeys (object, alterationFunc) {
   for (const [key, value] of Object.entries(object)) {
     const alteredKey = alterationFunc(key)
     if (
-      typeof value === 'object' &&
+      typeof value === "object" &&
       !Array.isArray(value) &&
       value != null
     ) {
@@ -24,12 +24,12 @@ function alterKeys (object, alterationFunc) {
 }
 
 const api = axios.create({
-  baseURL: 'http://127.0.0.1:8888/api',
+  baseURL: "http://127.0.0.1:8888/api",
 
   timeout: 5000,
 
   headers: {
-    'Content-Type': 'application/json'
+    "Content-Type": "application/json"
   },
 
   transformRequest: [
@@ -41,7 +41,7 @@ const api = axios.create({
       return alterKeys(data, key => {
         return key
           .split(/(?=[A-Z])/)
-          .join('_')
+          .join("_")
           .toLowerCase()
       })
     },

@@ -43,19 +43,19 @@
 </template>
 
 <script>
-import BaseLogo from '@/components/BaseLogo'
+import BaseLogo from "@/components/BaseLogo"
 
 export default {
-  name: 'ModalAuthenticationSignIn',
+  name: "ModalAuthenticationSignIn",
 
   components: {
-    'base-logo': BaseLogo
+    "base-logo": BaseLogo
   }
 }
 </script>
 
 <style lang="scss" scoped>
-@import '../styles/mixins/authentication_modal';
+@import "../styles/mixins/authentication_modal";
 
 @include authentication-modal;
 </style>

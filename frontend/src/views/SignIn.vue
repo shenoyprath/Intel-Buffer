@@ -3,10 +3,10 @@
 </template>
 
 <script>
-import ModalAuthenticationSignIn from '@/components/ModalAuthenticationSignIn'
+import ModalAuthenticationSignIn from "@/components/ModalAuthenticationSignIn"
 
 export default {
-  name: 'SignIn',
+  name: "SignIn",
 
   components: {
     ModalAuthenticationSignIn
