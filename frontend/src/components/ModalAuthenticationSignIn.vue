@@ -9,9 +9,12 @@
         Access your personalized content and interact with others
       </p>
 
-      <form class="animated zoomIn delay-1s">
+      <form
+        id="sign-in-form"
+        class="animated zoomIn delay-1s"
+      >
         <input
-          id="email"
+          id="email-address"
           type="email"
           placeholder="Email Address"
           autofocus
@@ -24,7 +27,13 @@
       </form>
 
       <router-link to="/">Forgot Password?</router-link>
-      <button>Sign In</button>
+      <button
+        type="submit"
+        form="sign-in-form"
+      >
+        Sign In
+      </button>
+
       <p>
         Don't have an account?
         <router-link to="/">Register</router-link>
