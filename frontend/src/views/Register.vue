@@ -3,10 +3,10 @@
 </template>
 
 <script>
-import ModalAuthenticationRegister from '@/components/ModalAuthenticationRegister'
+import ModalAuthenticationRegister from "@/components/ModalAuthenticationRegister"
 
 export default {
-  name: 'Register',
+  name: "Register",
 
   components: {
     ModalAuthenticationRegister

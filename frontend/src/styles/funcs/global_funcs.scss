@@ -18,11 +18,11 @@
     ),
     priority: 500
   );
-  
+
   @each $layer in $layers {
     $z-indices: map_get($z-indices, $layer);
     @if $z-indices == null {
-      @warn 'No z-index or z-index map was found for the layer "#{$layer}".';
+      @warn "No z-index or z-index map was found for the layer '#{$layer}'.";
     }
   }
   @return $z-indices;

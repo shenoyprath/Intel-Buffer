@@ -42,13 +42,13 @@
 </template>
 
 <script>
-import BaseLogo from '@/components/BaseLogo'
+import BaseLogo from "@/components/BaseLogo"
 
 export default {
-  name: 'navbar',
+  name: "navbar",
 
   components: {
-    'base-logo': BaseLogo
+    "base-logo": BaseLogo
   },
 
   data () {
@@ -57,48 +57,48 @@ export default {
 
       navSections: {
         personalize: {
-          name: 'personalize',
+          name: "personalize",
           links: [
-            'register',
-            'sign in'
+            "register",
+            "sign in"
           ]
         },
 
         chronicles: {
-          name: 'chronicles',
+          name: "chronicles",
           links: [
-            'most read',
-            'latest',
-            'featured',
-            'heaps',
-            'eye appealers',
-            'for you',
-            'write'
+            "most read",
+            "latest",
+            "featured",
+            "heaps",
+            "eye appealers",
+            "for you",
+            "write"
           ]
         },
 
         news: {
-          name: 'news',
+          name: "news",
           links: [
-            'top stories',
-            'breaking',
-            'opinion'
+            "top stories",
+            "breaking",
+            "opinion"
           ]
         },
 
         topics: {
-          name: 'topics',
+          name: "topics",
           links: [
-            'arts',
-            'computing',
-            'engineering',
-            'entertainment',
-            'gaming',
-            'history',
-            'medicine',
-            'science',
-            'sports',
-            'more...'
+            "arts",
+            "computing",
+            "engineering",
+            "entertainment",
+            "gaming",
+            "history",
+            "medicine",
+            "science",
+            "sports",
+            "more..."
           ]
         }
       }
@@ -107,7 +107,7 @@ export default {
 
   computed: {
     menuOpenClass () {
-      return this.isMenuOpen ? 'open' : ''
+      return this.isMenuOpen ? "open" : ""
     }
   }
 }
