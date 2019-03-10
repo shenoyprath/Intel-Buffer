@@ -24,7 +24,7 @@ function alterKeys (object, alterationFunc) {
 }
 
 const api = axios.create({
-  baseURL: 'http://127.0.0.1:8888/api/',
+  baseURL: 'http://127.0.0.1:8888/api',
 
   timeout: 5000,
 
