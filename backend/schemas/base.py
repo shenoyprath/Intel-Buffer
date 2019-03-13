@@ -3,7 +3,7 @@ from marshmallow.fields import Field
 
 
 class Base(Schema):
-    pass
+    custom_errors = {}
 
 
 # Some of the default msgs use programmer language like "Field cannot be null".
