@@ -7,6 +7,7 @@ from models import db
 from models.user import User
 
 from schemas.base import Base
+from schemas.forbid_blank_str import ForbidBlankStr
 
 
 class SignInSchema(Base):
@@ -16,9 +17,15 @@ class SignInSchema(Base):
 
     # will check if email is in db anyway, so
     # marshmallow's Email() field validation isn't needed.
-    email_address = String(required=True)
+    email_address = String(
+        required=True,
+        validate=ForbidBlankStr()
+    )
 
-    password = String(required=True)
+    password = String(
+        required=True,
+        validate=ForbidBlankStr()
+    )
 
     @validates_schema
     def has_valid_credentials(self, data):
