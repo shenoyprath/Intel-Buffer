@@ -12,7 +12,7 @@ from api import rest_api, jwt, redis_db
 from schemas.sign_in_schema import SignInSchema
 
 
-@rest_api.route("/auth_token", methods=("POST", "PATCH", "DELETE"))
+@rest_api.route("/auth-token", methods=("POST", "PATCH", "DELETE"))
 class AuthToken(Resource):
 
     redis_namespace = "auth_blacklist"
