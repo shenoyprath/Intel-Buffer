@@ -1,5 +1,7 @@
 from time import time
 
+from flask import jsonify
+
 from flask_restplus import Resource
 from flask_jwt_extended import (
     create_access_token, create_refresh_token, get_raw_jwt, get_jwt_identity, jwt_refresh_token_required,
@@ -22,11 +24,11 @@ class AuthToken(Resource):
         access_token = create_access_token(user.email_address, fresh=True)
         refresh_token = create_refresh_token(user.email_address)
 
-        user_info = {
+        user_info = jsonify({
             "id": user.id,
             "first_name": user.first_name,
             "last_name": user.last_name
-        }
+        })
         set_access_cookies(user_info, access_token)
         set_refresh_cookies(user_info, refresh_token)
         return user_info
@@ -40,7 +42,9 @@ class AuthToken(Resource):
     @jwt_refresh_token_required
     def patch():  # renews the access token
         access_token = create_access_token(get_jwt_identity())
-        set_access_cookies({}, access_token)  # No response required here except a 200.
+        response = jsonify({})  # No response required here except a 200.
+        set_access_cookies(response, access_token)
+        return response
 
     @classmethod
     def get_db_key(cls, decoded_refresh_token):
@@ -57,14 +61,17 @@ class AuthToken(Resource):
         not very efficient.
         """
 
-        refresh_token = get_raw_jwt()["jti"]
+        refresh_token = get_raw_jwt()
         storage_duration = refresh_token["exp"] - int(time())  # time until token expires spontaneously.
         redis_db.set(
             name=cls.get_db_key(refresh_token),
             value=get_jwt_identity(),
             ex=storage_duration
         )
-        unset_jwt_cookies({})  # No response required here except a 200.
+
+        response = jsonify({})  # No response required here except a 200.
+        unset_jwt_cookies(response)
+        return response
 
     # making this a class method messes with jwt as it passes one arg without passing the class.
     @staticmethod

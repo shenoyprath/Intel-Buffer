@@ -29,6 +29,8 @@ class Config(ABC):
     JWT_ACCESS_COOKIE_PATH = "/api"
     JWT_REFRESH_COOKIE_PATH = "/api/auth-token"
     JWT_COOKIE_CSRF_PROTECT = True
+    JWT_ACCESS_CSRF_COOKIE_PATH = JWT_ACCESS_COOKIE_PATH
+    JWT_REFRESH_CSRF_COOKIE_PATH = JWT_REFRESH_COOKIE_PATH
 
     if not os.path.exists(DIST_DIR):  # pragma: no cover
         raise NotADirectoryError(f"DIST_DIR not found: {DIST_DIR}")
