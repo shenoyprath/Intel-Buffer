@@ -62,7 +62,7 @@ class AuthToken(Resource):
         """
 
         refresh_token = get_raw_jwt()
-        storage_duration = refresh_token["exp"] - int(time())  # time until token expires spontaneously.
+        storage_duration = refresh_token["exp"] - int(time())  # seconds until token expires spontaneously.
         redis_db.set(
             name=cls.get_db_key(refresh_token),
             value=get_jwt_identity(),
