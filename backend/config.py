@@ -20,10 +20,17 @@ class Config(ABC):
     REDIS_DB_PASS = getenv_or_err("REDIS_DB_PASS")
 
     JWT_SECRET_KEY = SECRET_KEY
-    JWT_ACCESS_TOKEN_EXPIRES = timedelta(minutes=15)
+    JWT_ACCESS_TOKEN_EXPIRES = timedelta(minutes=10)
     JWT_REFRESH_TOKEN_EXPIRES = timedelta(days=30)
     JWT_BLACKLIST_ENABLED = True
-    JWT_BLACKLIST_TOKEN_CHECKS = ("access", "refresh")
+    JWT_BLACKLIST_TOKEN_CHECKS = ("refresh",)
+    JWT_TOKEN_LOCATION = ("cookies",)
+    JWT_SECURE_COOKIE = False  # Only allow JWT cookies to be sent over https. True in production.
+    JWT_ACCESS_COOKIE_PATH = "/api"
+    JWT_REFRESH_COOKIE_PATH = "/api/auth-token"
+    JWT_COOKIE_CSRF_PROTECT = True
+    JWT_ACCESS_CSRF_COOKIE_PATH = JWT_ACCESS_COOKIE_PATH
+    JWT_REFRESH_CSRF_COOKIE_PATH = JWT_REFRESH_COOKIE_PATH
 
     if not os.path.exists(DIST_DIR):  # pragma: no cover
         raise NotADirectoryError(f"DIST_DIR not found: {DIST_DIR}")
@@ -49,3 +56,4 @@ class ProdConfig(Config):
     DEBUG = False
     DB_NAME = "intel_buffer_prod_db"
     REDIS_DB = 2
+    JWT_SECURE_COOKIE = True

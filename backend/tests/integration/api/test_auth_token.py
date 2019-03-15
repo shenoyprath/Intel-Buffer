@@ -1,35 +1,38 @@
 from flask import url_for
 
-from flask_jwt_extended import create_access_token, create_refresh_token, decode_token
+from flask_jwt_extended import decode_token
 
-from pytest import mark, fixture, raises
+from werkzeug.http import parse_cookie
 
 from api.auth_token import AuthToken
 
 from models.user import User
 
+from pytest import fixture, mark
+
 from tests.utils.model_instance import model_instance
 
 
-@mark.usefixtures("database")
+def get_cookie(response, name):
+    cookie_headers = response.headers.getlist("Set-Cookie")
+    for cookie_header in cookie_headers:
+        cookie_dict = parse_cookie(cookie_header)
+        cookie_name, = list(cookie_dict.keys())
+        if cookie_name == name:
+            return cookie_dict[cookie_name]
+
+
+@mark.usefixtures("database", "redis_database")
 class TestAuthToken:
 
     endpoint = "api.auth_token"
 
-    @mark.usefixtures("client")
-    def test_serialization_fails_for_multiple_tokens_of_same_type(self):
-        access_tokens = (
-            create_access_token("foo"),
-            create_access_token("bar")
-        )
-        refresh_tokens = (
-            create_refresh_token("foo"),
-            create_refresh_token("bar")
-        )
-
-        for same_tokens in (access_tokens, refresh_tokens):
-            with raises(TypeError):
-                AuthToken.serialize(*same_tokens)
+    expected_cookies = (
+        "access_token_cookie",
+        "csrf_access_token",
+        "refresh_token_cookie",
+        "csrf_refresh_token"
+    )
 
     @fixture
     def post_res(self, client, valid_user_info):
@@ -41,59 +44,37 @@ class TestAuthToken:
                     password=valid_user_info["password"]
                 )
             )
-        return res
+            yield res
 
-    def test_post_res_has_access_and_refresh_tokens(self, post_res):
+    def test_post_response_has_necessary_auth_token_and_csrf_cookie_headers(self, post_res):
         assert post_res.status_code == 200
-        assert post_res.json.get("access_token")
-        assert post_res.json.get("refresh_token")
 
-    @staticmethod
-    def get_auth_header(token):
-        return {"Authorization": f"Bearer {token}"}
+        for cookie in self.expected_cookies:
+            assert get_cookie(post_res, cookie)
 
-    @fixture
-    def patch_res(self, client, post_res):
-        refresh_token = post_res.json["refresh_token"]
-        return client.patch(
+    def test_patch_response_renews_access_token_cookie_only(self, post_res, client):
+        access_token = get_cookie(post_res, "access_token_cookie")
+        refresh_csrf = get_cookie(post_res, "csrf_refresh_token")
+
+        patch_res = client.patch(
             url_for(self.endpoint),
-            headers=self.get_auth_header(refresh_token)
+            headers={"X-CSRF-TOKEN": refresh_csrf}
         )
-
-    @mark.usefixtures("redis_database")
-    def test_patch_res_has_access_token_only(self, patch_res):
         assert patch_res.status_code == 200
-        assert patch_res.json.get("access_token")
-        try:
-            patch_res.json["refresh_token"]
-        except KeyError:
-            pass
+        assert access_token != get_cookie(patch_res, "access_token_cookie")
+        assert get_cookie(patch_res, "refresh_token_cookie") is None  # make sure refresh token doesn't change.
 
-    @mark.usefixtures("redis_database")
-    def test_access_tokens_have_refresh_token_info_in_claims(self, post_res, patch_res):
-        for res in (post_res, patch_res):
-            access_token = decode_token(res.json["access_token"])
-            claims = access_token["user_claims"]
+    def test_delete_response_deletes_token_cookies_and_revokes_refresh_token(self, post_res, client):
+        refresh_token = get_cookie(post_res, "refresh_token_cookie")
+        refresh_csrf = get_cookie(post_res, "csrf_refresh_token")
 
-            refresh_token_key = "refresh_token"
-            assert refresh_token_key in claims
-            assert "jti" in claims[refresh_token_key]
-            assert "exp" in claims[refresh_token_key]
-
-    @mark.usefixtures("redis_database")
-    def test_delete_invalidates_access_and_refresh_tokens(self, client, post_res):
-        access_token = post_res.json["access_token"]
-        decoded_access_token = decode_token(access_token)
-        decoded_refresh_token = decode_token(post_res.json["refresh_token"])
-
-        for token in (decoded_access_token, decoded_refresh_token):
-            assert not AuthToken.is_token_revoked(token)
-
-        res = client.delete(
-            url_for("api.auth_token"),
-            headers=TestAuthToken.get_auth_header(access_token)
+        delete_res = client.delete(
+            url_for(self.endpoint),
+            headers={"X-CSRF-TOKEN": refresh_csrf}
         )
-        assert res.status_code == 200
-
-        for token in (decoded_access_token, decoded_refresh_token):
-            assert AuthToken.is_token_revoked(token)
+        assert delete_res.status_code == 200
+        for cookie in self.expected_cookies:
+            assert get_cookie(delete_res, cookie) == ""
+        assert AuthToken.is_token_revoked(
+            decode_token(refresh_token)
+        )

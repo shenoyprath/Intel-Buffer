@@ -27,7 +27,7 @@ jobs:
       - checkout
 
       - run:
-          name: grant circleci access to backend dependency locations
+          name: Grant CircleCi Access to Backend Dependency Locations
           command: |
             sudo chown -R circleci:circleci /usr/local/bin
             sudo chown -R circleci:circleci /usr/local/lib/python3.7/site-packages
@@ -38,15 +38,15 @@ jobs:
           - ib-
 
       - run:
-          name: install pipenv
+          name: Install Pipenv
           command: cd backend && pip install pipenv
 
       - run:
-          name: install backend dependencies
+          name: Install Backend Dependencies
           command: cd backend && pipenv install --dev
 
       - run:
-          name: install frontend dependencies
+          name: Install Frontend Dependencies
           command: cd frontend && npm install
 
       - save_cache:
@@ -58,22 +58,22 @@ jobs:
             - node_modules
 
       - run:
-          name: frontend tests
+          name: Frontend Tests
           command: cd frontend && npm run test:unit
 
       - run:
           # needed for backend to run some quick checks using the compiled dist folder.
-          name: compile frontend
+          name: Compile Frontend
           command: cd frontend && npm run build
 
       - run:
-          name: flake8 linting
+          name: Flake8 Linting
           command: cd backend && pipenv run flake8
 
       - run:
-          name: bandit security linting
+          name: Bandit Security Linting
           command: cd backend && pipenv run bandit -r . -c bandit.yml
 
       - run:
-          name: backend tests with coverage
+          name: Backend Tests With Coverage
           command: cd backend && pipenv run python -m pytest --cov

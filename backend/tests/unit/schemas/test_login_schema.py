@@ -12,7 +12,7 @@ from tests.utils.model_instance import model_instance
 
 @mark.usefixtures("database")
 class TestLoginSchema:
-    @given(email_address=emails(), password=text())
+    @given(email_address=emails(), password=text(min_size=1))
     def test_invalidates_incorrect_credentials(self, email_address, password):
         errors = SignInSchema().validate({
             "email_address": email_address,
