@@ -10,7 +10,7 @@ from models.user import User
 class TestBase:
     @mark.usefixtures("database")
     @given(id_=integers())
-    def test_safe_get_by_id_returns_none_when_not_found(self, id_):
+    def test_get_or_none_by_id_returns_none_when_not_found(self, id_):
         assert User.get_or_none_by_id(id_) is None
 
     def test_get_concrete_descendants(self):
