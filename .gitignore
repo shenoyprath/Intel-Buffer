@@ -118,3 +118,16 @@ venv.bak/
 # backend test caches
 .hypothesis
 .pytest_cache
+
+# node modules and build directory
+node_modules
+/dist
+
+# local env files
+.env.local
+.env.*.local
+
+# Log files
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
