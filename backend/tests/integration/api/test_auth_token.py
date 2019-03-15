@@ -52,7 +52,7 @@ class TestAuthToken:
         for cookie in self.expected_cookies:
             assert get_cookie(post_res, cookie)
 
-    def test_patch_response_renews_access_token_cookie(self, post_res, client):
+    def test_patch_response_renews_access_token_cookie_only(self, post_res, client):
         access_token = get_cookie(post_res, "access_token_cookie")
         refresh_csrf = get_cookie(post_res, "csrf_refresh_token")
 
@@ -62,6 +62,7 @@ class TestAuthToken:
         )
         assert patch_res.status_code == 200
         assert access_token != get_cookie(patch_res, "access_token_cookie")
+        assert get_cookie(patch_res, "refresh_token_cookie") is None  # make sure refresh token doesn't change.
 
     def test_delete_response_deletes_token_cookies_and_revokes_refresh_token(self, post_res, client):
         refresh_token = get_cookie(post_res, "refresh_token_cookie")
