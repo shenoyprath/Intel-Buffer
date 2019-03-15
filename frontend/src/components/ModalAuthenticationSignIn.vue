@@ -58,4 +58,26 @@ export default {
 @import "../styles/mixins/authentication_modal";
 
 @include authentication-modal;
+
+%error {
+  display: block;
+  color: #ff0000;
+}
+
+.schema-error {
+  @extend %error;
+
+  border: {
+    color: #ff0000;
+    radius: 5px;
+    style: solid;
+    width: 1px;
+  }
+
+  padding: 10px;
+}
+
+.field-error {
+  @extend %error;
+}
 </style>
