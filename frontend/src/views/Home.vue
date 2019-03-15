@@ -15,15 +15,15 @@
 </template>
 
 <script>
-import TheSplashScreen from "@/components/TheSplashScreen"
-import Navbar from "../components/Navbar"
+import TheSplashScreen from '@/components/TheSplashScreen'
+import Navbar from '../components/Navbar'
 
 export default {
-  name: "home",
+  name: 'home',
 
   components: {
-    "the-splash-screen": TheSplashScreen,
-    "navbar": Navbar
+    'the-splash-screen': TheSplashScreen,
+    'navbar': Navbar
   },
 
   data () {

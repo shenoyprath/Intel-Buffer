@@ -5,16 +5,10 @@
     <div class="authentication-modal animated slideInUp">
       <base-logo height="25pt"/>
       <h2>Sign in to Continue</h2>
-      <p class="description">
-        Access your personalized content and interact with others
-      </p>
 
-      <form
-        id="sign-in-form"
-        class="animated zoomIn delay-1s"
-      >
+      <form class="animated zoomIn delay-1s">
         <input
-          id="email-address"
+          id="email"
           type="email"
           placeholder="Email Address"
           autofocus
@@ -27,13 +21,7 @@
       </form>
 
       <router-link to="/">Forgot Password?</router-link>
-      <button
-        type="submit"
-        form="sign-in-form"
-      >
-        Sign In
-      </button>
-
+      <button>Sign In</button>
       <p>
         Don't have an account?
         <router-link to="/">Register</router-link>
@@ -43,19 +31,19 @@
 </template>
 
 <script>
-import BaseLogo from "@/components/BaseLogo"
+import BaseLogo from '@/components/BaseLogo'
 
 export default {
-  name: "ModalAuthenticationSignIn",
+  name: 'ModalAuthenticationSignIn',
 
   components: {
-    "base-logo": BaseLogo
+    'base-logo': BaseLogo
   }
 }
 </script>
 
 <style lang="scss" scoped>
-@import "../styles/mixins/authentication_modal";
+@import '../styles/mixins/authentication_modal';
 
 @include authentication-modal;
 </style>

@@ -6,13 +6,13 @@
 </template>
 
 <script>
-import BaseLogo from "@/components/BaseLogo"
+import BaseLogo from '@/components/BaseLogo'
 
 export default {
-  name: "TheSplashScreen",
+  name: 'TheSplashScreen',
 
   components: {
-    "base-logo": BaseLogo
+    'base-logo': BaseLogo
   }
 }
 </script>
