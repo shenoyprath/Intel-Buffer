@@ -20,6 +20,7 @@ export default {
   overflow: hidden;
 
   background-color: transparent;
+  padding: 0;
 
   &::before, &::after {
     content: '';
