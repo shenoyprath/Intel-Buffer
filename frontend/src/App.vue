@@ -57,41 +57,6 @@ b {
   font-weight: 700;
 }
 
-button {
-  display: inline-block;
-  overflow: visible;
-
-  vertical-align: middle;
-  line-height: 1.5;
-  white-space: nowrap;
-
-  padding: 0.375rem 0.75rem;
-  outline: none;
-  margin: 0;
-  user-select: none;
-
-  cursor: pointer;
-  transition: all .2s ease-in-out;
-
-  font: {
-    family: inherit;
-    size: 1rem;
-    weight: 400;
-  }
-
-  text: {
-    transform: none;
-    align: center;
-  }
-
-  border: {
-    width: 1px;
-    style: solid;
-    color: transparent;
-    radius: 0.25em;
-  }
-}
-
 h1, h2, h3, h4, h5, h6 {
   font: {
     family: "Eczar", serif;

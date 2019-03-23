@@ -7,11 +7,12 @@
       class="modal"
       v-if="isVisible"
     >
-      <button
+      <base-button
         class="close"
         @click="hide"
+        :grow-on-hover="true"
       >
-      </button>
+      </base-button>
 
       <section class="content">
         <slot name="header"/>
@@ -25,12 +26,20 @@
 </template>
 
 <script>
+import BaseButton from "@/components/BaseButton"
+
 export default {
   name: "BaseModal",
 
-  data: () => ({
-    isVisible: false
-  }),
+  components: {
+    BaseButton
+  },
+
+  data () {
+    return {
+      isVisible: true
+    }
+  },
 
   methods: {
     show () {
@@ -63,8 +72,6 @@ export default {
 }
 
 .close {
-  @include grow-on-hover;
-
   display: inline-block;
   position: absolute;
   top: 0;
