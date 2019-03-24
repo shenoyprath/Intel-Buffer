@@ -40,15 +40,8 @@ a {
   text-decoration: none;
 
   @include if-hover-enabled {
-    &:hover,
-    &:focus {
-      border: {
-        bottom: {
-          width: 1px;
-          style: solid;
-          color: $theme-blue;
-        }
-      }
+    &:hover, &:focus {
+      border-bottom: 1px solid $theme-blue;
     }
   }
 }

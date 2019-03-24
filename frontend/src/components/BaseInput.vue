@@ -12,14 +12,13 @@
       enter-active-class="animated fadeInUp faster"
       leave-active-class="animated fadeOutDown faster"
     >
-      <!--suppress JSUnresolvedVariable -->
       <label
         class="floating-label"
         :class="{
           focus: isFocus,
           error: error
         }"
-        :for="_uid"
+        :for="id"
         v-show="isFocus || currentValue"
       >
         {{ label }}
@@ -40,8 +39,7 @@
     </transition>
 
     <div class="fix-to-bottom">
-      <!--suppress HtmlFormInputWithoutLabel, JSUnresolvedVariable -->
-      <!-- Generate unique id for each instance of the component using `this._uid` -->
+      <!--suppress HtmlFormInputWithoutLabel -->
       <input
         class="enhanced-input"
 
@@ -49,7 +47,7 @@
           focus: isFocus,
           error: error
         }"
-        :id="_uid"
+        :id="id"
         :placeholder="isFocus ? '' : placeholder"
         :maxlength="maxlength"
 
@@ -89,6 +87,18 @@ export default {
   inheritAttrs: false,
 
   props: {
+    /*
+     * By default, will generate unique id for each instance of the component using `this._uid`.
+     */
+    id: {
+      type: String,
+      default () {
+        // noinspection JSUnresolvedVariable
+        return this._uid
+      },
+      validator: (str) => !!str
+    },
+
     label: {
       type: String,
       required: true,
