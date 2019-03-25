@@ -42,6 +42,9 @@ button {
   cursor: pointer;
   transition: all .2s ease-in-out;
 
+  background-color: $foreground-color;
+  color: $background-color;
+
   font: {
     family: inherit;
     size: 1rem;
