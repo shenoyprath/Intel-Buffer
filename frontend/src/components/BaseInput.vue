@@ -94,15 +94,27 @@ export default {
       type: String,
       default () {
         // noinspection JSUnresolvedVariable
-        return this._uid
+        return this._uid.toString()
       },
-      validator: (str) => !!str
+      validator: (id) => !!id
     },
 
+    /*
+     * Used to identify an input in a form.
+     * Official name used by the API for this field in the schema.
+     */
+    fieldName: {
+      type: String,
+      validator: (fieldName) => !!fieldName
+    },
+
+    /*
+     * Must be extremely brief and specific.
+     */
     label: {
       type: String,
       required: true,
-      validator: (str) => !!str
+      validator: (label) => !!label
     },
 
     placeholder: {
@@ -196,8 +208,13 @@ export default {
   }
 }
 
+%capitalize {
+  text-transform: capitalize;
+}
+
 .floating-label {
   @extend %input-assistance;
+  @extend %capitalize;
 
   float: left;
   padding: {
@@ -234,6 +251,10 @@ export default {
 
   &:disabled {
     border-bottom-style: dotted;
+  }
+
+  &::placeholder {
+    @extend %capitalize;
   }
 
   &.focus {
