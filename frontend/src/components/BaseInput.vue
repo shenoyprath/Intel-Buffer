@@ -173,6 +173,12 @@ export default {
     currentLength () {
       return this.currentValue.length
     }
+  },
+
+  watch: {
+    value (newValue) {
+      this.currentValue = newValue
+    }
   }
 }
 </script>
