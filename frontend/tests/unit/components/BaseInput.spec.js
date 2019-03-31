@@ -51,14 +51,14 @@ describe("BaseInput.vue", () => {
   })
 
   it("updates text inside input when value is updated", () => {
-    const testValue = "test val"
+    const testValue = "test updates text inside input when value is updated"
     wrapper.setProps({ value: testValue })
     // noinspection JSUnresolvedVariable
     expect(input.element.value).to.equal(testValue)
   })
 
   it("shows label when text is present in input", () => {
-    wrapper.setProps({ value: "testing" })
+    wrapper.setProps({ value: "test shows label when text is present in input" })
     expect(label.isVisible()).to.equal(true)
   })
 
@@ -77,7 +77,7 @@ describe("BaseInput.vue", () => {
     input.trigger("focus")
 
     const maxlengthDisplay = wrapper.find(".maxlength")
-    const testValue = "testing"
+    const testValue = "test has length to maxlength ratio when maxlength is given"
     input.setValue(testValue)
     expect(maxlengthDisplay.text()).to.equal(`${testValue.length}/${maxlength}`)
 
@@ -100,7 +100,7 @@ describe("BaseInput.vue", () => {
   })
 
   it("displays error when there is one and removes helper from DOM", () => {
-    const testError = "testing error"
+    const testError = "test displays error when there is one and removes helper from DOM"
     wrapper.setProps({ error: testError })
 
     const errorDisplay = wrapper.find("span.error")
@@ -113,5 +113,16 @@ describe("BaseInput.vue", () => {
     const width = 20
     wrapper.setProps({ size: width })
     expect(wrapper.element.style.width).to.equal(`${width}em`)
+  })
+
+  it("emits the value of the input when the value changes", () => {
+    const testValue = "test emits the value of the input when the value changes"
+    input.setValue(testValue)
+    const emittedValues = wrapper.emitted().input
+    expect(
+      emittedValues
+        .filter(value => value.includes(testValue))
+        .length
+    ).to.equal(1)
   })
 })

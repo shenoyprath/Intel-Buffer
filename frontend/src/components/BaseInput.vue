@@ -55,7 +55,7 @@
         @blur="isFocus = false"
 
         v-bind="$attrs"
-        v-on="$listeners"
+        v-on="listeners"
         v-model="currentValue"
       />
 
@@ -172,6 +172,19 @@ export default {
   computed: {
     currentLength () {
       return this.currentValue.length
+    },
+
+    /**
+     * Used to attach all event listeners to the `<input/>` instead of the root node.
+     * The `input` listener ensures that the parent component can still use `v-model`.
+     */
+    listeners () {
+      return {
+        ...this.$listeners,
+        input: () => {
+          this.$emit("input", this.currentValue)
+        }
+      }
     }
   },
 
