@@ -37,7 +37,7 @@ def create_app(config):
     )
 
     def register_blueprints():
-        if config.DEBUG:
+        if config.DEBUG:  # pragma: no cover
             api_blueprint.after_request(enable_cors)
         app.register_blueprint(api_blueprint)
 
