@@ -23,7 +23,7 @@ function alterKeys (object, alterationFunc) {
   return alteredObject
 }
 
-const api = axios.create({
+export default axios.create({
   baseURL: "http://127.0.0.1:8888/api",
 
   timeout: 5000,
@@ -66,5 +66,3 @@ const api = axios.create({
     }
   ]
 })
-
-export default api
