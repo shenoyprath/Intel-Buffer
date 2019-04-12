@@ -9,17 +9,20 @@
     >
       <base-button
         class="close"
-        @click="hide"
+        @click="$emit('close')"
         :grow-on-hover="true"
-      >
-      </base-button>
+      />
 
       <section class="content">
-        <slot name="header"/>
+        <header>
+          <slot name="modal-header"/>
+        </header>
 
-        <slot name="body"/>
+        <slot/>
 
-        <slot name="footer"/>
+        <footer>
+          <slot name="modal-footer"/>
+        </footer>
       </section>
     </div>
   </transition>
@@ -35,19 +38,10 @@ export default {
     BaseButton
   },
 
-  data () {
-    return {
-      isVisible: true
-    }
-  },
-
-  methods: {
-    show () {
-      this.isVisible = true
-    },
-
-    hide () {
-      this.isVisible = false
+  props: {
+    isVisible: {
+      type: Boolean,
+      default: false
     }
   }
 }
