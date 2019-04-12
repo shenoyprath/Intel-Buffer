@@ -7,7 +7,7 @@ describe("BaseLogo.vue", () => {
   const wrapper = shallowMount(BaseLogo)
 
   it("root element is an svg", () => {
-    expect(wrapper.is("svg")).to.equal(true)
+    expect(wrapper.is("svg")).to.be.true
   })
 
   it("has default height of 35pt and default width of 50pt", () => {

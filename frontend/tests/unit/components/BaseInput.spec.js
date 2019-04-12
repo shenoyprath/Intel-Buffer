@@ -41,12 +41,12 @@ describe("BaseInput.vue", () => {
         .props
         .label
         .validator("")
-    ).to.equal(false)
+    ).to.not.be.ok
   })
 
   it("shows label when input is focused on", () => {
     input.trigger("focus")
-    expect(label.isVisible()).to.equal(true)
+    expect(label.isVisible()).to.be.true
     input.trigger("blur") // clean up
   })
 
@@ -59,7 +59,7 @@ describe("BaseInput.vue", () => {
 
   it("shows label when text is present in input", () => {
     wrapper.setProps({ value: "test shows label when text is present in input" })
-    expect(label.isVisible()).to.equal(true)
+    expect(label.isVisible()).to.be.true
   })
 
   it("throws validation error for non-integer & negative maxlength", () => {
@@ -69,8 +69,8 @@ describe("BaseInput.vue", () => {
       .props
       .maxlength
       .validator
-    expect(maxlengthValidator(-2)).to.equal(false)
-    expect(maxlengthValidator(2.5)).to.equal(false)
+    expect(maxlengthValidator(-2)).to.not.be.ok
+    expect(maxlengthValidator(2.5)).to.not.be.ok
   })
 
   it("has length to maxlength ratio when maxlength is given", () => {
@@ -94,7 +94,7 @@ describe("BaseInput.vue", () => {
 
     const helper = wrapper.find("span.helper")
     expect(helper.text()).to.equal(helperText)
-    expect(helper.isVisible()).to.equal(true)
+    expect(helper.isVisible()).to.be.true
 
     input.trigger("blur")
   })
@@ -105,7 +105,7 @@ describe("BaseInput.vue", () => {
 
     const errorDisplay = wrapper.find("span.error")
     expect(errorDisplay.text()).to.equal(testError)
-    expect(errorDisplay.isVisible()).to.equal(true)
+    expect(errorDisplay.isVisible()).to.be.true
     expect(() => wrapper.find("span.helper").text()).to.throw()
   })
 
