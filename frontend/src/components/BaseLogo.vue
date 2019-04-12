@@ -1,10 +1,11 @@
 <template>
-  <svg version="1.0"
-       xmlns="http://www.w3.org/2000/svg"
-       viewBox="0 0 700.000000 506.000000"
-       preserveAspectRatio="xMidYMid meet"
-       height="35pt"
-       width="50pt"
+  <svg
+    version="1.0"
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 700.000000 506.000000"
+    preserveAspectRatio="xMidYMid meet"
+    height="35pt"
+    width="50pt"
   >
     <g
       transform="translate(0.000000,506.000000) scale(0.100000,-0.100000)"
@@ -62,7 +63,7 @@
 
 <script>
 export default {
-  name: 'BaseLogo'
+  name: "BaseLogo"
 }
 </script>
 

@@ -16,9 +16,10 @@
           placeholder="First Name"
           autofocus
         />
-        <input id="last-name"
-               type="text"
-               placeholder="Last Name"
+        <input
+          id="last-name"
+          type="text"
+          placeholder="Last Name"
         />
 
         <input
@@ -47,10 +48,10 @@
 </template>
 
 <script>
-import BaseLogo from '@/components/BaseLogo'
+import BaseLogo from "@/components/BaseLogo"
 
 export default {
-  name: 'ModalAuthenticationRegister',
+  name: "ModalAuthenticationRegister",
 
   components: {
     BaseLogo
@@ -59,7 +60,5 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '../styles/mixins/authentication_modal';
 
-@include authentication-modal(tablet-wide);
 </style>
