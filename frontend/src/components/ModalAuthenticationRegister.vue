@@ -60,7 +60,5 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "../styles/mixins/authentication_modal";
 
-@include authentication-modal(tablet-wide);
 </style>
