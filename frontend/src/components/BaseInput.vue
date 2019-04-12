@@ -96,16 +96,7 @@ export default {
         // noinspection JSUnresolvedVariable
         return this._uid.toString()
       },
-      validator: (id) => !!id
-    },
-
-    /*
-     * Used to identify an input in a form.
-     * Official name used by the API for this field in the schema.
-     */
-    fieldName: {
-      type: String,
-      validator: (fieldName) => !!fieldName
+      validator: (id) => id
     },
 
     /*
@@ -114,7 +105,7 @@ export default {
     label: {
       type: String,
       required: true,
-      validator: (label) => !!label
+      validator: (label) => label
     },
 
     placeholder: {
@@ -219,7 +210,6 @@ export default {
 
 %input-assistance {
   display: block;
-  font-size: 14px;
   color: $theme-silver;
 
   &.error {
@@ -235,6 +225,7 @@ export default {
   @extend %input-assistance;
   @extend %capitalize;
 
+  font-size: 14px;
   float: left;
   padding: {
     left: 2px;
@@ -250,6 +241,7 @@ export default {
 .maxlength {
   @extend %input-assistance;
 
+  font-size: 12px;
   float: right;
 }
 
@@ -289,6 +281,7 @@ export default {
   @extend %input-assistance;
 
   &.error, &.helper {
+    font-size: 12px;
     margin: 5px 0;
   }
 
