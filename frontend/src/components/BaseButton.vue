@@ -1,10 +1,10 @@
 <template>
   <button
-    v-bind="$attrs"
-    v-on="$listeners"
     :class="{
       'grow-on-hover': growOnHover
     }"
+    v-bind="$attrs"
+    v-on="$listeners"
   >
     <slot/>
   </button>
@@ -47,7 +47,7 @@ button {
 
   font: {
     family: inherit;
-    size: 1rem;
+    size: 0.9rem;
     weight: 400;
   }
 
@@ -61,6 +61,11 @@ button {
     style: solid;
     color: transparent;
     radius: 0.25em;
+  }
+
+  &:disabled {
+    opacity: 0.65;
+    cursor: default;
   }
 }
 
