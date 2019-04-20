@@ -211,6 +211,7 @@ export default {
 %input-assistance {
   display: block;
   color: $theme-silver;
+  text-align: left;
 
   &.error {
     color: $theme-red;
