@@ -97,4 +97,10 @@ export default {
   }
   text-align: center;
 }
+
+fieldset {
+  border: none;
+  margin: 0;
+  padding: 0;
+}
 </style>
