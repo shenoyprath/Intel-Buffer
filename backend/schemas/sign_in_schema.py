@@ -12,7 +12,8 @@ from schemas.forbid_blank_str import ForbidBlankStr
 
 class SignInSchema(Base):
     custom_errors = {
-        "invalid_credentials": "Invalid credentials. Please try again."
+        "nonexistent_email": "Email address does not exist.",
+        "incorrect_password": "Incorrect password. Please try again."
     }
 
     # will check if email is in db anyway, so
@@ -34,9 +35,15 @@ class SignInSchema(Base):
 
         with db:
             user = User.retrieve(email_address)
-            if user is None or not check_password_hash(user.password, password):
+            if user is None:
                 raise ValidationError(
-                    SignInSchema.custom_errors["invalid_credentials"]
+                    SignInSchema.custom_errors["nonexistent_email"],
+                    field_name="email_address"
+                )
+            elif not check_password_hash(user.password, password):
+                raise ValidationError(
+                    SignInSchema.custom_errors["incorrect_password"],
+                    field_name="password"
                 )
 
     @post_load
