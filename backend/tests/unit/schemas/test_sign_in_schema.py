@@ -11,7 +11,7 @@ from tests.utils.model_instance import model_instance
 
 
 @mark.usefixtures("database")
-class TestLoginSchema:
+class TestSignInSchema:
     @given(email_address=emails())
     def test_invalidates_nonexistent_email_address(self, email_address):
         errors = SignInSchema().validate({
