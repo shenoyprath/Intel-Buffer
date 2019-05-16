@@ -1,59 +1,106 @@
 <template>
-  <div class="authentication-modal-container animated fadeIn slow">
-    <button class="close">&#x2715;</button>
+  <base-modal class="sign-in-modal">
+    <template #modal-header>
+      <h2>
+        Welcome Back!
+      </h2>
+      <h5>
+        Sign in to access your personalized content and connect with others.
+      </h5>
+    </template>
 
-    <div class="authentication-modal animated slideInUp">
-      <base-logo height="25pt"/>
-      <h2>Sign in to Continue</h2>
-      <p class="description">
-        Access your personalized content and interact with others
-      </p>
-
-      <form
-        id="sign-in-form"
-        class="animated zoomIn delay-1s"
-      >
-        <input
-          id="email-address"
+    <base-form
+      action="/auth-token"
+      method="POST"
+      :form-data="credentials"
+      #default="{ errors }"
+    >
+      <fieldset name="credentials">
+        <base-input
+          class="credentials"
+          label="email address"
           type="email"
-          placeholder="Email Address"
-          autofocus
+          v-model="credentials.emailAddress"
+          :error="errors.emailAddress"
+          required
         />
-        <input
-          id="password"
+        <base-input
+          class="credentials"
+          label="password"
           type="password"
-          placeholder="Password"
+          v-model="credentials.password"
+          :error="errors.password"
+          required
         />
-      </form>
+      </fieldset>
 
-      <router-link to="/">Forgot Password?</router-link>
-      <button
+      <base-button
         type="submit"
-        form="sign-in-form"
+        grow-on-hover
       >
-        Sign In
-      </button>
+        Sign in
+      </base-button>
+    </base-form>
+
+    <template #modal-footer>
+      <p>
+        <small>
+          <a href="/">Forgot password?</a>
+        </small>
+      </p>
 
       <p>
-        Don't have an account?
-        <router-link to="/">Register</router-link>
+        <small>
+          Don't have an account?
+          <router-link to="/">Register</router-link>
+        </small>
       </p>
-    </div>
-  </div>
+    </template>
+  </base-modal>
 </template>
 
 <script>
-import BaseLogo from "@/components/BaseLogo"
+import BaseModal from "@/components/BaseModal"
+import BaseForm from "@/components/BaseForm"
+import BaseInput from "@/components/BaseInput"
+import BaseButton from "@/components/BaseButton"
 
 export default {
   name: "ModalAuthenticationSignIn",
 
   components: {
-    "base-logo": BaseLogo
+    BaseButton,
+    BaseInput,
+    BaseForm,
+    BaseModal
+  },
+
+  data () {
+    return {
+      credentials: {
+        emailAddress: "",
+        password: ""
+      }
+    }
   }
 }
 </script>
 
 <style lang="scss" scoped>
+.sign-in-modal /deep/ .container {
+  text-align: center;
 
+  @include media-query(tablet-small) {
+    width: 650px;
+    height: 450px;
+  }
+}
+
+.credentials {
+  display: block;
+  margin: {
+    left: auto;
+    right: auto;
+  }
+}
 </style>

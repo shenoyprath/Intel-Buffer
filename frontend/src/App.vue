@@ -5,23 +5,7 @@
 </template>
 
 <script>
-export default {
-  computed: {
-    isTouchDevice () {
-      const vendorPrefixes = " -webkit- -moz- -o- -ms- ".split(" ")
-      // noinspection JSUnresolvedVariable
-      if (("ontouchstart" in window) ||
-        // eslint-disable-next-line no-undef
-        (window.DocumentTouch && document instanceof DocumentTouch)) {
-        return true
-      }
 
-      const query = ["(", vendorPrefixes.join("touch-enabled),("), "heartz", ")"].join("")
-      const mq = query => window.matchMedia(query).matches
-      return mq(query)
-    }
-  }
-}
 </script>
 
 <style lang="scss">
@@ -57,7 +41,7 @@ h1, h2, h3, h4, h5, h6 {
   }
 }
 
-#{$app} {
+#app {
   background-color: $background-color;
   color: $foreground-color;
 

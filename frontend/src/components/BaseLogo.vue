@@ -67,7 +67,7 @@ export default {
 }
 </script>
 
-<style scoped lang="scss">
+<style lang="scss" scoped>
 g {
   fill: $foreground-color;
 }
