@@ -1,64 +1,125 @@
 <template>
-  <div class="authentication-modal-container animated fadeIn slow">
-    <button class="close">&#x2715;</button>
+  <base-modal class="registration-modal">
+    <template #modal-header>
+      <h2>
+        Join IntelBuffer.
+      </h2>
+      <h5>
+        {{ registrationBenefits }}
+      </h5>
+    </template>
 
-    <div class="authentication-modal animated slideInUp">
-      <base-logo height="25pt"/>
-      <h2>Register to Personalize IntelBuffer</h2>
-      <p class="description">
-        Become a member to personalize your content, follow your favorite authors, and share your knowledge
-      </p>
-
-      <form class="animated zoomIn delay-1s">
-        <input
-          id="first-name"
+    <base-form
+      action="/user"
+      method="POST"
+      :form-data="newUser"
+      #default="{ errors }"
+    >
+      <fieldset name="name">
+        <base-input
+          label="first name"
           type="text"
-          placeholder="First Name"
-          autofocus
+          v-model="newUser.firstName"
+          :error="errors.firstName"
         />
-        <input
-          id="last-name"
+        <base-input
+          label="last name"
           type="text"
-          placeholder="Last Name"
+          v-model="newUser.lastName"
+          :error="errors.lastName"
         />
+      </fieldset>
 
-        <input
-          id="email"
+      <fieldset name="credentials">
+        <base-input
+          label="email address"
           type="email"
-          placeholder="Email Address"
+          v-model="newUser.emailAddress"
+          :error="errors.emailAddress"
+          required
         />
-        <input
-          id="password"
+        <base-input
+          label="password"
           type="password"
-          placeholder="Password"
+          v-model="newUser.password"
+          :error="errors.password"
+          required
         />
-      </form>
+      </fieldset>
+
+      <base-button
+        type="submit"
+        grow-on-hover
+      >
+        Register
+      </base-button>
+    </base-form>
+
+    <template #modal-footer>
+      <p>
+        <small>
+          Already have an account? <a href="/">Sign in</a>
+        </small>
+      </p>
 
       <p>
-        By clicking register, you agree to our
-        <router-link to="/">Terms</router-link>
+        <small>
+          By registering, you agree to our
+          <router-link to="/">Terms</router-link> and
+          <router-link to="/">Privacy Policy</router-link>
+        </small>
       </p>
-      <button>Register</button>
-      <p>
-        Already registered?
-        <router-link to="/">Sign in</router-link>
-      </p>
-    </div>
-  </div>
+    </template>
+  </base-modal>
 </template>
 
 <script>
-import BaseLogo from "@/components/BaseLogo"
+import BaseModal from "@/components/BaseModal"
+import BaseForm from "@/components/BaseForm"
+import BaseInput from "@/components/BaseInput"
+import BaseButton from "@/components/BaseButton"
 
 export default {
   name: "ModalAuthenticationRegister",
 
   components: {
-    BaseLogo
+    BaseButton,
+    BaseInput,
+    BaseForm,
+    BaseModal
+  },
+
+  props: {
+    registrationBenefits: {
+      type: String,
+      default: (
+        "Tailor your experience, " +
+        "follow your favorite authors, " +
+        "and share your knowledge."
+      )
+    }
+  },
+
+  data () {
+    return {
+      newUser: {
+        firstName: "",
+        lastName: "",
+        emailAddress: "",
+        password: ""
+      }
+    }
   }
 }
 </script>
 
 <style lang="scss" scoped>
+.registration-modal /deep/ .container {
+  text-align: center;
 
+  @include media-query(tablet-small) {
+    width: 650px;
+    height: 460px;
+  }
+}
 </style>
