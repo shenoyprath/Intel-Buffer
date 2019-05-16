@@ -15,10 +15,7 @@
       :form-data="credentials"
       #default="{ errors }"
     >
-      <fieldset
-        class="credentials"
-        name="credentials"
-      >
+      <fieldset name="credentials">
         <base-input
           class="credentials"
           label="email address"
