@@ -6,10 +6,9 @@
     <div
       class="overlay"
       @click.self="$emit('implicit-close')"
-      v-if="isVisible"
     >
       <div
-        class="modal"
+        class="container"
         v-bind="$attrs"
         v-on="$listeners"
       >
@@ -44,14 +43,7 @@ export default {
     BaseButton
   },
 
-  inheritAttrs: false,
-
-  props: {
-    isVisible: {
-      type: Boolean,
-      default: false
-    }
-  }
+  inheritAttrs: false
 }
 </script>
 
@@ -70,7 +62,7 @@ export default {
   }
 }
 
-.modal {
+.container {
   position: fixed;
   top: 50%;
   left: 50%;
