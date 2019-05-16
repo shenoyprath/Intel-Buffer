@@ -96,6 +96,7 @@ export default {
     width: 1px;
   }
   text-align: center;
+  font-size: 13px;
 }
 
 fieldset {
