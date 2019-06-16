@@ -12,12 +12,12 @@ export default {
 
   mounted () {
     // noinspection JSCheckFunctionSignatures
-    this.initMediaQuery()
+    this.initResponsiveDesign()
   },
 
   methods: {
-    ...mapActions("mediaQuery", [
-      "initMediaQuery"
+    ...mapActions("responsiveDesign", [
+      "initResponsiveDesign"
     ])
   }
 }
