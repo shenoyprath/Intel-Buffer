@@ -8,15 +8,13 @@ export default {
   },
 
   getters: {
+    /*
+     * `mqMaxWidth` not provided to enforce mobile-first design.
+     * If absolutely necessary, return value can obviously be negated.
+     */
     mqMinWidth (state) {
       return (breakpoint) => {
         return state.windowWidth >= rwdBreakpointWidths[breakpoint]
-      }
-    },
-
-    mqMaxWidth (state) {
-      return (breakpoint) => {
-        return state.windowWidth <= rwdBreakpointWidths[breakpoint]
       }
     }
   },
