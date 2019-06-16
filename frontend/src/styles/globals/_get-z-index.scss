@@ -1,23 +1,23 @@
 @function get-z-index($layers...) {
   $z-indices: (
-          background: (
-                  base: -100,
-                  top: -50
-          ),
-          main: 0,
-          tooltip: 50,
-          footer: 100,
-          dropdown: 150,
-          header: 200,
-          modal: (
-                  overlay: 250,
-                  main: 300,
-                  tooltip: 350,
-                  footer: 400,
-                  header: 450,
-                  dropdown: 500
-          ),
-          priority: 550
+    background: (
+      base: -100,
+      top: -50
+    ),
+    main: 0,
+    tooltip: 50,
+    footer: 100,
+    dropdown: 150,
+    header: 200,
+    modal: (
+      overlay: 250,
+      main: 300,
+      tooltip: 350,
+      footer: 400,
+      header: 450,
+      dropdown: 500
+    ),
+    priority: 550
   );
 
   @each $layer in $layers {
