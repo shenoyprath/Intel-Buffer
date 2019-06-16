@@ -1,0 +1,11 @@
+@mixin if-hover-enabled {
+  @media (hover: hover) {
+    @content;
+  }
+}
+
+@mixin if-hover-disabled {
+  @media (hover: none) {
+    @content;
+  }
+}

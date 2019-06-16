@@ -1,0 +1,9 @@
+@mixin grow-on-hover($scale-val: 1.05) {
+  transition: transform .2s ease-in-out;
+
+  @include if-hover-enabled {
+    &:hover, &:focus {
+      transform: scale($scale-val);
+    }
+  }
+}
