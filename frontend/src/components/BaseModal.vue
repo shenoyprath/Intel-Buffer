@@ -9,15 +9,27 @@
     >
       <div
         class="container"
+        :class="{
+          bordered: floating
+        }"
+        :style="{
+          width: floating ? width : null,
+          height: floating ? height : null
+        }"
         v-bind="$attrs"
         v-on="$listeners"
       >
         <base-button
           class="close"
-          grow-on-hover
           @click="$emit('explicit-close')"
+          grow-on-hover
         />
-        <section class="content">
+        <section
+          class="content"
+          :class="{
+            'fit-container': floating
+          }"
+        >
           <header>
             <slot name="modal-header"/>
           </header>
@@ -43,7 +55,28 @@ export default {
     BaseButton
   },
 
-  inheritAttrs: false
+  inheritAttrs: false,
+
+  props: {
+    width: {
+      type: String,
+      required: true
+    },
+
+    height: {
+      type: String,
+      required: true
+    },
+
+    /*
+     * Modal is fullscreen if false.
+     * Width & height are set only when true.
+     */
+    floating: {
+      type: Boolean,
+      default: false
+    }
+  }
 }
 </script>
 
@@ -54,6 +87,7 @@ export default {
   right: 0;
   width: 100%;
   height: 100%;
+  z-index: get-z-index(modal, overlay);
 
   @if ($background-color == #000) {
     background-color: rgba(0, 0, 0, 0.95);
@@ -77,10 +111,7 @@ export default {
   z-index: get-z-index(modal, main);
   background-color: $background-color;
 
-  @include media-query(tablet-small) {
-    width: 600px;
-    height: 400px;
-
+  &.bordered {
     @if ($background-color == #000) {
       border: 1px solid #6e6e6e;
       box-shadow: 0 4px 8px 0 rgba(255, 255, 255, 0.2),
@@ -149,7 +180,7 @@ export default {
   }
   overflow: auto;
 
-  @include media-query(tablet-small) {
+  &.fit-container {
     top: 0;
     transform: none;
     height: 100%;

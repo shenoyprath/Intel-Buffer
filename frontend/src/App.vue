@@ -5,7 +5,22 @@
 </template>
 
 <script>
+import { mapActions } from "vuex"
 
+export default {
+  name: "App",
+
+  mounted () {
+    // noinspection JSCheckFunctionSignatures
+    this.initResponsiveDesign()
+  },
+
+  methods: {
+    ...mapActions("responsiveDesign", [
+      "initResponsiveDesign"
+    ])
+  }
+}
 </script>
 
 <style lang="scss">
@@ -22,6 +37,7 @@
 a {
   color: $theme-blue;
   text-decoration: none;
+  cursor: pointer;
 
   @include if-hover-enabled {
     &:hover, &:focus {
