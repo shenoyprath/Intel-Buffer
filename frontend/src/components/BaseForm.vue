@@ -2,7 +2,7 @@
   <form
     v-bind="$attrs"
     v-on="$listeners"
-    @submit.prevent="submitForm"
+    @submit.prevent="dispatchForm"
   >
     <transition
       enter-active-class="animated fadeIn"
@@ -62,7 +62,7 @@ export default {
   },
 
   methods: {
-    async submitForm () {
+    async dispatchForm () {
       this.errors = {}
       try {
         const response = await api({
