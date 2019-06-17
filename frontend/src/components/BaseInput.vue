@@ -5,7 +5,7 @@
       shake: error
     }"
     :style="{
-      width: `${size}em`
+      width: size
     }"
   >
     <transition
@@ -147,9 +147,8 @@ export default {
     },
 
     size: {
-      type: Number,
-      default: 15,
-      validator: (num) => Number.isFinite(num) && num >= 0
+      type: String,
+      default: "15em"
     }
   },
 
