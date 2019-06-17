@@ -5,7 +5,7 @@
       shake: error
     }"
     :style="{
-      width: size
+      width: width
     }"
   >
     <transition
@@ -146,7 +146,7 @@ export default {
       }
     },
 
-    size: {
+    width: {
       type: String,
       default: "15em"
     }
