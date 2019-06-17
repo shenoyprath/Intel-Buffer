@@ -109,10 +109,10 @@ describe("BaseInput.vue", () => {
     expect(() => wrapper.find("span.helper").text()).to.throw()
   })
 
-  it("changes width based on size given", () => {
-    const width = 20
-    wrapper.setProps({ size: width })
-    expect(wrapper.element.style.width).to.equal(`${width}em`)
+  it("changes width based on width given", () => {
+    const width = "20em"
+    wrapper.setProps({ width: width })
+    expect(wrapper.element.style.width).to.equal(width)
   })
 
   it("emits the value of the input when the value changes", () => {
