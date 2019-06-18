@@ -131,7 +131,6 @@ export default {
     /*
      * Keep it short and preferably a single line in length.
      * Should never take up more than two lines.
-     * If error is two lines long, adjust the height of the root accordingly.
      */
     error: {
       type: String,
