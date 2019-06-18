@@ -28,9 +28,10 @@ class Config(ABC):
     JWT_SECURE_COOKIE = False  # Only allow JWT cookies to be sent over https. True in production.
     JWT_ACCESS_COOKIE_PATH = "/api"
     JWT_REFRESH_COOKIE_PATH = "/api/auth-token"
+    # CSRF cookies' paths are not set to the access/refresh cookies' paths. If they are, the
+    # client can't access CSRF cookies using JS & will not attach the cookies to the request.
     JWT_COOKIE_CSRF_PROTECT = True
-    JWT_ACCESS_CSRF_COOKIE_PATH = JWT_ACCESS_COOKIE_PATH
-    JWT_REFRESH_CSRF_COOKIE_PATH = JWT_REFRESH_COOKIE_PATH
+    JWT_SESSION_COOKIE = False  # Cookies should be persistent.
 
     if not os.path.exists(DIST_DIR):  # pragma: no cover
         raise NotADirectoryError(f"DIST_DIR not found: {DIST_DIR}")
