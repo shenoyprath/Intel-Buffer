@@ -2,7 +2,7 @@ import axios from "axios"
 
 import alterKeys from "@/utils/alter-keys"
 
-export default axios.create({
+const api = axios.create({
   baseURL: "http://127.0.0.1:8888/api",
 
   timeout: 5000,
@@ -45,9 +45,24 @@ export default axios.create({
     }
   ],
 
+  xsrfHeaderName: "X-CSRF-TOKEN",
+
   // in development, backend & frontend run on different ports.
   // the same origin policy is followed & cookies can't be shared.
   // setting `withCredentials` to true allows the cookies to be shared.
   // https://stackoverflow.com/a/14802115
   withCredentials: process.env.NODE_ENV !== "production"
 })
+
+api.interceptors.request.use(
+  function addCsrfCookie (config) {
+    if (config.url === "/auth-token") {
+      config.xsrfCookieName = "csrf_refresh_token"
+    } else {
+      config.xsrfCookieName = "csrf_access_token"
+    }
+    return config
+  }
+)
+
+export default api
