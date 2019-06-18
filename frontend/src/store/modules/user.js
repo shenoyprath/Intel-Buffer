@@ -1,11 +1,26 @@
 export default {
+  namespaced: true,
+
   state: {
-    user: null
+    id: null,
+
+    firstName: null,
+    lastName: null
   },
 
-  getters: {},
+  getters: {
+    isUserAnonymous (state) {
+      return state.id == null
+    }
+  },
 
-  mutations: {},
+  mutations: {
+    setCurrentUser (state, { id, firstName, lastName }) {
+      state.id = id
+      state.firstName = firstName
+      state.lastName = lastName
+    }
+  },
 
   actions: {}
 }
