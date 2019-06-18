@@ -43,5 +43,11 @@ export default axios.create({
         )
       })
     }
-  ]
+  ],
+
+  // in development, backend & frontend run on different ports.
+  // the same origin policy is followed & cookies can't be shared.
+  // setting `withCredentials` to true allows the cookies to be shared.
+  // https://stackoverflow.com/a/14802115
+  withCredentials: process.env.NODE_ENV !== "production"
 })
