@@ -2,6 +2,7 @@
   <transition
     enter-active-class="animated pulse faster"
     leave-active-class="animated fadeOut faster"
+    appear
   >
     <div
       class="overlay"
