@@ -1,17 +1,42 @@
 <template>
   <div id="app">
+    <component
+      :is="
+        anonymousHasAccount
+          ? 'the-modal-authentication-sign-in'
+          : 'the-modal-authentication-register'
+      "
+      v-if="canStartAuthProcess"
+    />
     <router-view/>
   </div>
 </template>
 
 <script>
-import { mapActions } from "vuex"
+import { mapActions, mapGetters, mapState } from "vuex"
+
+import TheModalAuthenticationSignIn from "@/components/TheModalAuthenticationSignIn"
+import TheModalAuthenticationRegister from "@/components/TheModalAuthenticationRegister"
 
 export default {
   name: "App",
 
+  components: {
+    TheModalAuthenticationSignIn,
+    TheModalAuthenticationRegister
+  },
+
+  computed: {
+    ...mapState("authenticationProcess", {
+      anonymousHasAccount: "accountExists"
+    }),
+
+    ...mapGetters("authenticationProcess", [
+      "canStartAuthProcess"
+    ])
+  },
+
   mounted () {
-    // noinspection JSCheckFunctionSignatures
     this.initResponsiveDesign()
   },
 
