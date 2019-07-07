@@ -1,6 +1,8 @@
 import Vue from "vue"
 import Vuex from "vuex"
 
+import createPersistedState from "vuex-persistedstate"
+
 import responsiveDesign from "@/store/modules/responsive-design"
 import user from "@/store/modules/user"
 
@@ -12,5 +14,13 @@ export default new Vuex.Store({
   modules: {
     responsiveDesign,
     user
-  }
+  },
+
+  plugins: [
+    createPersistedState({
+      paths: [
+        "user"
+      ]
+    })
+  ]
 })
