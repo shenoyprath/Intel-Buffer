@@ -3,6 +3,7 @@ import Vuex from "vuex"
 
 import createPersistedState from "vuex-persistedstate"
 
+import authenticationProcess from "@/store/modules/authentication-process"
 import responsiveDesign from "@/store/modules/responsive-design"
 import user from "@/store/modules/user"
 
@@ -12,6 +13,7 @@ export default new Vuex.Store({
   strict: process.env.NODE_ENV !== "production",
 
   modules: {
+    authenticationProcess,
     responsiveDesign,
     user
   },
