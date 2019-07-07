@@ -1,41 +1,58 @@
 <template>
   <base-modal
-    class="sign-in-modal"
-    width="500px"
-    height="500px"
-    :floating="mqMinWidth.phoneTablet"
+    class="registration-modal"
+    width="650px"
+    height="480px"
+    :floating="mqMinWidth.tabletSmall"
     @close="obviateAuth"
   >
     <template #modal-header>
       <modal-authentication-headnote
-        title="Welcome Back!"
+        title="Join IntelBuffer."
         :subtitle="
           authCoaxing ||
-          'Access your personalized content and connect with your audience.'
+          'Tailor your experience, interact with your favorite authors, and share your knowledge.'
         "
       />
     </template>
 
     <base-form
-      action="/auth-token"
+      action="/user"
       method="POST"
-      :form-data="credentials"
+      :form-data="newUser"
       @valid="authenticateUser"
       #default="{ errors }"
     >
+      <fieldset name="identity">
+        <base-input
+          label="first name"
+          type="text"
+          :error="errors.firstName"
+          v-model="newUser.firstName"
+          required
+        />
+        <base-input
+          label="last name"
+          type="text"
+          :error="errors.lastName"
+          v-model="newUser.lastName"
+          required
+        />
+      </fieldset>
+
       <fieldset name="credentials">
         <base-input
           label="email address"
           type="email"
           :error="errors.emailAddress"
-          v-model="credentials.emailAddress"
+          v-model="newUser.emailAddress"
           required
         />
         <base-input
           label="password"
           type="password"
           :error="errors.password"
-          v-model="credentials.password"
+          v-model="newUser.password"
           required
         />
       </fieldset>
@@ -44,21 +61,25 @@
         type="submit"
         grow-on-hover
       >
-        Sign in
+        Register
       </base-button>
     </base-form>
 
     <template #modal-footer>
       <modal-authentication-footnote>
+        By registering, you agree to our
         <router-link to="#">
-          Forgot password?
+          Terms
+        </router-link> and
+        <router-link to="#">
+          Privacy Policy
         </router-link>
       </modal-authentication-footnote>
 
       <modal-authentication-footnote>
-        Don't have an account?
+        Already have an account?
         <a @click.prevent="toggleAccountExistence">
-          Create one
+          Sign in
         </a>
       </modal-authentication-footnote>
     </template>
@@ -77,7 +98,7 @@ import authentication from "@/mixins/authentication"
 import mediaQuery from "@/mixins/media-query"
 
 export default {
-  name: "ModalAuthenticationSignIn",
+  name: "TheModalAuthenticationRegister",
 
   components: {
     BaseForm,
@@ -95,7 +116,10 @@ export default {
 
   data () {
     return {
-      credentials: {
+      newUser: {
+        firstName: "",
+        lastName: "",
+
         emailAddress: "",
         password: ""
       }
@@ -105,7 +129,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.sign-in-modal {
+.registration-modal {
   text-align: center;
 }
 </style>
