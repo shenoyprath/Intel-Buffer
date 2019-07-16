@@ -1,6 +1,8 @@
 import axios from "axios"
 
-import alterJsonKeys from "@/utils/alter-json-keys"
+import addCsrfCookie from "@/rest-api/interceptors/request/add-csrf-cookie"
+import camelToSnakeKeys from "@/rest-api/transformations/request/camel-to-snake-keys"
+import snakeToCamelKeys from "@/rest-api/transformations/response/snake-to-camel-keys"
 
 const api = axios.create({
   baseURL: "http://127.0.0.1:8888/api",
@@ -12,37 +14,13 @@ const api = axios.create({
   },
 
   transformRequest: [
-    /**
-     * API expects snake_case for JSON keys in the request body, but we want to maintain JS naming conventions in the
-     * frontend code.
-     */
-    function camelToSnake (data) {
-      return alterJsonKeys(data, key => {
-        return key
-          .split(/(?=[A-Z])/)
-          .join("_")
-          .toLowerCase()
-      })
-    },
-
-    // last transformRequest function has to return JSON string.
-    data => JSON.stringify(data)
+    camelToSnakeKeys,
+    JSON.stringify // last request transformation has to return JSON string.
   ],
 
   transformResponse: [
-    data => JSON.parse(data),
-
-    /**
-     * Converts API response's snake_case JSON keys back to camelCase for use in frontend code.
-     */
-    function snakeToCamel (data) {
-      return alterJsonKeys(data, key => {
-        return key.replace(
-          /([^_]_[^_])/g, // ignore prefix & suffix underscores.
-          substr => substr[0] + substr[2].toUpperCase()
-        )
-      })
-    }
+    JSON.parse,
+    snakeToCamelKeys
   ],
 
   xsrfHeaderName: "X-CSRF-TOKEN",
@@ -54,15 +32,6 @@ const api = axios.create({
   withCredentials: process.env.NODE_ENV !== "production"
 })
 
-api.interceptors.request.use(
-  function addCsrfCookie (config) {
-    if (config.url === "/auth-token") {
-      config.xsrfCookieName = "csrf_refresh_token"
-    } else {
-      config.xsrfCookieName = "csrf_access_token"
-    }
-    return config
-  }
-)
+api.interceptors.request.use(addCsrfCookie)
 
 export default api
