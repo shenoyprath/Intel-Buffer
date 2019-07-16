@@ -72,9 +72,11 @@ export default {
         })
         this.$emit("valid", response.data)
       } catch (e) {
-        // to preserve real estate, only 1st error of each field must be shown.
-        for (const [fieldName, errors] of Object.entries(e.response.data.errors)) {
-          this.$set(this.errors, fieldName, errors[0])
+        if (e?.response?.data?.errors) {
+          // to preserve real estate, only 1st error of each field must be shown.
+          for (const [fieldName, errors] of Object.entries(e.response.data.errors)) {
+            this.$set(this.errors, fieldName, errors[0])
+          }
         }
         this.$emit("invalid") // parent should access errors only in slot.
       }
