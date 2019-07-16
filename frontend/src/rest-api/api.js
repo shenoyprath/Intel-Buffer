@@ -1,6 +1,6 @@
 import axios from "axios"
 
-import alterKeys from "@/utils/alter-keys"
+import alterJsonKeys from "@/utils/alter-json-keys"
 
 const api = axios.create({
   baseURL: "http://127.0.0.1:8888/api",
@@ -17,7 +17,7 @@ const api = axios.create({
      * frontend code.
      */
     function camelToSnake (data) {
-      return alterKeys(data, key => {
+      return alterJsonKeys(data, key => {
         return key
           .split(/(?=[A-Z])/)
           .join("_")
@@ -36,7 +36,7 @@ const api = axios.create({
      * Converts API response's snake_case JSON keys back to camelCase for use in frontend code.
      */
     function snakeToCamel (data) {
-      return alterKeys(data, key => {
+      return alterJsonKeys(data, key => {
         return key.replace(
           /([^_]_[^_])/g, // ignore prefix & suffix underscores.
           substr => substr[0] + substr[2].toUpperCase()
