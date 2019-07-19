@@ -35,8 +35,12 @@ export default {
       state.authBenefits = null
     },
 
-    toggleAccountExistence (state) {
-      state.accountExists = !state.accountExists
+    makeAccountExistent (state) {
+      state.accountExists = true
+    },
+
+    makeAccountNonexistent (state) {
+      state.accountExists = false
     },
 
     setAuthBenefits (state, authBenefits) {
@@ -44,5 +48,14 @@ export default {
     }
   },
 
-  actions: {}
+  actions: {
+    authenticateUser ({ commit }, { id, firstName, lastName }) {
+      commit(
+        "user/setCurrentUser",
+        { id, firstName, lastName },
+        { root: true }
+      )
+      commit("obviateAuth")
+    }
+  }
 }

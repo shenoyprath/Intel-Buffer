@@ -1,4 +1,4 @@
-import { mapGetters, mapMutations } from "vuex"
+import { mapActions, mapGetters, mapMutations } from "vuex"
 
 export default {
   computed: {
@@ -10,16 +10,12 @@ export default {
   methods: {
     ...mapMutations("authenticationProcess", [
       "obviateAuth",
-      "toggleAccountExistence"
+      "makeAccountExistent",
+      "makeAccountNonexistent"
     ]),
 
-    ...mapMutations("user", [
-      "setCurrentUser"
-    ]),
-
-    authenticateUser (user) {
-      this.setCurrentUser(user)
-      this.obviateAuth()
-    }
+    ...mapActions("authenticationProcess", [
+      "authenticateUser"
+    ])
   }
 }

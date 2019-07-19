@@ -78,7 +78,7 @@
 
       <modal-authentication-footnote>
         Already have an account?
-        <a @click.prevent="toggleAccountExistence">
+        <a @click.prevent="makeAccountExistent">
           Sign in
         </a>
       </modal-authentication-footnote>

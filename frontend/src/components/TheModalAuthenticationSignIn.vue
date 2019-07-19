@@ -57,7 +57,7 @@
 
       <modal-authentication-footnote>
         Don't have an account?
-        <a @click.prevent="toggleAccountExistence">
+        <a @click.prevent="makeAccountNonexistent">
           Create one
         </a>
       </modal-authentication-footnote>
