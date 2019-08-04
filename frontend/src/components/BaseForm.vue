@@ -1,8 +1,8 @@
 <template>
   <form
+    @submit.prevent="dispatchForm"
     v-bind="$attrs"
     v-on="$listeners"
-    @submit.prevent="dispatchForm"
   >
     <transition
       enter-active-class="animated fadeIn"
