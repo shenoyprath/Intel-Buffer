@@ -3,7 +3,7 @@
     class="sign-in-modal"
     width="500px"
     height="500px"
-    :floating="mqMinWidth.phoneTablet"
+    :floating="mediaMinWidth.phoneTablet"
     @close="obviateAuth"
   >
     <template #modal-header>

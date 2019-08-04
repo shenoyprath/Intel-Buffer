@@ -3,7 +3,7 @@
     class="registration-modal"
     width="650px"
     height="480px"
-    :floating="mqMinWidth.tabletSmall"
+    :floating="mediaMinWidth.tabletSmall"
     @close="obviateAuth"
   >
     <template #modal-header>
