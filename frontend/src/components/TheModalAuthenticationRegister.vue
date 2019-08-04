@@ -20,7 +20,7 @@
       action="/user"
       method="POST"
       :form-data="newUser"
-      @valid="authenticateUser"
+      @valid="setUser"
       #default="{ errors }"
     >
       <fieldset name="identity">
@@ -78,7 +78,7 @@
 
       <modal-authentication-footnote>
         Already have an account?
-        <a @click.prevent="makeAccountExistent">
+        <a @click.prevent="requireSignIn">
           Sign in
         </a>
       </modal-authentication-footnote>
@@ -87,6 +87,8 @@
 </template>
 
 <script>
+import { mapActions, mapGetters } from "vuex"
+
 import BaseForm from "@/components/BaseForm"
 import BaseInput from "@/components/BaseInput"
 import BaseModal from "@/components/BaseModal"
@@ -94,7 +96,6 @@ import BaseButton from "@/components/BaseButton"
 import ModalAuthenticationHeadnote from "@/components/ModalAuthenticationHeadnote"
 import ModalAuthenticationFootnote from "@/components/ModalAuthenticationFootnote"
 
-import authentication from "@/mixins/authentication"
 import mediaQuery from "@/mixins/media-query"
 
 export default {
@@ -110,7 +111,6 @@ export default {
   },
 
   mixins: [
-    authentication,
     mediaQuery
   ],
 
@@ -124,6 +124,23 @@ export default {
         password: ""
       }
     }
+  },
+
+  computed: {
+    ...mapGetters("authenticationModal", [
+      "authCoaxing"
+    ])
+  },
+
+  methods: {
+    ...mapActions("authenticationModal", [
+      "requireSignIn",
+      "obviateAuth"
+    ]),
+
+    ...mapActions("currentUser", [
+      "setUser"
+    ])
   }
 }
 </script>

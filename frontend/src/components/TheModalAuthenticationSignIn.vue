@@ -20,7 +20,7 @@
       action="/auth-token"
       method="POST"
       :form-data="credentials"
-      @valid="authenticateUser"
+      @valid="setUser"
       #default="{ errors }"
     >
       <fieldset name="credentials">
@@ -57,7 +57,7 @@
 
       <modal-authentication-footnote>
         Don't have an account?
-        <a @click.prevent="makeAccountNonexistent">
+        <a @click.prevent="requireRegistration">
           Create one
         </a>
       </modal-authentication-footnote>
@@ -66,6 +66,8 @@
 </template>
 
 <script>
+import { mapActions, mapGetters } from "vuex"
+
 import BaseForm from "@/components/BaseForm"
 import BaseInput from "@/components/BaseInput"
 import BaseModal from "@/components/BaseModal"
@@ -73,7 +75,6 @@ import BaseButton from "@/components/BaseButton"
 import ModalAuthenticationHeadnote from "@/components/ModalAuthenticationHeadnote"
 import ModalAuthenticationFootnote from "@/components/ModalAuthenticationFootnote"
 
-import authentication from "@/mixins/authentication"
 import mediaQuery from "@/mixins/media-query"
 
 export default {
@@ -89,7 +90,6 @@ export default {
   },
 
   mixins: [
-    authentication,
     mediaQuery
   ],
 
@@ -100,6 +100,23 @@ export default {
         password: ""
       }
     }
+  },
+
+  computed: {
+    ...mapGetters("authenticationModal", [
+      "authCoaxing"
+    ])
+  },
+
+  methods: {
+    ...mapActions("authenticationModal", [
+      "requireRegistration",
+      "obviateAuth"
+    ]),
+
+    ...mapActions("currentUser", [
+      "setUser"
+    ])
   }
 }
 </script>
