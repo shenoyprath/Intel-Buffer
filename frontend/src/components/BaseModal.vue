@@ -2,10 +2,11 @@
   <transition
     enter-active-class="animated pulse faster"
     leave-active-class="animated fadeOut faster"
+    appear
   >
     <div
       class="overlay"
-      @click.self="$emit('implicit-close')"
+      @click.self="emitImplicitClosure"
     >
       <div
         class="container"
@@ -21,7 +22,7 @@
       >
         <base-button
           class="close"
-          @click="$emit('explicit-close')"
+          @click="emitClosure"
           grow-on-hover
         />
         <section
@@ -75,6 +76,27 @@ export default {
     floating: {
       type: Boolean,
       default: false
+    },
+
+    /*
+     * Implicit closure occurs when the user clicks outside the modal.
+     * Persistency prevents the modal from being closed implicitly.
+     */
+    persistent: {
+      type: Boolean,
+      default: false
+    }
+  },
+
+  methods: {
+    emitClosure () {
+      this.$emit("close")
+    },
+
+    emitImplicitClosure () {
+      if (!this.persistent) {
+        this.emitClosure()
+      }
     }
   }
 }

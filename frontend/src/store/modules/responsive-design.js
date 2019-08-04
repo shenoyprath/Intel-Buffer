@@ -24,17 +24,16 @@ export default {
 
   getters: {
     /**
-     * Returns an object detailing whether `@media (min-width: <breakpoint width>)`
-     * is active for each breakpoint width. `mqMaxWidth` not provided to enforce
-     * mobile-first design. If absolutely necessary, just use negation.
+     * Returns an object detailing whether `@media (min-width: <breakpoint width>)` is active for each breakpoint width.
+     * `mediaMaxWidth` not provided to enforce mobile-first design. If absolutely necessary, just use negation.
      * See issue #18 for more details on implementation.
      */
-    mqMinWidth (state) {
-      const query = {}
+    mediaMinWidth (state) {
+      const mediaQuery = {}
       for (const [breakpoint, width] of Object.entries(state.breakpointWidths)) {
-        query[breakpoint] = (state.windowWidth >= width)
+        mediaQuery[breakpoint] = (state.windowWidth >= width)
       }
-      return query
+      return mediaQuery
     }
   },
 

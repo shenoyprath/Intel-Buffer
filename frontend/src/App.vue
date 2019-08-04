@@ -1,17 +1,35 @@
 <template>
   <div id="app">
+    <component
+      :is="authModalComponent"
+      v-if="isAuthModalVisible"
+    />
     <router-view/>
   </div>
 </template>
 
 <script>
-import { mapActions } from "vuex"
+import { mapActions, mapGetters } from "vuex"
+
+import TheModalAuthenticationSignIn from "@/components/TheModalAuthenticationSignIn"
+import TheModalAuthenticationRegister from "@/components/TheModalAuthenticationRegister"
 
 export default {
   name: "App",
 
+  components: {
+    TheModalAuthenticationSignIn,
+    TheModalAuthenticationRegister
+  },
+
+  computed: {
+    ...mapGetters("authenticationModal", [
+      "isAuthModalVisible",
+      "authModalComponent"
+    ])
+  },
+
   mounted () {
-    // noinspection JSCheckFunctionSignatures
     this.initResponsiveDesign()
   },
 
@@ -24,8 +42,8 @@ export default {
 </script>
 
 <style lang="scss">
-@import url("https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css");
 @import url("https://fonts.googleapis.com/css?family=Eczar:600|Work+Sans:400,700");
+@import url("https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css");
 @import url("https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.0/animate.min.css");
 
 *,
