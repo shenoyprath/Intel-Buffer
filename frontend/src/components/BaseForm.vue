@@ -20,7 +20,7 @@
 </template>
 
 <script>
-import api from "@/rest-api/api"
+import api from "@/rest-api"
 
 export default {
   name: "BaseForm",
